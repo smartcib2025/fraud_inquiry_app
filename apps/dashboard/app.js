@@ -1178,9 +1178,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Sync presets select to email input
+    const loginPresets = document.getElementById("login-presets");
+    const loginEmailInput = document.getElementById("login-email-input");
+    if (loginPresets && loginEmailInput) {
+        loginPresets.addEventListener("change", (e) => {
+            if (e.target.value) {
+                loginEmailInput.value = e.target.value;
+            }
+        });
+    }
+
     if (googleLoginBtn) {
         googleLoginBtn.addEventListener("click", async () => {
-            const email = document.getElementById("login-email").value;
+            const email = document.getElementById("login-email-input").value.trim();
+            if (!email) {
+                alert("Please enter a valid Gmail or corporate email address.");
+                return;
+            }
             
             try {
                 const res = await fetch(`${API_BASE}/api/auth/google/callback`, {

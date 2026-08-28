@@ -624,8 +624,11 @@
             <p class="muted-text margin-bottom-lg" style="margin-bottom: 2rem; font-size: 0.9rem;">Authorized Law Enforcement Personnel Only. Secure sign-in required.</p>
             
             <div class="form-group margin-bottom-lg" style="text-align: left; margin-bottom: 1.5rem;">
-                <label for="login-email" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Simulated Gmail Address</label>
-                <select class="form-control" id="login-email" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none;">
+                <label for="login-email-input" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Gmail or Corporate Email Address</label>
+                <input type="email" class="form-control" id="login-email-input" placeholder="e.g. investigator.anong@gmail.com" value="admin@cppd.go.th" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none; margin-bottom: 1rem;">
+                
+                <label for="login-presets" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.85rem; color: var(--text-muted);">Quick-Select Preset Account</label>
+                <select class="form-control" id="login-presets" style="width: 100%; padding: 0.4rem; background: rgba(255,255,255,0.02); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none; font-size: 0.85rem;">
                     <option value="admin@cppd.go.th">admin@cppd.go.th (Admin)</option>
                     <option value="commander@cppd.go.th">commander@cppd.go.th (ผบก. / Commander)</option>
                     <option value="deputy.commander@cppd.go.th">deputy.commander@cppd.go.th (รอง ผบก. / Deputy Commander)</option>
@@ -633,6 +636,7 @@
                     <option value="deputy.superintendent@cppd.go.th">deputy.superintendent@cppd.go.th (รอง ผกก. / หัวหน้างานสอบสวน)</option>
                     <option value="somchai.i@cppd.go.th">somchai.i@cppd.go.th (พนักงานสอบสวน - CASE-142)</option>
                     <option value="clerk.a@cppd.go.th">clerk.a@cppd.go.th (เสมียนคดี - CASE-142)</option>
+                    <option value="">-- Type custom email above --</option>
                 </select>
             </div>
             
