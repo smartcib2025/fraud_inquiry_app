@@ -18,6 +18,118 @@ document.addEventListener("DOMContentLoaded", () => {
         return originalFetch(url, options);
     };
 
+    // 3-Language Translation Mappings
+    const translations = {
+        th: {
+            "nav-dashboard": "แผงควบคุม",
+            "nav-new-intake": "รับเรื่องร้องเรียนใหม่",
+            "nav-cases": "จัดการคดี",
+            "nav-ai-intelligence": "ศูนย์สืบสวน AI",
+            "nav-reports": "ระบบสร้างรายงาน",
+            "nav-admin-audit": "ผู้ดูแลระบบ & ตรวจสอบ",
+            "btn-signout": "ออกจากระบบ",
+            "api-online": "ระบบเชื่อมต่ออยู่",
+            
+            "view-title-command-center": "ศูนย์ปฏิบัติการ กก.1 บก.ปคบ.",
+            "view-sub-command-center": "ภาพรวมสถานะหน่วยงานและข้อความแจ้งเตือนที่สำคัญ",
+            "view-title-new-intake": "ระบบรับเรื่องข้อมูลผู้เสียหาย กก.1",
+            "view-sub-new-intake": "แบบฟอร์มรับเรื่องร้องเรียนและประมวลผล OCR สลิป/บัญชีผู้ต้องสงสัย",
+            "view-title-cases": "พื้นที่จัดการคดี (Case Workspace)",
+            "view-sub-cases": "ข้อมูลสรุปผู้เสียหาย พยานหลักฐาน เส้นทางการเงิน แผนการสืบสวน และประเด็นข้อกฎหมาย",
+            "view-title-ai-intelligence": "ศูนย์วิเคราะห์ข้อมูลสืบสวนสอบสวนอัจฉริยะ (AI Copilot)",
+            "view-sub-ai-intelligence": "แผนภูมิเครือข่ายเชื่อมโยงคดี การตรวจสอบจุดบกพร่องพยานหลักฐาน และการวิเคราะห์ข้อพิรุธ alibi",
+            "view-title-reports": "ระบบร่างเอกสาร & AI Document Generator",
+            "view-sub-reports": "เขียนร่างรายงานสรุปเสนอผู้บังคับบัญชา แผนประทุษกรรม และรายงานบัญชีม้าธุรกรรมต้องสงสัย",
+            "view-title-admin-audit": "ศูนย์ควบคุมสิทธิและตรวจสอบการปฏิบัติตามกฎหมาย (Compliance Audit)",
+            "view-sub-admin-audit": "การอนุมัติสิทธิพนักงานสอบสวน และประวัติการสืบค้นข้อมูลสำนวนคดีอย่างละเอียดที่บิดเบือนไม่ได้",
+            "ocr-header": "ระบบสแกนหลักฐาน & OCR Simulator",
+            "ocr-label-case": "เชื่อมโยงกับคดี",
+            "ocr-label-title": "ชื่อของเอกสาร",
+            "ocr-label-file": "เลือกไฟล์สลิป (PNG/JPG) หรือไฟล์บัญชี (TXT)",
+            "ocr-btn-run": "อัปโหลดและประมวลผล OCR",
+            "ocr-result-title": "⚡ ผลการดึงข้อมูล OCR"
+        },
+        en: {
+            "nav-dashboard": "Dashboard",
+            "nav-new-intake": "New Intake",
+            "nav-cases": "Case Workspace",
+            "nav-ai-intelligence": "AI Investigation Center",
+            "nav-reports": "Report Generator",
+            "nav-admin-audit": "Admin/Audit",
+            "btn-signout": "Sign Out",
+            "api-online": "API Online",
+            
+            "view-title-command-center": "CCPD AI Copilot — Division 1 Dashboard",
+            "view-sub-command-center": "Overview of division status and critical alerts.",
+            "view-title-new-intake": "New Intake Ingestion Portal",
+            "view-sub-new-intake": "Register complaints and simulate OCR transaction extractions.",
+            "view-title-cases": "Case Workspace",
+            "view-sub-cases": "Evidence-first case details, victims ledger, money flow, and timeline tools.",
+            "view-title-ai-intelligence": "AI Investigation Center",
+            "view-sub-ai-intelligence": "Suspect connection networks, gaps auditor, and alibi checks.",
+            "view-title-reports": "Report Generator",
+            "view-sub-reports": "Draft executive summaries, action plans, and transaction reports.",
+            "view-title-admin-audit": "Admin & Compliance Audit Center",
+            "view-sub-admin-audit": "Staff credentials permissions list and immutable compliance audit logs.",
+            "ocr-header": "Evidence & OCR Simulator",
+            "ocr-label-case": "Link to Case",
+            "ocr-label-title": "Document Title",
+            "ocr-label-file": "Select Slip (PNG/JPG) or Ledger (TXT)",
+            "ocr-btn-run": "Upload & Process OCR",
+            "ocr-result-title": "⚡ OCR Extracted Data"
+        },
+        zh: {
+            "nav-dashboard": "仪表盘",
+            "nav-new-intake": "新案录入",
+            "nav-cases": "案件工作区",
+            "nav-ai-intelligence": "AI调查中心",
+            "nav-reports": "报告生成器",
+            "nav-admin-audit": "管理与审计",
+            "btn-signout": "登出",
+            "api-online": "接口已联机",
+            
+            "view-title-command-center": "CCPD AI 协理 — 经侦一队指挥中心",
+            "view-sub-command-center": "部门状态和关键警报概述。",
+            "view-title-new-intake": "新案录入登记大厅",
+            "view-sub-new-intake": "注册受害者投诉并模拟 OCR 资金流水识别提取。",
+            "view-title-cases": "案件工作区",
+            "view-sub-cases": "提供受害者名单、证据链、资金流向、时间轴和法理要素等核心功能。",
+            "view-title-ai-intelligence": "AI 智能综合分析中心",
+            "view-sub-ai-intelligence": "嫌疑人关联图谱、起诉证据缺陷审查、和供词疑点审计。",
+            "view-title-reports": "智能报告与文书自动生成器",
+            "view-sub-reports": "自动起草结案呈批表、侦查计划书和洗钱资金链分析报告。",
+            "view-title-admin-audit": "合规审计与系统管理中心",
+            "view-sub-admin-audit": "警员访问批准控制台与不可篡改的履职合规审计日志。",
+            "ocr-header": "证据与 OCR 模拟器",
+            "ocr-label-case": "链接到案件",
+            "ocr-label-title": "文件标题",
+            "ocr-label-file": "选择转账单 (PNG/JPG) 或账簿 (TXT)",
+            "ocr-btn-run": "上传并进行 OCR 处理",
+            "ocr-result-title": "⚡ OCR 提取数据"
+        }
+    };
+
+    function applyTranslations(lang) {
+        localStorage.setItem("cppd_lang", lang);
+        const bundle = translations[lang] || translations["th"];
+        document.querySelectorAll("[data-i18n]").forEach(el => {
+            const key = el.getAttribute("data-i18n");
+            if (bundle[key]) {
+                el.textContent = bundle[key];
+            }
+        });
+        
+        // Update current active view title and description
+        const activeBtn = document.querySelector(".nav-btn.active");
+        if (activeBtn) {
+            const viewName = activeBtn.getAttribute("data-view");
+            if (viewName && bundle[`view-title-${viewName}`]) {
+                viewTitle.textContent = bundle[`view-title-${viewName}`];
+                viewSubtitle.textContent = bundle[`view-sub-${viewName}`];
+            }
+        }
+    }
+
     // API endpoint config
     const API_BASE = "http://localhost:8000";
     
@@ -50,15 +162,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const viewSubtitle = document.getElementById("view-subtitle");
 
     const viewMeta = {
-        "command-center": { title: "Command Center", subtitle: "Overview of division status and critical alerts." },
-        "cases": { title: "Case Management", subtitle: "Relational investigation records and evidence registries." },
-        "victim-intake": { title: "Victim Intake Portal", subtitle: "Simulated online witness and profile ingestion forms." },
-        "entity-intelligence": { title: "Entity Intelligence Network", subtitle: "Resolved suspects and counterparties across cases." },
-        "ai-findings": { title: "AI Findings & Supervisor Approvals", subtitle: "Investigator verification ledger for machine assertions." },
-        "audit-logs": { title: "Compliance Audit Ledger", subtitle: "Immutable historical log of all database and system actions." },
-        "trigger-center": { title: "Trigger Bus Center", subtitle: "Publish simulated Pub/Sub events directly into the CPPD OS API Gateway." },
-        "settings": { title: "Security Settings", subtitle: "AI and local processing toggles." },
-        "admin-console": { title: "Admin Console", subtitle: "User access approval and toggle controls." }
+        "command-center": { title: "Dashboard", subtitle: "Overview of division status and critical alerts." },
+        "new-intake": { title: "New Intake Ingestion Portal", subtitle: "Register complaints and simulate OCR transactions." },
+        "cases": { title: "Case Workspace", subtitle: "Evidence-first case details, victims ledger, and timeline tools." },
+        "ai-intelligence": { title: "AI Investigation Center", subtitle: "Suspect connection networks, gaps auditor, and alibi checks." },
+        "reports": { title: "Report Generator", subtitle: "Draft executive summaries and investigation blueprints." },
+        "admin-audit": { title: "Admin & Compliance Audit Center", subtitle: "Staff credentials permissions list and immutable compliance audit logs." }
     };
 
     navButtons.forEach(btn => {
@@ -77,17 +186,22 @@ document.addEventListener("DOMContentLoaded", () => {
         const targetPane = document.getElementById(`view-${viewName}`);
         if (targetPane) targetPane.classList.add("active");
 
-        // Update titles
-        if (viewMeta[viewName]) {
+        const currentLang = localStorage.getItem("cppd_lang") || "th";
+        const bundle = translations[currentLang] || translations["th"];
+        if (bundle[`view-title-${viewName}`]) {
+            viewTitle.textContent = bundle[`view-title-${viewName}`];
+            viewSubtitle.textContent = bundle[`view-sub-${viewName}`];
+        } else if (viewMeta[viewName]) {
             viewTitle.textContent = viewMeta[viewName].title;
             viewSubtitle.textContent = viewMeta[viewName].subtitle;
         }
 
-        // Trigger fetches
         if (viewName === "cases") fetchCases();
-        if (viewName === "ai-findings") fetchFindings();
-        if (viewName === "audit-logs") fetchAuditLogs();
-        if (viewName === "admin-console") fetchAdminUsers();
+        if (viewName === "new-intake") fetchIntakes();
+        if (viewName === "admin-audit") {
+            fetchAdminUsers();
+            fetchAuditLogs();
+        }
     }
 
     // -------------------------------------------------------------
@@ -96,14 +210,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const themeToggle = document.getElementById("theme-toggle");
     const htmlElement = document.documentElement;
 
-    themeToggle.addEventListener("click", () => {
-        const currentTheme = htmlElement.getAttribute("data-theme");
-        const newTheme = currentTheme === "dark" ? "light" : "dark";
-        htmlElement.setAttribute("data-theme", newTheme);
-        themeToggle.innerHTML = newTheme === "dark" ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
-        
-        logAuditLocal("SWITCH_THEME", "profiles", "client", `User toggled client interface to ${newTheme} mode.`);
-    });
+    // Load saved theme preference on initialization
+    const savedTheme = localStorage.getItem("cppd_theme") || "dark";
+    htmlElement.setAttribute("data-theme", savedTheme);
+    if (themeToggle) {
+        themeToggle.innerHTML = savedTheme === "dark" ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+    }
+
+    if (themeToggle) {
+        themeToggle.addEventListener("click", () => {
+            const currentTheme = htmlElement.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            htmlElement.setAttribute("data-theme", newTheme);
+            localStorage.setItem("cppd_theme", newTheme);
+            themeToggle.innerHTML = newTheme === "dark" ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+            
+            logAuditLocal("SWITCH_THEME", "profiles", "client", `User toggled client interface to ${newTheme} mode.`);
+        });
+    }
 
     // -------------------------------------------------------------
     // Data Fetching Logic (FastAPI API with Local Fallbacks)
@@ -459,72 +583,321 @@ document.addEventListener("DOMContentLoaded", () => {
     // -------------------------------------------------------------
     // Core Workflow Simulation / Forms
     // -------------------------------------------------------------
-    const intakeForm = document.getElementById("victim-intake-form");
-    intakeForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const caseId = document.getElementById("intake-case-id").value;
-        const text = document.getElementById("intake-raw-statement").value;
-        
-        const btn = document.getElementById("btn-submit-intake");
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Extracting...';
-        
+    // -------------------------------------------------------------
+    // Core Workflow Simulation / Forms & Intake Promotion
+    // -------------------------------------------------------------
+    async function fetchIntakes() {
         try {
-            // Check if backend is available
-            const res = await fetch(`${API_BASE}/api/pubsub/publish`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    event_type: "VICTIM_REGISTERED",
-                    payload: {
-                        case_id: caseId,
-                        full_name: "Nattapong Sukprasert",
-                        phone: "081-555-0192",
-                        loss_amount: 1250000.00,
-                        raw_statement: text
+            const res = await fetch(`${API_BASE}/api/intakes`);
+            if (!res.ok) throw new Error("API issue");
+            state.intakes = await res.json();
+        } catch (e) {
+            console.warn("Backend API offline, using local mock intakes.", e);
+            if (!state.intakes || state.intakes.length === 0) {
+                state.intakes = [
+                    {
+                        id: "INTAKE-001",
+                        title: "Cosmetics Scam Complaint",
+                        reporter_name: "Sunisa Saelim",
+                        reporter_phone: "082-111-9988",
+                        triage_urgency: "high",
+                        triage_reason: "Multiple similar complaints logged against this seller within 24 hours.",
+                        status: "pending",
+                        created_at: "2026-08-16T09:00:00Z"
                     }
-                })
-            });
-            if (res.ok) {
-                logAuditLocal("VICTIM_INTAKE", "victims", "new", "Extracted statement entities successfully.");
-                alert("Victim statement processed successfully by Gemini and registered.");
-                switchView("command-center");
-                loadAllInitialData();
-            } else {
-                throw new Error("API rejection");
+                ];
             }
-        } catch (err) {
-            // Local Simulation fallback if backend offline
-            setTimeout(() => {
-                logAuditLocal("VICTIM_INTAKE_MOCK", "victims", "new", "Gemini extraction simulator processed statement. Entities resolved.");
+        }
+        renderIntakes();
+    }
+
+    function renderIntakes() {
+        const tbody = document.querySelector("#intakes-table tbody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        
+        state.intakes.forEach(i => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><strong>${i.id}</strong></td>
+                <td>${i.title}</td>
+                <td>${i.reporter_name}</td>
+                <td>${i.reporter_phone}</td>
+                <td>
+                    <span class="badge" style="background-color: ${i.triage_urgency === 'high' ? 'rgba(239,68,68,0.15)' : 'rgba(245,158,11,0.15)'}; color: ${i.triage_urgency === 'high' ? 'var(--danger)' : 'var(--warning)'}">
+                        ${i.triage_urgency.toUpperCase()}
+                    </span>
+                </td>
+                <td style="font-size: 0.8rem; color: var(--text-muted); max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${i.triage_reason}">
+                    ${i.triage_reason}
+                </td>
+                <td>
+                    <span class="badge" style="background-color: ${i.status === 'promoted' ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.05)'}; color: ${i.status === 'promoted' ? 'var(--success)' : 'var(--text-muted)'}">
+                        ${i.status.toUpperCase()}
+                    </span>
+                </td>
+                <td style="text-align: right;">
+                    ${i.status === 'pending' ? `
+                        <button class="btn btn-primary btn-sm btn-promote-intake" data-intakeid="${i.id}" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                            <i class="fa-solid fa-folder-plus"></i> Promote
+                        </button>
+                    ` : `
+                        <span class="text-xs muted-text">Linked to ${i.case_id}</span>
+                    `}
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        document.querySelectorAll(".btn-promote-intake").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                const intakeId = btn.getAttribute("data-intakeid");
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Promoting...';
                 
-                // Add target match trigger alert
-                state.alerts.unshift({
-                    id: "alert-" + Date.now(),
-                    type: "warning",
-                    title: "Entity Match Warning",
-                    description: "Phone `081-555-0192` extracted. Registered to case CASE-142.",
-                    time: "Just now"
+                try {
+                    const res = await fetch(`${API_BASE}/api/intakes/${intakeId}/promote`, {
+                        method: "POST"
+                    });
+                    if (!res.ok) throw new Error("Promotion issue");
+                    const result = await res.json();
+                    alert(`Successfully promoted complaint to Case ${result.case_id}!`);
+                    switchView("cases");
+                    fetchCases();
+                    fetchIntakes();
+                } catch (e) {
+                    alert("Simulator Mode: promoted intake to new case successfully!");
+                    const intake = state.intakes.find(x => x.id === intakeId);
+                    if (intake) {
+                        intake.status = "promoted";
+                        const caseId = "CASE-" + Math.floor(100 + Math.random() * 900);
+                        intake.case_id = caseId;
+                        state.cases.push({
+                            id: caseId,
+                            title: intake.title,
+                            description: intake.raw_statement || "Simulated case",
+                            status: "open",
+                            owning_unit: "Financial Crimes Division 1",
+                            sensitive: false
+                        });
+                    }
+                    switchView("cases");
+                    fetchCases();
+                    fetchIntakes();
+                }
+            });
+        });
+    }
+
+    const intakeForm = document.getElementById("victim-intake-form");
+    if (intakeForm) {
+        intakeForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const title = document.getElementById("intake-title").value;
+            const reporterName = document.getElementById("intake-reporter-name").value;
+            const reporterPhone = document.getElementById("intake-reporter-phone").value;
+            const text = document.getElementById("intake-raw-statement").value;
+            
+            const btn = document.getElementById("btn-submit-intake");
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Ingesting...';
+            
+            try {
+                const res = await fetch(`${API_BASE}/api/intakes`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        title: title,
+                        reporter_name: reporterName,
+                        reporter_phone: reporterPhone,
+                        raw_statement: text
+                    })
                 });
                 
-                state.triggers.unshift({
-                    id: "trig-" + Date.now(),
-                    event_type: "VICTIM_REGISTERED",
-                    payload: { full_name: "Nattapong Sukprasert", case_id: caseId },
-                    created_at: "Just now"
-                });
+                if (!res.ok) throw new Error("API rejection");
+                const newIntake = await res.json();
                 
-                // Reset form button
+                alert(`Complaint registered and triaged successfully as ${newIntake.id}!`);
+                document.getElementById("intake-title").value = "";
+                document.getElementById("intake-reporter-name").value = "";
+                document.getElementById("intake-reporter-phone").value = "";
+                document.getElementById("intake-raw-statement").value = "";
+                
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-microchip"></i> Run AI Extraction (Gemini Flash)';
+                btn.innerHTML = '<i class="fa-solid fa-microchip"></i> Run AI Ingestion & Triage';
                 
-                alert("Simulator: Statement extracted successfully. Cross-case matches analyzed.");
-                switchView("command-center");
-                renderAlertsFeed();
-                renderTimelineTriggers();
-            }, 1000);
+                fetchIntakes();
+            } catch (err) {
+                setTimeout(() => {
+                    const mockId = "INTAKE-" + Math.floor(100 + Math.random() * 900);
+                    state.intakes.push({
+                        id: mockId,
+                        title: title,
+                        reporter_name: reporterName,
+                        reporter_phone: reporterPhone,
+                        raw_statement: text,
+                        triage_urgency: "high",
+                        triage_reason: "Simulated AI triage analysis found matching fraud keywords.",
+                        status: "pending",
+                        created_at: new Date().toISOString()
+                    });
+                    
+                    alert(`Simulator Mode: Ingested complaint successfully as ${mockId}!`);
+                    document.getElementById("intake-title").value = "";
+                    document.getElementById("intake-reporter-name").value = "";
+                    document.getElementById("intake-reporter-phone").value = "";
+                    document.getElementById("intake-raw-statement").value = "";
+                    
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-microchip"></i> Run AI Ingestion & Triage';
+                    
+                    fetchIntakes();
+                }, 800);
+            }
+        });
+    }
+
+    const reportForm = document.getElementById("report-generator-form");
+    if (reportForm) {
+        reportForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const caseId = document.getElementById("report-case-id").value;
+            const reportType = document.getElementById("report-type").value;
+            const previewTextarea = document.getElementById("draft-report-content");
+            
+            previewTextarea.value = "Drafting document with AI Copilot... Please wait...";
+            
+            try {
+                const res = await fetch(`${API_BASE}/api/reports/generate`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ case_id: caseId, report_type: reportType })
+                });
+                
+                if (!res.ok) throw new Error("Drafting failed");
+                const report = await res.json();
+                previewTextarea.value = report.content;
+            } catch (err) {
+                previewTextarea.value = "Error: Failed to generate report draft. Check gateway connection.";
+            }
+        });
+    }
+    
+    const copyDraftBtn = document.getElementById("btn-copy-draft-report");
+    if (copyDraftBtn) {
+        copyDraftBtn.addEventListener("click", () => {
+            const content = document.getElementById("draft-report-content").value;
+            navigator.clipboard.writeText(content);
+            alert("Draft report copied to clipboard!");
+        });
+    }
+
+    document.addEventListener("click", (e) => {
+        const tabBtn = e.target.closest("[data-ai-tab]");
+        if (tabBtn) {
+            const tabName = tabBtn.getAttribute("data-ai-tab");
+            const container = tabBtn.closest(".ai-tab-selectors");
+            container.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+            tabBtn.classList.add("active");
+            
+            const viewPane = tabBtn.closest("#view-ai-intelligence");
+            viewPane.querySelectorAll(".ai-tab-panel").forEach(panel => panel.style.display = "none");
+            const targetPanel = viewPane.querySelector(`#ai-tab-content-${tabName}`);
+            if (targetPanel) targetPanel.style.display = "block";
         }
     });
+
+    document.addEventListener("click", (e) => {
+        const tabBtn = e.target.closest("[data-workspace-tab]");
+        if (tabBtn) {
+            const tabName = tabBtn.getAttribute("data-workspace-tab");
+            const tabsContainer = tabBtn.closest(".workspace-tabs");
+            tabsContainer.querySelectorAll(".tab-btn").forEach(btn => {
+                btn.classList.remove("active");
+                btn.style.borderBottomColor = "transparent";
+                btn.style.color = "var(--text-muted)";
+            });
+            tabBtn.classList.add("active");
+            tabBtn.style.borderBottomColor = "var(--accent-primary)";
+            tabBtn.style.color = "var(--text-primary)";
+            
+            const detailsPanel = tabBtn.closest("#case-details-panel");
+            detailsPanel.querySelectorAll(".workspace-tab-content").forEach(panel => panel.style.display = "none");
+            const targetPanel = detailsPanel.querySelector(`#workspace-tab-${tabName}`);
+            if (targetPanel) targetPanel.style.display = "block";
+        }
+    });
+    // OCR Upload Form Submission
+    const ocrForm = document.getElementById("ocr-upload-form");
+    if (ocrForm) {
+        ocrForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const caseId = document.getElementById("ocr-case-id").value;
+            const title = document.getElementById("ocr-file-title").value;
+            const fileInput = document.getElementById("ocr-file-input");
+            
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert("Please select a file to upload.");
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const btn = document.getElementById("btn-run-ocr");
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing OCR...';
+            
+            const formData = new FormData();
+            formData.append("case_id", caseId);
+            formData.append("title", title);
+            formData.append("description", "Uploaded via Online Ingestion & OCR Simulator");
+            formData.append("type", "bank_statement");
+            formData.append("file", file);
+            
+            try {
+                const res = await fetch(`${API_BASE}/api/evidence/upload`, {
+                    method: "POST",
+                    body: formData
+                });
+                
+                const data = await res.json();
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Upload & Process OCR';
+                
+                if (res.ok && data.status === "success") {
+                    const resultsPanel = document.getElementById("ocr-results-panel");
+                    resultsPanel.style.display = "block";
+                    
+                    const ocrRes = data.ocr_result;
+                    if (ocrRes && ocrRes.status === "extracted") {
+                        document.getElementById("ocr-res-bank").textContent = ocrRes.bank;
+                        document.getElementById("ocr-res-account").textContent = ocrRes.account;
+                        document.getElementById("ocr-res-amount").textContent = Number(ocrRes.amount).toLocaleString();
+                        document.getElementById("ocr-res-status").textContent = "Success (Txn Seeded)";
+                        document.getElementById("ocr-res-status").style.color = "var(--success)";
+                        logAuditLocal("OCR_SIMULATOR", "evidence", data.evidence_id, `Simulated OCR extracted target account ${ocrRes.account} with amount ${ocrRes.amount} THB.`);
+                    } else {
+                        document.getElementById("ocr-res-bank").textContent = "N/A";
+                        document.getElementById("ocr-res-account").textContent = "N/A";
+                        document.getElementById("ocr-res-amount").textContent = "0";
+                        document.getElementById("ocr-res-status").textContent = "Text Extracted Only";
+                        document.getElementById("ocr-res-status").style.color = "var(--warning)";
+                        logAuditLocal("OCR_SIMULATOR", "evidence", data.evidence_id, `Simulated OCR scanned document only.`);
+                    }
+                    
+                    alert("OCR processing completed! Check results below the form.");
+                    fileInput.value = "";
+                    document.getElementById("ocr-file-title").value = "";
+                    loadAllInitialData();
+                } else {
+                    alert("OCR simulation failed: " + (data.detail || "Unknown error"));
+                }
+            } catch (err) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Upload & Process OCR';
+                alert("Network error running OCR Simulator: " + err.message);
+            }
+        });
+    }
 
     // -------------------------------------------------------------
     // Pub/Sub Trigger Panel Actions
@@ -657,6 +1030,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fetchCases();
         fetchFindings();
         fetchAuditLogs();
+        fetchIntakes();
         renderAlertsFeed();
         renderTimelineTriggers();
         fetchAISettings();
@@ -860,6 +1234,18 @@ document.addEventListener("DOMContentLoaded", () => {
             const emailFilter = document.getElementById("filter-audit-email").value.trim();
             const actionFilter = document.getElementById("filter-audit-action").value;
             fetchAuditLogs(emailFilter, actionFilter);
+        });
+    }
+
+    // Language Switcher Dropdown Listener
+    const langSelect = document.getElementById("lang-select");
+    if (langSelect) {
+        const savedLang = localStorage.getItem("cppd_lang") || "th";
+        langSelect.value = savedLang;
+        applyTranslations(savedLang);
+        
+        langSelect.addEventListener("change", (e) => {
+            applyTranslations(e.target.value);
         });
     }
 

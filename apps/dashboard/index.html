@@ -22,7 +22,7 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <i class="fa-solid fa-shield-halved accent-color"></i>
+                    <img src="https://cppd.cib.go.th/backend/uploads/logo_edit_500_7acc86e6d4.png" alt="CPPD Logo" style="height: 30px; width: auto; object-fit: contain;">
                     <span>CPPD OS</span>
                 </div>
                 <span class="badge">Antigravity</span>
@@ -30,32 +30,22 @@
             
             <nav class="sidebar-nav">
                 <button class="nav-btn active" data-view="command-center">
-                    <i class="fa-solid fa-gauge-high"></i> Command Center
+                    <i class="fa-solid fa-gauge-high"></i> <span data-i18n="nav-dashboard">Dashboard</span>
+                </button>
+                <button class="nav-btn" data-view="new-intake">
+                    <i class="fa-solid fa-folder-plus"></i> <span data-i18n="nav-new-intake">New Intake</span>
                 </button>
                 <button class="nav-btn" data-view="cases">
-                    <i class="fa-solid fa-folder-open"></i> Cases
+                    <i class="fa-solid fa-folder-open"></i> <span data-i18n="nav-cases">Case Workspace</span>
                 </button>
-                <button class="nav-btn" data-view="victim-intake">
-                    <i class="fa-solid fa-user-plus"></i> Victim Intake
+                <button class="nav-btn" data-view="ai-intelligence">
+                    <i class="fa-solid fa-brain"></i> <span data-i18n="nav-ai-intelligence">AI Investigation Center</span>
                 </button>
-                <button class="nav-btn" data-view="entity-intelligence">
-                    <i class="fa-solid fa-diagram-project"></i> Entity Network
+                <button class="nav-btn" data-view="reports">
+                    <i class="fa-solid fa-file-invoice"></i> <span data-i18n="nav-reports">Report Generator</span>
                 </button>
-                <button class="nav-btn" data-view="ai-findings">
-                    <i class="fa-solid fa-robot"></i> AI Findings
-                    <span class="badge-count" id="findings-count">1</span>
-                </button>
-                <button class="nav-btn" data-view="audit-logs">
-                    <i class="fa-solid fa-receipt"></i> Audit Ledger
-                </button>
-                <button class="nav-btn" data-view="trigger-center">
-                    <i class="fa-solid fa-bolt"></i> Trigger Center
-                </button>
-                <button class="nav-btn" data-view="settings">
-                    <i class="fa-solid fa-gear"></i> Security Settings
-                </button>
-                <button class="nav-btn" data-view="admin-console" id="nav-admin-console" style="display: none;">
-                    <i class="fa-solid fa-users-gear"></i> Admin Console
+                <button class="nav-btn" data-view="admin-audit" id="nav-admin-console" style="display: none;">
+                    <i class="fa-solid fa-users-gear"></i> <span data-i18n="nav-admin-audit">Admin/Audit</span>
                 </button>
             </nav>
             
@@ -72,7 +62,7 @@
                         <i class="fa-solid fa-moon"></i>
                     </button>
                     <button id="btn-logout" class="btn btn-danger btn-sm" style="padding: 0.4rem; flex: 1; border-radius: var(--border-radius); font-size: 0.8rem;">
-                        <i class="fa-solid fa-power-off"></i> Sign Out
+                        <i class="fa-solid fa-power-off"></i> <span data-i18n="btn-signout">Sign Out</span>
                     </button>
                 </div>
             </div>
@@ -85,9 +75,18 @@
                     <h1 id="view-title">Command Center</h1>
                     <p id="view-subtitle" class="muted-text">Overview of division status and critical alerts.</p>
                 </div>
-                <div class="header-actions">
-                    <span class="status-indicator online"></span>
-                    <span class="status-text">API Online</span>
+                <div class="header-actions" style="display: flex; align-items: center; gap: 1rem;">
+                    <div class="lang-selector">
+                        <select id="lang-select" style="padding: 0.4rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none; cursor: pointer; font-size: 0.85rem;">
+                            <option value="th">🇹🇭 ไทย (TH)</option>
+                            <option value="en">🇺🇸 English (EN)</option>
+                            <option value="zh">🇨🇳 中文 (ZH)</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="status-indicator online"></span>
+                        <span class="status-text" id="status-api-text" data-i18n="api-online">API Online</span>
+                    </div>
                 </div>
             </header>
 
@@ -224,29 +223,41 @@
                                     </div>
                                 </div>
                                 
-                                <div class="detail-section">
-                                    <h4>Victims</h4>
+                                <!-- Workspace Tabs navigation -->
+                                <div class="workspace-tabs" style="display: flex; gap: 0.25rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1rem; padding-bottom: 0.25rem; overflow-x: auto;">
+                                    <button class="tab-btn active" data-workspace-tab="victims" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid var(--accent-primary); color: var(--text-primary); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Victims</button>
+                                    <button class="tab-btn" data-workspace-tab="evidence" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Evidence</button>
+                                    <button class="tab-btn" data-workspace-tab="transactions" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Transactions</button>
+                                    <button class="tab-btn" data-workspace-tab="timeline" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Timeline</button>
+                                    <button class="tab-btn" data-workspace-tab="legal-matrix" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Legal Matrix</button>
+                                    <button class="tab-btn" data-workspace-tab="tasks" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Tasks</button>
+                                </div>
+                                
+                                <!-- Tab Contents -->
+                                <div id="workspace-tab-victims" class="workspace-tab-content active">
                                     <div class="detail-list" id="details-victims-list"></div>
                                 </div>
-
-                                <div class="detail-section">
-                                    <h4>Evidence Inventory (Immutable Registry)</h4>
+                                
+                                <div id="workspace-tab-evidence" class="workspace-tab-content" style="display: none;">
                                     <div class="detail-list" id="details-evidence-list"></div>
                                 </div>
-
-                                <div class="detail-section">
-                                    <h4>Active Investigation Tasks</h4>
-                                    <div class="detail-list" id="details-tasks-list"></div>
+                                
+                                <div id="workspace-tab-transactions" class="workspace-tab-content" style="display: none;">
+                                    <div class="detail-list" id="details-transactions-list"></div>
                                 </div>
-
-                                <div class="detail-section">
-                                    <h4>Timeline & Chronology Contradictions</h4>
+                                
+                                <div id="workspace-tab-timeline" class="workspace-tab-content" style="display: none;">
                                     <div class="detail-list" id="details-contradictions-list"></div>
                                 </div>
-
-                                <div class="detail-section">
-                                    <h4>Financial Structuring Ledger</h4>
-                                    <div class="detail-list" id="details-transactions-list"></div>
+                                
+                                <div id="workspace-tab-legal-matrix" class="workspace-tab-content" style="display: none;">
+                                    <div class="detail-list" id="details-legal-matrix-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                        <!-- Dynamic Legal Issue Mappings -->
+                                    </div>
+                                </div>
+                                
+                                <div id="workspace-tab-tasks" class="workspace-tab-content" style="display: none;">
+                                    <div class="detail-list" id="details-tasks-list"></div>
                                 </div>
 
                                 <div class="detail-section margin-top-lg" style="margin-top: 1.5rem;">
@@ -257,274 +268,329 @@
                     </div>
                 </section>
 
-                <!-- VIEW: VICTIM INTAKE -->
-                <section id="view-victim-intake" class="view-pane">
+                <!-- VIEW: NEW INTAKE -->
+                <section id="view-new-intake" class="view-pane">
                     <div class="dashboard-split">
+                        <!-- Left Pane: Ingest Complaint Form -->
                         <div class="card flex-grow">
                             <div class="card-header">
-                                <h2>Online Ingestion & OCR Simulator</h2>
+                                <h2>Register New Intake Complaint</h2>
                             </div>
                             <div class="card-body">
                                 <form id="victim-intake-form">
-                                    <div class="form-group">
-                                        <label for="intake-case-id">Link to Case</label>
-                                        <select id="intake-case-id" class="form-control" required>
+                                    <div class="form-group" style="margin-bottom: 0.75rem;">
+                                        <label for="intake-title">Complaint Title</label>
+                                        <input type="text" id="intake-title" class="form-control" placeholder="e.g. Cosmetics scam on Facebook page" required>
+                                    </div>
+                                    <div class="form-group" style="display: flex; gap: 1rem; margin-bottom: 0.75rem;">
+                                        <div style="flex: 1;">
+                                            <label for="intake-reporter-name">Reporter Name</label>
+                                            <input type="text" id="intake-reporter-name" class="form-control" placeholder="Full Name" required>
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="intake-reporter-phone">Reporter Phone</label>
+                                            <input type="text" id="intake-reporter-phone" class="form-control" placeholder="e.g. 089-xxx-xxxx" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 1rem;">
+                                        <label for="intake-raw-statement">Raw Witness Statement / Chat Transcript</label>
+                                        <textarea id="intake-raw-statement" rows="5" class="form-control" placeholder="Provide copy-paste statement text..." required>My name is Nattapong Sukprasert. I was scammed by Kittisak Wongsawat. I contacted him at 089-111-2345. I made a transfer of 1,250,000 THB to SCB account 401-229-3388. Please help track my funds.</textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" id="btn-submit-intake" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                        <i class="fa-solid fa-microchip"></i> Run AI Ingestion & Triage
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card w-350" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius);">
+                            <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding: 1rem;">
+                                <h2 style="margin: 0; font-size: 1.1rem;" data-i18n="ocr-header">Slip & Ledger OCR Simulator</h2>
+                            </div>
+                            <div class="card-body" style="padding: 1.25rem;">
+                                <form id="ocr-upload-form">
+                                    <div class="form-group" style="margin-bottom: 0.75rem;">
+                                        <label for="ocr-case-id" class="form-label" style="display: block; font-weight: 500; font-size: 0.85rem;" data-i18n="ocr-label-case">Link to Case</label>
+                                        <select id="ocr-case-id" class="form-control" style="width: 100%; padding: 0.5rem;" required>
                                             <option value="CASE-142">CASE-142 - Siam Network Ledger Structuring</option>
                                             <option value="CASE-087">CASE-087 - Phuket Cyber Cash Layering</option>
                                             <option value="CASE-112">CASE-112 - Bangkok Shell Company Network</option>
                                         </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="intake-raw-statement">Victim Written Statement / Chat Transcript</label>
-                                        <textarea id="intake-raw-statement" rows="8" class="form-control" placeholder="Provide raw copy-paste statement or chat ledger transcription..." required>My name is Nattapong Sukprasert. I was scammed by Kittisak Wongsawat. I contacted him at 089-111-2345. I made a transfer of 1,250,000 THB to SCB account 401-229-3388. Please help track my funds.</textarea>
+                                    <div class="form-group" style="margin-bottom: 0.75rem;">
+                                        <label for="ocr-file-title" class="form-label" style="display: block; font-weight: 500; font-size: 0.85rem;" data-i18n="ocr-label-title">Document Title</label>
+                                        <input type="text" id="ocr-file-title" class="form-control" placeholder="e.g. Kasikorn Transfer Slip" style="width: 100%; padding: 0.5rem;" required>
                                     </div>
-                                    <div class="form-actions">
-                                        <button type="submit" class="btn btn-primary" id="btn-submit-intake">
-                                            <i class="fa-solid fa-microchip"></i> Run AI Extraction (Gemini Flash)
-                                        </button>
+                                    <div class="form-group" style="margin-bottom: 1rem;">
+                                        <label for="ocr-file-input" class="form-label" style="display: block; font-weight: 500; font-size: 0.85rem;" data-i18n="ocr-label-file">Select Slip (PNG/JPG) or Ledger (TXT)</label>
+                                        <input type="file" id="ocr-file-input" class="form-control" style="width: 100%; padding: 0.4rem; background: transparent; border: 1px dashed var(--border-color);" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" id="btn-run-ocr" style="width: 100%; padding: 0.6rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i> <span data-i18n="ocr-btn-run">Upload & Process OCR</span>
+                                    </button>
+                                </form>
+
+                                <!-- OCR Results panel -->
+                                <div id="ocr-results-panel" style="display: none; margin-top: 1rem; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); background: rgba(0,0,0,0.1);">
+                                    <h4 style="margin: 0 0 0.5rem 0; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;"><i class="fa-solid fa-bolt text-warning"></i> OCR Results</h4>
+                                    <p style="margin: 0 0 0.25rem 0; font-size: 0.8rem;"><strong>Bank:</strong> <span id="ocr-res-bank">-</span></p>
+                                    <p style="margin: 0 0 0.25rem 0; font-size: 0.8rem;"><strong>Account:</strong> <span id="ocr-res-account">-</span></p>
+                                    <p style="margin: 0 0 0.25rem 0; font-size: 0.8rem;"><strong>Amount:</strong> <span id="ocr-res-amount">-</span> THB</p>
+                                    <p style="margin: 0; font-size: 0.8rem;"><strong>Status:</strong> <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--success); padding: 0.1rem 0.4rem;" id="ocr-res-status">-</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom Pane: Intakes Table -->
+                    <div class="card margin-top-lg" style="margin-top: 1.5rem;">
+                        <div class="card-header">
+                            <h2>Pending Intakes & AI Triage Center</h2>
+                        </div>
+                        <div class="card-body no-padding">
+                            <table class="cppd-table" id="intakes-table">
+                                <thead>
+                                    <tr>
+                                        <th>Intake ID</th>
+                                        <th>Title</th>
+                                        <th>Reporter</th>
+                                        <th>Phone</th>
+                                        <th>AI Triage Urgency</th>
+                                        <th>AI Reason</th>
+                                        <th>Status</th>
+                                        <th style="text-align: right;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic Intakes List -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: AI INVESTIGATION CENTER -->
+                <section id="view-ai-intelligence" class="view-pane">
+                    <div class="card">
+                        <div class="card-header justify-between" style="border-bottom: 1px solid var(--border-color); padding: 1rem; display: flex; align-items: center;">
+                            <h2>AI Investigation Center</h2>
+                            <div class="ai-tab-selectors" style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-outline btn-sm active" data-ai-tab="graph" style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">Relation Network</button>
+                                <button class="btn btn-outline btn-sm" data-ai-tab="gaps" style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">Evidence Gap Analyzer</button>
+                                <button class="btn btn-outline btn-sm" data-ai-tab="contradicts" style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">Devil's Advocate</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- TAB: RELATION GRAPH -->
+                            <div id="ai-tab-content-graph" class="ai-tab-panel">
+                                <p class="muted-text margin-bottom-lg" style="margin-bottom: 1rem;">Visual representation of resolved suspects and organizations mapped across cases.</p>
+                                <div class="graph-canvas-container">
+                                    <div class="graph-canvas" id="graph-canvas-sim">
+                                        <div class="graph-node node-case" style="top: 50%; left: 30%;">
+                                            <i class="fa-solid fa-folder-open"></i>
+                                            <span>CASE-142</span>
+                                        </div>
+                                        <div class="graph-node node-person" style="top: 25%; left: 55%;">
+                                            <i class="fa-solid fa-user"></i>
+                                            <span>Kittisak (Suspect)</span>
+                                        </div>
+                                        <div class="graph-node node-phone" style="top: 50%; left: 75%;">
+                                            <i class="fa-solid fa-mobile-screen-button"></i>
+                                            <span>089-111-2345</span>
+                                        </div>
+                                        <div class="graph-node node-account" style="top: 75%; left: 55%;">
+                                            <i class="fa-solid fa-credit-card"></i>
+                                            <span>SCB 401-229-3388</span>
+                                        </div>
+                                        <svg class="graph-edges">
+                                            <line x1="30%" y1="50%" x2="55%" y2="25%"></line>
+                                            <line x1="30%" y1="50%" x2="75%" y2="50%"></line>
+                                            <line x1="30%" y1="50%" x2="55%" y2="75%"></line>
+                                            <line x1="55%" y1="25%" x2="55%" y2="75%"></line>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- TAB: EVIDENCE GAPS -->
+                            <div id="ai-tab-content-gaps" class="ai-tab-panel" style="display: none;">
+                                <p class="muted-text margin-bottom-lg" style="margin-bottom: 1rem;">AI-assisted identification of evidence voids in the active case file against required legal proof structures.</p>
+                                <div class="alert alert-warning" style="margin-bottom: 1.5rem; display: flex; gap: 0.75rem; align-items: flex-start; padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--warning); background: rgba(245,158,11,0.05);">
+                                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--warning); font-size: 1.25rem;"></i>
+                                    <div>
+                                        <h4 style="margin: 0 0 0.25rem 0; font-size: 0.95rem;">Missing Proof: Public Intent Indicator</h4>
+                                        <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Although Siam Network transfers are logged, evidence that advertisements were published to the general public (web listings, Facebook posts archive) is currently missing from CASE-142 to substantiate Section 343 charges.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- TAB: DEVIL'S ADVOCATE -->
+                            <div id="ai-tab-content-contradicts" class="ai-tab-panel" style="display: none;">
+                                <p class="muted-text margin-bottom-lg" style="margin-bottom: 1rem;">Chronology auditor checking witness statements against transactional and physical records to flag discrepancies.</p>
+                                <div class="alert alert-danger" style="margin-bottom: 1.5rem; display: flex; gap: 0.75rem; align-items: flex-start; padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--danger); background: rgba(239,68,68,0.05);">
+                                    <i class="fa-solid fa-circle-xmark" style="color: var(--danger); font-size: 1.25rem;"></i>
+                                    <div>
+                                        <h4 style="margin: 0 0 0.25rem 0; font-size: 0.95rem;">Timeline Contradiction Flagged</h4>
+                                        <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Suspect Kittisak Wongsawat asserts he was in Phuket during the transaction window of 2026-08-10, but ATM cash withdrawal logs record ATM terminal usage at Ladprao Rd, Bangkok at 11:00:00Z.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: REPORT GENERATOR -->
+                <section id="view-reports" class="view-pane">
+                    <div class="dashboard-split">
+                        <!-- Controls Card -->
+                        <div class="card w-350">
+                            <div class="card-header">
+                                <h2>AI Document Copilot</h2>
+                            </div>
+                            <div class="card-body">
+                                <form id="report-generator-form">
+                                    <div class="form-group margin-bottom-md" style="margin-bottom: 1rem;">
+                                        <label for="report-case-id" class="form-label">Select Case</label>
+                                        <select id="report-case-id" class="form-control" required>
+                                            <option value="CASE-142">CASE-142 - Siam Network Ledger Structuring</option>
+                                            <option value="CASE-087">CASE-087 - Phuket Cyber Cash Layering</option>
+                                            <option value="CASE-112">CASE-112 - Bangkok Shell Company Network</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group margin-bottom-lg" style="margin-bottom: 1.5rem;">
+                                        <label for="report-type" class="form-label">Report Template</label>
+                                        <select id="report-type" class="form-control" required>
+                                            <option value="Executive Brief">Executive Brief</option>
+                                            <option value="Investigation Plan">Investigation Plan</option>
+                                            <option value="Financial Analysis">Financial Analysis</option>
+                                            <option value="Evidence Gap Report">Evidence Gap Report</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" id="btn-generate-report" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.65rem;">
+                                        <i class="fa-solid fa-file-pen"></i> Draft Document
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Preview Card -->
+                        <div class="card flex-grow">
+                            <div class="card-header justify-between">
+                                <h2>Draft Preview Pane</h2>
+                                <button class="btn btn-outline btn-sm" id="btn-copy-draft-report"><i class="fa-solid fa-copy"></i> Copy Draft</button>
+                            </div>
+                            <div class="card-body" style="height: 100%; display: flex; flex-direction: column;">
+                                <textarea id="draft-report-content" class="form-control" style="flex: 1; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.6; background: rgba(0,0,0,0.15); border: 1px solid var(--border-color); color: var(--text-primary); resize: none; min-height: 300px; padding: 1rem;" readonly>Draft preview will appear here after generation...</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: ADMIN/AUDIT -->
+                <section id="view-admin-audit" class="view-pane">
+                    <div class="dashboard-split" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        
+                        <!-- Top Row: Users and Audits -->
+                        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+                            <!-- User approvals card -->
+                            <div class="card" style="flex: 1; min-width: 400px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius);">
+                                <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding: 1.25rem;">
+                                    <h2 style="margin: 0; font-size: 1.1rem;"><i class="fa-solid fa-users-gear text-primary"></i> User Access & Approvals</h2>
+                                </div>
+                                <div class="card-body" style="padding: 1rem;">
+                                    <table class="cppd-table" id="admin-users-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                                        <thead>
+                                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                                <th style="padding: 0.5rem;">Name</th>
+                                                <th style="padding: 0.5rem;">Email</th>
+                                                <th style="padding: 0.5rem;">Role</th>
+                                                <th style="padding: 0.5rem;">Status</th>
+                                                <th style="padding: 0.5rem; text-align: right;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Dynamic Users List -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Audit Logs card -->
+                            <div class="card" style="flex: 1.5; min-width: 500px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius);">
+                                <div class="card-header justify-between" style="border-bottom: 1px solid var(--border-color); padding: 1.25rem; display: flex; align-items: center;">
+                                    <h2 style="margin: 0; font-size: 1.1rem;"><i class="fa-solid fa-receipt text-primary"></i> Compliance Audit Logs</h2>
+                                    <button class="btn btn-secondary btn-sm" id="btn-export-audit"><i class="fa-solid fa-download"></i> Export CSV</button>
+                                </div>
+                                <div class="card-body" style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border-color); display: flex; gap: 0.5rem; align-items: center;">
+                                    <input type="text" id="filter-audit-email" placeholder="Filter by Gmail..." style="padding: 0.4rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none; font-size: 0.8rem; width: 180px;">
+                                    <select id="filter-audit-action" style="padding: 0.4rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none; font-size: 0.8rem; width: 150px;">
+                                        <option value="">All Actions</option>
+                                        <option value="LOGIN_SUCCESS">LOGIN_SUCCESS</option>
+                                        <option value="LOGOUT">LOGOUT</option>
+                                        <option value="VIEW_CASE_DETAILS">VIEW_CASE_DETAILS</option>
+                                        <option value="CREATE_INTAKE">CREATE_INTAKE</option>
+                                        <option value="PROMOTE_INTAKE">PROMOTE_INTAKE</option>
+                                        <option value="GENERATE_REPORT">GENERATE_REPORT</option>
+                                    </select>
+                                    <button class="btn btn-primary btn-sm" id="btn-filter-audit" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Filter</button>
+                                </div>
+                                <div class="card-body no-padding" style="overflow-y: auto; max-height: 250px;">
+                                    <table class="cppd-table" id="audit-table" style="width: 100%; font-size: 0.8rem;">
+                                        <thead>
+                                            <tr>
+                                                <th style="padding: 0.5rem;">Timestamp</th>
+                                                <th style="padding: 0.5rem;">Action</th>
+                                                <th style="padding: 0.5rem;">User</th>
+                                                <th style="padding: 0.5rem;">Details</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Dynamic Audit Logs -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Bottom Row: Privacy and AI Configs -->
+                        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius); max-width: 800px;">
+                            <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding: 1.25rem;">
+                                <h2 style="margin: 0; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-shield-halved text-primary"></i> Local AI & Privacy Configuration</h2>
+                            </div>
+                            <div class="card-body" style="padding: 1.5rem;">
+                                <p class="muted-text" style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.85rem;">For highly confidential investigations, route all AI summarizations and extractions to on-premises local endpoints to ensure data sovereignty.</p>
+                                
+                                <form id="form-ai-settings">
+                                    <div class="form-group" style="margin-bottom: 1rem;">
+                                        <label for="ai-mode" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.85rem;">AI Processing Mode</label>
+                                        <select class="form-control" id="ai-mode" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none;">
+                                            <option value="cloud">Cloud AI Tier (Google Gemini 2.5)</option>
+                                            <option value="local_pc">Local PC Offline Mode (Ollama / Localhost)</option>
+                                            <option value="local_agency">Agency Secure Network Mode (CIB GPT / On-Premises)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group" id="group-local-endpoint" style="margin-bottom: 1rem;">
+                                        <label for="ai-endpoint" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.85rem;">Local AI Endpoint Base URL</label>
+                                        <input type="text" class="form-control" id="ai-endpoint" placeholder="e.g. http://localhost:11434/v1" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none;">
+                                        <span class="text-xs muted-text" style="display: block; margin-top: 0.25rem; font-size: 0.75rem; color: var(--text-muted);">Endpoint should support OpenAI chat completions schema.</span>
+                                    </div>
+                                    
+                                    <div class="form-group" id="group-local-model" style="margin-bottom: 1rem;">
+                                        <label for="ai-model" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.85rem;">Target Model Name</label>
+                                        <input type="text" class="form-control" id="ai-model" placeholder="e.g. llama3" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none;">
+                                    </div>
+                                    
+                                    <div class="form-group" style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
+                                        <button class="btn btn-primary btn-sm" type="submit" id="btn-save-settings">Save Configurations</button>
+                                        <button class="btn btn-outline btn-sm" type="button" id="btn-preset-ollama">Load Ollama Defaults</button>
+                                        <button class="btn btn-outline btn-sm" type="button" id="btn-preset-cib">Load CIB GPT Defaults</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
-
-                        <div class="card w-350">
-                            <div class="card-header">
-                                <h2>Mobile QR Ingestion</h2>
-                            </div>
-                            <div class="card-body flex-center">
-                                <div class="qr-container">
-                                    <div class="qr-box">
-                                        <!-- Simulated QR Code -->
-                                        <div class="qr-code-placeholder">
-                                            <i class="fa-solid fa-qrcode fa-6x"></i>
-                                        </div>
-                                    </div>
-                                    <p class="text-center margin-top-md text-sm muted-text">Scan to launch mobile portal for victim self-registration.</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </section>
 
-                <!-- VIEW: ENTITY INTELLIGENCE -->
-                <section id="view-entity-intelligence" class="view-pane">
-                    <div class="card">
-                        <div class="card-header justify-between">
-                            <h2>Investigation Knowledge Graph</h2>
-                            <span class="badge text-xs">PostgreSQL Schema V1</span>
-                        </div>
-                        <div class="card-body">
-                            <p class="muted-text margin-bottom-lg">Visual representation of resolved entities and linkages across cases.</p>
-                            
-                            <div class="graph-canvas-container">
-                                <!-- Interactive Graph Visual Simulation -->
-                                <div class="graph-canvas" id="graph-canvas-sim">
-                                    <div class="graph-node node-case" style="top: 50%; left: 30%;">
-                                        <i class="fa-solid fa-folder-open"></i>
-                                        <span>CASE-142</span>
-                                    </div>
-                                    <div class="graph-node node-person" style="top: 25%; left: 55%;">
-                                        <i class="fa-solid fa-user"></i>
-                                        <span>Kittisak (Suspect)</span>
-                                    </div>
-                                    <div class="graph-node node-phone" style="top: 50%; left: 75%;">
-                                        <i class="fa-solid fa-mobile-screen-button"></i>
-                                        <span>089-111-2345</span>
-                                    </div>
-                                    <div class="graph-node node-account" style="top: 75%; left: 55%;">
-                                        <i class="fa-solid fa-credit-card"></i>
-                                        <span>SCB 401-229-3388</span>
-                                    </div>
-                                    
-                                    <!-- Dynamic lines can be rendered with CSS or SVG -->
-                                    <svg class="graph-edges">
-                                        <line x1="30%" y1="50%" x2="55%" y2="25%"></line>
-                                        <line x1="30%" y1="50%" x2="75%" y2="50%"></line>
-                                        <line x1="30%" y1="50%" x2="55%" y2="75%"></line>
-                                        <line x1="55%" y1="25%" x2="55%" y2="75%"></line>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- VIEW: AI FINDINGS & APPROVALS -->
-                <section id="view-ai-findings" class="view-pane">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2>Supervisor Review & AI Findings Ledger</h2>
-                        </div>
-                        <div class="card-body no-padding">
-                            <table class="cppd-table" id="findings-table">
-                                <thead>
-                                    <tr>
-                                        <th>Finding ID</th>
-                                        <th>Case</th>
-                                        <th>Type</th>
-                                        <th>Details</th>
-                                        <th>Confidence</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Dynamic Findings -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- VIEW: AUDIT LOGS -->
-                <section id="view-audit-logs" class="view-pane">
-                    <div class="card">
-                        <div class="card-header justify-between">
-                            <h2>Chronological Compliance Audit Ledger</h2>
-                            <button class="btn btn-secondary btn-sm" id="btn-export-audit"><i class="fa-solid fa-download"></i> Export CSV</button>
-                        </div>
-                        <div class="card-body" style="padding: 1rem; border-bottom: 1px solid var(--border-color); display: flex; gap: 1rem;">
-                            <input type="text" id="filter-audit-email" placeholder="Filter by Gmail..." style="padding: 0.5rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none; width: 250px;">
-                            <select id="filter-audit-action" style="padding: 0.5rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none; width: 200px;">
-                                <option value="">All Actions</option>
-                                <option value="LOGIN_SUCCESS">LOGIN_SUCCESS</option>
-                                <option value="LOGOUT">LOGOUT</option>
-                                <option value="VIEW_CASE_DETAILS">VIEW_CASE_DETAILS</option>
-                                <option value="UPDATE_AI_SETTINGS">UPDATE_AI_SETTINGS</option>
-                                <option value="GENERATE_CASE_BRIEFING">GENERATE_CASE_BRIEFING</option>
-                            </select>
-                            <button class="btn btn-primary btn-sm" id="btn-filter-audit">Filter</button>
-                        </div>
-                        <div class="card-body no-padding">
-                            <table class="cppd-table" id="audit-table">
-                                <thead>
-                                    <tr>
-                                        <th>Timestamp</th>
-                                        <th>Action Type</th>
-                                        <th>Target Table</th>
-                                        <th>Record ID</th>
-                                        <th>Operational Details</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Dynamic Audit Logs -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- VIEW: TRIGGER CENTER -->
-                <section id="view-trigger-center" class="view-pane">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2>Pub/Sub Trigger Bus Simulator</h2>
-                        </div>
-                        <div class="card-body">
-                            <p class="muted-text margin-bottom-lg">Simulate hardware/external triggers routing into the Google Cloud API gateway and firing workflow scripts.</p>
-                            
-                            <div class="trigger-buttons-grid">
-                                <button class="btn btn-outline btn-trigger" data-trigger="VICTIM_REGISTERED_MOCK">
-                                    <i class="fa-solid fa-user-plus text-primary"></i>
-                                    <div>
-                                        <h4>VICTIM_REGISTERED</h4>
-                                        <p>Mock QR registration for Nattapong</p>
-                                    </div>
-                                </button>
-                                
-                                <button class="btn btn-outline btn-trigger" data-trigger="EVIDENCE_UPLOADED_MOCK">
-                                    <i class="fa-solid fa-file-shield text-success"></i>
-                                    <div>
-                                        <h4>EVIDENCE_UPLOADED</h4>
-                                        <p>Simulate bank transfer slip receipt upload</p>
-                                    </div>
-                                </button>
-                                
-                                <button class="btn btn-outline btn-trigger" data-trigger="ENTITY_CREATED_MOCK">
-                                    <i class="fa-solid fa-link text-warning"></i>
-                                    <div>
-                                        <h4>ENTITY_CREATED</h4>
-                                        <p>Simulate suspect phone number detection</p>
-                                    </div>
-                                </button>
-                                
-                                <button class="btn btn-outline btn-trigger" data-trigger="EVIDENCE_GAP_MOCK">
-                                    <i class="fa-solid fa-clipboard-question text-danger"></i>
-                                    <div>
-                                        <h4>EVIDENCE_GAP_FOUND</h4>
-                                        <p>Audit check for missing ledgers</p>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- VIEW: SECURITY SETTINGS -->
-                <section id="view-settings" class="view-pane">
-                    <div class="card" style="max-width: 600px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius);">
-                        <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding: 1.25rem;">
-                            <h2 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-shield-halved text-primary"></i> Local AI & Privacy Configuration</h2>
-                        </div>
-                        <div class="card-body" style="padding: 1.5rem;">
-                            <p class="muted-text margin-bottom-lg" style="color: var(--text-muted); margin-bottom: 1.5rem;">For highly confidential investigations, route all AI summarizations and extractions to on-premises local endpoints to ensure data sovereignty.</p>
-                            
-                            <form id="form-ai-settings">
-                                <div class="form-group margin-bottom-lg" style="margin-bottom: 1.25rem;">
-                                    <label for="ai-mode" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">AI Processing Mode</label>
-                                    <select class="form-control" id="ai-mode" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none;">
-                                        <option value="cloud">Cloud AI Tier (Google Gemini 2.5)</option>
-                                        <option value="local_pc">Local PC Offline Mode (Ollama / Localhost)</option>
-                                        <option value="local_agency">Agency Secure Network Mode (CIB GPT / On-Premises)</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group margin-bottom-lg" id="group-local-endpoint" style="margin-bottom: 1.25rem;">
-                                    <label for="ai-endpoint" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Local AI Endpoint Base URL</label>
-                                    <input type="text" class="form-control" id="ai-endpoint" placeholder="e.g. http://localhost:11434/v1" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none;">
-                                    <span class="text-xs muted-text" style="display: block; margin-top: 0.25rem; font-size: 0.75rem; color: var(--text-muted);">Endpoint should support OpenAI chat completions schema.</span>
-                                </div>
-                                
-                                <div class="form-group margin-bottom-lg" id="group-local-model" style="margin-bottom: 1.25rem;">
-                                    <label for="ai-model" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Target Model Name</label>
-                                    <input type="text" class="form-control" id="ai-model" placeholder="e.g. llama3" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none;">
-                                </div>
-                                
-                                <div class="form-group" style="display: flex; gap: 0.5rem; margin-top: 1.75rem;">
-                                    <button class="btn btn-primary" type="submit" id="btn-save-settings">Save Configurations</button>
-                                    <button class="btn btn-outline" type="button" id="btn-preset-ollama">Load Ollama Defaults</button>
-                                    <button class="btn btn-outline" type="button" id="btn-preset-cib">Load CIB GPT Defaults</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- VIEW: ADMIN CONSOLE -->
-                <section id="view-admin-console" class="view-pane">
-                    <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius); max-width: 800px; margin-bottom: 2rem;">
-                        <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding: 1.25rem;">
-                            <h2 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-users-gear text-primary"></i> User Access & Approval Management</h2>
-                        </div>
-                        <div class="card-body" style="padding: 1.5rem;">
-                            <p class="muted-text margin-bottom-lg" style="color: var(--text-muted); margin-bottom: 1.5rem;">Manage platform credentials and toggle admin approval states for each staff member below.</p>
-                            <table class="cppd-table" id="admin-users-table" style="width: 100%; border-collapse: collapse; text-align: left;">
-                                <thead>
-                                    <tr style="border-bottom: 1px solid var(--border-color);">
-                                        <th style="padding: 0.75rem;">Name</th>
-                                        <th style="padding: 0.75rem;">Email</th>
-                                        <th style="padding: 0.75rem;">Role</th>
-                                        <th style="padding: 0.75rem;">Status</th>
-                                        <th style="padding: 0.75rem; text-align: right;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Dynamic Users List -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
             </div>
         </main>
     </div>
@@ -551,8 +617,8 @@
     <!-- MODAL: LOGIN OVERLAY -->
     <div id="login-overlay" style="position: fixed; inset: 0; background-color: var(--bg-app); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px);">
         <div class="card" style="width: 90%; max-width: 400px; padding: 2rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius); text-align: center;">
-            <div style="font-size: 3rem; margin-bottom: 1rem; color: var(--text-primary)">
-                <i class="fa-solid fa-building-shield"></i>
+            <div style="margin-bottom: 1.5rem; display: flex; justify-content: center; align-items: center;">
+                <img src="https://cppd.cib.go.th/backend/uploads/logo_edit_500_7acc86e6d4.png" alt="CPPD Logo" style="height: 90px; width: auto; object-fit: contain;">
             </div>
             <h2 class="margin-bottom-sm">CPPD Investigation OS</h2>
             <p class="muted-text margin-bottom-lg" style="margin-bottom: 2rem; font-size: 0.9rem;">Authorized Law Enforcement Personnel Only. Secure sign-in required.</p>

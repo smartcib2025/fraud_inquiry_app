@@ -53,7 +53,7 @@ class MockDatabase:
                 "title": "Siam Network Ledger Structuring",
                 "description": "Investigation into structured cash transfers and suspected layering using fake online commerce entities.",
                 "status": "open",
-                "owning_unit": "Financial Crimes",
+                "owning_unit": "Financial Crimes Division 1",
                 "sensitive": False,
                 "created_at": "2026-08-10T10:00:00Z",
                 "updated_at": "2026-08-17T15:00:00Z"
@@ -63,7 +63,7 @@ class MockDatabase:
                 "title": "Phuket Cyber Cash Layering",
                 "description": "Tracking illegal offshore gambling proceeds routed through local proxy banking accounts.",
                 "status": "open",
-                "owning_unit": "Financial Crimes",
+                "owning_unit": "Financial Crimes Division 1",
                 "sensitive": False,
                 "created_at": "2026-08-12T11:00:00Z",
                 "updated_at": "2026-08-16T12:00:00Z"
@@ -86,53 +86,73 @@ class MockDatabase:
             {"case_id": "CASE-112", "user_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", "assignment_role": "co-lead"}
         ]
         self.profiles = {
-            "d2f0998c-8c1d-4099-ae1e-f3f2a89366df": {"id": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df", "email": "somchai.i@cppd.go.th", "full_name": "Somchai Dev (พนักงานสอบสวน)", "org_unit": "Financial Crimes", "role": "investigator", "approved": True},
-            "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d": {"id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", "email": "somsak.b@cppd.go.th", "full_name": "Somsak Code (พนักงานสอบสวน)", "org_unit": "Cyber Division", "role": "investigator", "approved": True},
-            "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077": {"id": "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077", "email": "superintendent@cppd.go.th", "full_name": "Anong Head (ผกก. Financial Crimes)", "org_unit": "Financial Crimes", "role": "superintendent", "approved": True},
-            "e37b98d2-430b-488f-9a73-982ee3f2112e": {"id": "e37b98d2-430b-488f-9a73-982ee3f2112e", "email": "commander@cppd.go.th", "full_name": "Prapas Chief (ผบก.)", "org_unit": "Division HQ", "role": "commander", "approved": True},
+            "d2f0998c-8c1d-4099-ae1e-f3f2a89366df": {"id": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df", "email": "somchai.i@cppd.go.th", "full_name": "Somchai Dev (พนักงานสอบสวน กก.1)", "org_unit": "Financial Crimes Division 1", "role": "investigator", "approved": True},
+            "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d": {"id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", "email": "somsak.b@cppd.go.th", "full_name": "Somsak Code (พนักงานสอบสวน กก.1)", "org_unit": "Financial Crimes Division 1", "role": "investigator", "approved": True},
+            "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077": {"id": "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077", "email": "superintendent@cppd.go.th", "full_name": "Anong Head (ผกก. กก.1 บก.ปคบ.)", "org_unit": "Financial Crimes Division 1", "role": "superintendent", "approved": True},
+            "e37b98d2-430b-488f-9a73-982ee3f2112e": {"id": "e37b98d2-430b-488f-9a73-982ee3f2112e", "email": "commander@cppd.go.th", "full_name": "Prapas Chief (ผบก.ปคบ.)", "org_unit": "Division HQ", "role": "commander", "approved": True},
             "p-admin": {"id": "p-admin", "email": "admin@cppd.go.th", "full_name": "Admin Chief", "org_unit": "Division HQ", "role": "admin", "approved": True},
-            "p-deputy-commander": {"id": "p-deputy-commander", "email": "deputy.commander@cppd.go.th", "full_name": " deputy.commander (รอง ผบก.)", "org_unit": "Division HQ", "role": "deputy_commander", "approved": True},
-            "p-deputy-superintendent": {"id": "p-deputy-superintendent", "email": "deputy.superintendent@cppd.go.th", "full_name": "Anong Head (รอง ผกก.)", "org_unit": "Financial Crimes", "role": "deputy_superintendent", "approved": True},
-            "p-clerk": {"id": "p-clerk", "email": "clerk.a@cppd.go.th", "full_name": "Clerk A (เสมียนคดี)", "org_unit": "Financial Crimes", "role": "clerk", "approved": False}
+            "p-deputy-commander": {"id": "p-deputy-commander", "email": "deputy.commander@cppd.go.th", "full_name": "deputy.commander (รอง ผบก.ปคบ.)", "org_unit": "Division HQ", "role": "deputy_commander", "approved": True},
+            "p-deputy-superintendent": {"id": "p-deputy-superintendent", "email": "deputy.superintendent@cppd.go.th", "full_name": "Anong Head (รอง ผกก. กก.1 บก.ปคบ.)", "org_unit": "Financial Crimes Division 1", "role": "deputy_superintendent", "approved": True},
+            "p-clerk": {"id": "p-clerk", "email": "clerk.a@cppd.go.th", "full_name": "Clerk A (เสมียนคดี กก.1)", "org_unit": "Financial Crimes Division 1", "role": "clerk", "approved": True}
         }
+        self.sessions = {}
+        
+        # 1. INTAKES
+        self.intakes = [
+            {
+                "id": "INTAKE-001",
+                "case_id": None,
+                "title": "Cosmetics Scam Complaint",
+                "description": "Complaint regarding fake luxury lipsticks sold by 'Siam Network' on Facebook.",
+                "reporter_name": "Sunisa Saelim",
+                "reporter_phone": "082-111-9988",
+                "raw_statement": "I ordered 5 luxury lipsticks from Siam Network page for 15,000 THB but received counterfeit ones. The seller refused refund and blocked me.",
+                "triage_urgency": "high",
+                "triage_reason": "Multiple similar complaints logged against this seller within 24 hours.",
+                "status": "pending",
+                "created_at": "2026-08-16T09:00:00Z"
+            },
+            {
+                "id": "INTAKE-002",
+                "case_id": None,
+                "title": "Unauthorized Subscription Charge",
+                "description": "Complaint regarding unauthorized health supplement subscription charges on credit card.",
+                "reporter_name": "Piyabut Somdee",
+                "reporter_phone": "085-333-2211",
+                "raw_statement": "I bought a supplement trial bottle from Phuket supplements site. They charged my card 3,500 THB next month without my consent.",
+                "triage_urgency": "medium",
+                "triage_reason": "Single transaction dispute, needs consumer protection terms review.",
+                "status": "pending",
+                "created_at": "2026-08-17T11:00:00Z"
+            }
+        ]
+        
+        # 2. PERSONS
+        self.persons = [
+            {"id": "p-kittisak", "case_id": "CASE-142", "name": "Kittisak Wongsawat", "national_id": "1-1002-88832-11-2", "role": "Suspect", "phone": "089-111-2345", "address": "12/5 Ladprao Rd, Bangkok"},
+            {"id": "p-sunisa", "case_id": "CASE-142", "name": "Sunisa Saelim", "national_id": "3-1209-99823-00-1", "role": "Witness/Victim", "phone": "082-111-9988", "address": "45 Vibhavadi Rd, Bangkok"},
+            {"id": "p-somchai", "case_id": "CASE-142", "name": "Somchai Sukdee", "national_id": "1-1003-77723-11-0", "role": "Witness (Proxy Director)", "phone": "081-999-8888", "address": "77 Ratchada Rd, Bangkok"}
+        ]
+        
+        # 3. ORGANIZATIONS
+        self.organizations = [
+            {"id": "org-siam-net", "case_id": "CASE-142", "name": "Siam Network Co., Ltd.", "registration_number": "0105563023145", "type": "Company", "address": "100/1 Sukhumvit Rd, Bangkok", "status": "active"},
+            {"id": "org-phuket-supp", "case_id": "CASE-087", "name": "Phuket Supplements Co.", "registration_number": "0765561002231", "type": "Store/Manufacturer", "address": "55/9 Patong Beach Rd, Phuket", "status": "active"}
+        ]
+        
+        # 4. VICTIMS
         self.victims = [
             {"id": "cf2f8c5b-38ab-41c1-903c-83b66d4db02a", "case_id": "CASE-142", "full_name": "Nattapong Sukprasert", "email": "nattapong.s@gmail.com", "phone": "081-555-0192", "address": "123/4 Sukhumvit Rd, Bangkok", "loss_amount": 1250000.00, "intake_source": "portal"},
             {"id": "8b3e9fb3-83bc-42b7-8ce6-90bd551deeb3", "case_id": "CASE-087", "full_name": "Chaiwat Mongkol", "email": "chaiwat.m@yahoo.com", "phone": "089-777-1234", "address": "56/9 Patong Beach Rd, Phuket", "loss_amount": 850000.00, "intake_source": "portal"}
         ]
+        
+        # 5. EVIDENCE
         self.evidence = [
             {"id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088", "case_id": "CASE-142", "title": "Transfer slip receipt", "description": "Bank receipt slip showing 1.25M THB transfer to SCB account.", "type": "document", "file_hash": "a3f82cb304b5f883201de374ffea57bd8c928e1832049e3bfd12cf88c9d21415", "status": "sealed", "created_at": "2026-08-10T10:05:00Z"},
             {"id": "11b7df3c-6622-48df-9cb9-ef77ba4c28f1", "case_id": "CASE-142", "title": "Line Chat Logs screenshot", "description": "Screenshots showing contact between suspect and victim.", "type": "document", "file_hash": "e7b92f7a63bc1a2384a56c07221ee9f08cb18d9f10928e3bcfde204d80a1122a", "status": "sealed", "created_at": "2026-08-10T10:10:00Z"}
         ]
-        self.statements = [
-            {
-                "id": "a8efde12-b91b-4f9e-bc43-2287f3b890a2", 
-                "case_id": "CASE-142", 
-                "subject_id": "cf2f8c5b-38ab-41c1-903c-83b66d4db02a", 
-                "subject_type": "victim", 
-                "recorded_at": "2026-08-10T10:00:00Z", 
-                "transcript": "I was contacted by a seller on Facebook offering bulk electronics at discount. I transferred 1.25M Baht to Siam Commerce Bank account number 401-229-3388. After payment, the seller deleted the Facebook page. The phone number they contacted me with was 089-111-2345.", 
-                "summary": "Victim defrauded of 1.25M THB by fake Facebook seller. Funds transferred to SCB 401-229-3388. Contact phone: 089-111-2345.",
-                "created_at": "2026-08-10T10:00:00Z"
-            }
-        ]
-        self.entities = [
-            {"id": "c01f8c5b-38ab-41c1-903c-83b66d4db03a", "type": "PERSON", "name": "Kittisak Wongsawat"},
-            {"id": "c02f8c5b-38ab-41c1-903c-83b66d4db03b", "type": "PHONE", "name": "089-111-2345"},
-            {"id": "c03f8c5b-38ab-41c1-903c-83b66d4db03c", "type": "BANK_ACCOUNT", "name": "401-229-3388"}
-        ]
-        self.entity_identifiers = [
-            {"id": "d01f8c5b-38ab-41c1-903c-83b66d4db04a", "entity_id": "c01f8c5b-38ab-41c1-903c-83b66d4db03a", "identifier_type": "national_id", "value": "1-1002-88832-11-2"},
-            {"id": "d02f8c5b-38ab-41c1-903c-83b66d4db04b", "entity_id": "c02f8c5b-38ab-41c1-903c-83b66d4db03b", "identifier_type": "phone_number", "value": "089-111-2345"},
-            {"id": "d03f8c5b-38ab-41c1-903c-83b66d4db04c", "entity_id": "c03f8c5b-38ab-41c1-903c-83b66d4db03c", "identifier_type": "bank_account_number", "value": "401-229-3388"}
-        ]
-        self.entity_relationships = [
-            {"id": str(uuid.uuid4()), "source_entity_id": "c01f8c5b-38ab-41c1-903c-83b66d4db03a", "target_entity_id": "c03f8c5b-38ab-41c1-903c-83b66d4db03c", "relationship_type": "OWNS", "confidence": 1.00}
-        ]
-        self.case_entities = [
-            {"case_id": "CASE-142", "entity_id": "c01f8c5b-38ab-41c1-903c-83b66d4db03a"},
-            {"case_id": "CASE-142", "entity_id": "c02f8c5b-38ab-41c1-903c-83b66d4db03b"},
-            {"case_id": "CASE-142", "entity_id": "c03f8c5b-38ab-41c1-903c-83b66d4db03c"}
-        ]
+        
+        # 6. TRANSACTIONS
         self.bank_accounts = [
             {"id": "b07e2a9b-38cc-4d32-bc10-ef239ab82811", "bank_name": "Siam Commerce Bank", "account_number": "401-229-3388", "account_name": "Kittisak Wongsawat"},
             {"id": "b08e3a9c-49dd-5e43-cd21-f0340bc93922", "bank_name": "Kasikorn Bank", "account_number": "702-888-1123", "account_name": "Siam Electronics Co. Ltd"}
@@ -150,12 +170,50 @@ class MockDatabase:
                 "evidence_id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"
             }
         ]
+        
+        # 7. TIMELINE
+        self.timeline = [
+            {"id": "ev-1", "case_id": "CASE-142", "event_date": "2026-08-01T09:00:00Z", "title": "Siam Network Co. Registration", "description": "Siam Network Co., Ltd. registered with Department of Business Development.", "evidence_id": None},
+            {"id": "ev-2", "case_id": "CASE-142", "event_date": "2026-08-05T10:00:00Z", "title": "Suspect Opens Mule Account", "description": "Kittisak Wongsawat opens Siam Commerce Bank account number 401-229-3388.", "evidence_id": None},
+            {"id": "ev-3", "case_id": "CASE-142", "event_date": "2026-08-09T14:32:00Z", "title": "Victim Bank Transfer", "description": "Victim Nattapong Sukprasert transfers 1.25M Baht to Siam Commerce Bank account 401-229-3388.", "evidence_id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"},
+            {"id": "ev-4", "case_id": "CASE-142", "event_date": "2026-08-10T11:00:00Z", "title": "Cash Withdrawal at Ladprao ATM", "description": "ATM records show 1.25M Baht cash withdrawal by Kittisak. (Alibi contradiction flag).", "evidence_id": None}
+        ]
+        
+        # 8. LEGAL_ISSUES
+        self.legal_issues = [
+            {"id": "li-1", "case_id": "CASE-142", "issue_title": "Public Fraud (ฉ้อโกงประชาชน)", "legal_code": "Section 343 of Criminal Code", "description": "Fraudulent online listings targeting public consumer purchase.", "status": "substantiated", "evidence_ids": ["f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"]},
+            {"id": "li-2", "case_id": "CASE-142", "issue_title": "False Advertising (โฆษณาเป็นเท็จ)", "legal_code": "Section 22 of Consumer Protection Act B.E. 2522", "description": "Misrepresentation of cosmetic product quality and certifications.", "status": "under_review", "evidence_ids": ["11b7df3c-6622-48df-9cb9-ef77ba4c28f1"]},
+            {"id": "li-3", "case_id": "CASE-142", "issue_title": "Computer Crimes", "legal_code": "Section 14(1) of Computer Crimes Act", "description": "Inputting false information into computer systems.", "status": "substantiated", "evidence_ids": ["11b7df3c-6622-48df-9cb9-ef77ba4c28f1"]}
+        ]
+        
+        # 9. TASKS
         self.tasks = [
             {"id": "918d6e3c-8c5e-4c7b-8395-5db460cb7d10", "case_id": "CASE-142", "title": "Verify Kittisak Wongsawat identity", "description": "Cross-check suspect ID with Department of Provincial Administration registry.", "assigned_to": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df", "status": "pending", "due_date": "2026-08-25T17:00:00Z"},
             {"id": "918d6e3c-8c5e-4c7b-8395-5db460cb7d11", "case_id": "CASE-142", "title": "Analyze bank transactions flow", "description": "Review layering indicators from transaction reports on SCB 401-229-3388.", "assigned_to": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df", "status": "in_progress", "due_date": "2026-08-28T17:00:00Z"}
         ]
-        self.audit_events = []
+        
+        # 10. REPORTS
+        self.reports = [
+            {"id": "rep-001", "case_id": "CASE-142", "report_type": "Executive Brief", "title": "Siam Network Triage Briefing", "content": "DRAFT REPORT\nSummary of Siam Network cosmetics scam...", "created_at": "2026-08-17T12:00:00Z"}
+        ]
+        
+        # 11. AUDIT_LOG
+        self.audit_log = []
         self.trigger_events = []
+        
+        # Legacy compatibility values
+        self.statements = [
+            {
+                "id": "a8efde12-b91b-4f9e-bc43-2287f3b890a2", 
+                "case_id": "CASE-142", 
+                "subject_id": "cf2f8c5b-38ab-41c1-903c-83b66d4db02a", 
+                "subject_type": "victim", 
+                "recorded_at": "2026-08-10T10:00:00Z", 
+                "transcript": "I was contacted by a seller on Facebook offering bulk electronics at discount. I transferred 1.25M Baht to Siam Commerce Bank account number 401-229-3388. After payment, the seller deleted the Facebook page. The phone number they contacted me with was 089-111-2345.", 
+                "summary": "Victim defrauded of 1.25M THB by fake Facebook seller. Funds transferred to SCB 401-229-3388. Contact phone: 089-111-2345.",
+                "created_at": "2026-08-10T10:00:00Z"
+            }
+        ]
         self.ai_findings = [
             {
                 "id": "ai-find-001",
@@ -168,7 +226,23 @@ class MockDatabase:
                 "created_at": "2026-08-17T12:00:00Z"
             }
         ]
-        self.sessions = {}
+        
+    @property
+    def audit_events(self):
+        return self.audit_log
+        
+    @audit_events.setter
+    def audit_events(self, value):
+        self.audit_log = value
+        
+    @property
+    def entities(self):
+        result = []
+        for p in self.persons:
+            result.append({"id": p["id"], "type": "PERSON", "name": p["name"]})
+        for o in self.organizations:
+            result.append({"id": o["id"], "type": "ORGANIZATION", "name": o["name"]})
+        return result
 
 db = MockDatabase()
 
@@ -252,8 +326,13 @@ def get_case(case_id: str, authorization: Optional[str] = Header(None)):
     case_victims = [v for v in db.victims if v["case_id"] == case_id]
     case_evidence = [e for e in db.evidence if e["case_id"] == case_id]
     case_tasks = [t for t in db.tasks if t["case_id"] == case_id]
-    case_entities_ids = [ce["entity_id"] for ce in db.case_entities if ce["case_id"] == case_id]
-    case_entities = [ent for ent in db.entities if ent["id"] in case_entities_ids]
+    case_entities = [
+        {"id": p["id"], "type": "PERSON", "name": p["name"], "role": p["role"]}
+        for p in db.persons if p.get("case_id") == case_id
+    ] + [
+        {"id": o["id"], "type": "ORGANIZATION", "name": o["name"], "role": o.get("type", "Company")}
+        for o in db.organizations if o.get("case_id") == case_id
+    ]
     case_transactions = [t for t in db.transactions if t["case_id"] == case_id]
     
     db.audit_events.append({
@@ -275,6 +354,195 @@ def get_case(case_id: str, authorization: Optional[str] = Header(None)):
         "transactions": case_transactions
     }
 
+# -------------------------------------------------------------
+# CCPD AI Copilot — Intake Management Endpoints
+# -------------------------------------------------------------
+class IntakeCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+    reporter_name: str
+    reporter_phone: str
+    raw_statement: str
+
+@app.get("/api/intakes")
+def list_intakes(authorization: Optional[str] = Header(None)):
+    user = get_user_from_token(authorization)
+    return db.intakes
+
+@app.post("/api/intakes")
+def create_intake(payload: IntakeCreate, authorization: Optional[str] = Header(None)):
+    user = get_user_from_token(authorization)
+    intake_id = f"INTAKE-{str(uuid.uuid4())[:8].upper()}"
+    
+    statement_lower = payload.raw_statement.lower()
+    urgency = "medium"
+    reason = "Standard consumer protection case."
+    if any(x in statement_lower for x in ["scam", "fraud", "หลอก", "โกง", "ลวง", "เสียหาย", "สูญเสีย"]):
+        urgency = "high"
+        reason = "Potential financial crime or public fraud indicators detected in statements."
+    
+    new_intake = {
+        "id": intake_id,
+        "case_id": None,
+        "title": payload.title,
+        "description": payload.description,
+        "reporter_name": payload.reporter_name,
+        "reporter_phone": payload.reporter_phone,
+        "raw_statement": payload.raw_statement,
+        "triage_urgency": urgency,
+        "triage_reason": reason,
+        "status": "pending",
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    db.intakes.append(new_intake)
+    
+    db.audit_log.append({
+        "id": str(uuid.uuid4()),
+        "user_id": user["email"],
+        "action": "CREATE_INTAKE",
+        "table_name": "intakes",
+        "record_id": intake_id,
+        "query_details": f"Registered new complaint report: {payload.title}",
+        "logged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    })
+    return new_intake
+
+@app.post("/api/intakes/{intake_id}/promote")
+def promote_intake_to_case(intake_id: str, authorization: Optional[str] = Header(None)):
+    user = get_user_from_token(authorization)
+    intake = next((i for i in db.intakes if i["id"] == intake_id), None)
+    if not intake:
+        raise HTTPException(status_code=404, detail="Intake report not found")
+        
+    case_id = f"CASE-{str(uuid.uuid4())[:8].upper()}"
+    new_case = {
+        "id": case_id,
+        "title": intake["title"],
+        "description": intake["raw_statement"],
+        "status": "open",
+        "owning_unit": "Financial Crimes Division 1",
+        "sensitive": False,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "updated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    db.cases[case_id] = new_case
+    intake["case_id"] = case_id
+    intake["status"] = "promoted"
+    
+    victim_id = str(uuid.uuid4())
+    db.victims.append({
+        "id": victim_id,
+        "case_id": case_id,
+        "full_name": intake["reporter_name"],
+        "phone": intake["reporter_phone"],
+        "email": f"{intake['reporter_name'].lower().replace(' ', '')}@gmail.com",
+        "address": "Simulated address",
+        "loss_amount": 10000.0,
+        "intake_source": "complaint"
+    })
+    
+    db.audit_log.append({
+        "id": str(uuid.uuid4()),
+        "user_id": user["email"],
+        "action": "PROMOTE_INTAKE",
+        "table_name": "cases",
+        "record_id": case_id,
+        "query_details": f"Promoted intake complaint {intake_id} to case {case_id}",
+        "logged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    })
+    
+    return {"status": "success", "case_id": case_id, "case": new_case}
+
+# -------------------------------------------------------------
+# CCPD AI Copilot — Case Workspace Sub-tabs Endpoints
+# -------------------------------------------------------------
+@app.get("/api/cases/{case_id}/timeline")
+def get_case_timeline(case_id: str, authorization: Optional[str] = Header(None)):
+    user = get_user_from_token(authorization)
+    timeline_events = [ev for ev in db.timeline if ev["case_id"] == case_id]
+    return timeline_events
+
+@app.get("/api/cases/{case_id}/legal-issues")
+def get_case_legal_issues(case_id: str, authorization: Optional[str] = Header(None)):
+    user = get_user_from_token(authorization)
+    issues = [li for li in db.legal_issues if li["case_id"] == case_id]
+    return issues
+
+@app.get("/api/cases/{case_id}/reports")
+def get_case_reports(case_id: str, authorization: Optional[str] = Header(None)):
+    user = get_user_from_token(authorization)
+    case_reports = [r for r in db.reports if r["case_id"] == case_id]
+    return case_reports
+
+class ReportGenerateRequest(BaseModel):
+    case_id: str
+    report_type: str
+
+@app.post("/api/reports/generate")
+def generate_report_draft(payload: ReportGenerateRequest, authorization: Optional[str] = Header(None)):
+    user = get_user_from_token(authorization)
+    case = db.cases.get(payload.case_id)
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+        
+    report_id = f"REP-{str(uuid.uuid4())[:8].upper()}"
+    draft_title = f"{payload.report_type} - {case['title']}"
+    draft_content = ""
+    
+    if payload.report_type == "Executive Brief":
+        draft_content = (
+            f"EXECUTIVE BRIEFING REPORT\n"
+            f"Case: {case['title']} ({case['id']})\n"
+            f"Owning Unit: {case['owning_unit']}\n\n"
+            f"1. Executive Summary:\n"
+            f"This case concerns allegation of consumer rights violation under CCPD Division 1 scope: {case['description']}.\n\n"
+            f"2. Facts Resolved:\n"
+            f"- Entities under investigation: Kittisak Wongsawat (SCB account 401-229-3388).\n"
+            f"- Evidence uploaded: Bank transfer slips, Line chat screenshots.\n\n"
+            f"3. Recommendation:\n"
+            f"Proceed with legal charges based on Section 343 Public Fraud."
+        )
+    elif payload.report_type == "Investigation Plan":
+        draft_content = (
+            f"INVESTIGATION ACTION PLAN\n"
+            f"Case: {case['title']} ({case['id']})\n\n"
+            f"1. Investigation Strategy:\n"
+            f"- Identify suspect credentials and trace all proxy IP logs.\n"
+            f"- Inspect transaction layering to locate shell companies.\n\n"
+            f"2. Key Steps / Tasks:\n"
+            f"- Verify Kittisak Wongsawat credentials with DOPA registry.\n"
+            f"- File bank letters for SCB account activity records."
+        )
+    else:
+        draft_content = (
+            f"{payload.report_type.upper()} REPORT DRAFT\n"
+            f"Case Reference: {case['id']} - {case['title']}\n"
+            f"Compiled by: {user['email']}\n\n"
+            f"Simulated AI Copilot generated content matching evidence-first parameters."
+        )
+        
+    report_record = {
+        "id": report_id,
+        "case_id": payload.case_id,
+        "report_type": payload.report_type,
+        "title": draft_title,
+        "content": draft_content,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    db.reports.append(report_record)
+    
+    db.audit_log.append({
+        "id": str(uuid.uuid4()),
+        "user_id": user["email"],
+        "action": "GENERATE_REPORT",
+        "table_name": "reports",
+        "record_id": report_id,
+        "query_details": f"Generated {payload.report_type} draft: {draft_title}",
+        "logged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    })
+    
+    return report_record
+
 @app.post("/api/cases")
 def create_case(case: CaseCreate):
     if case.id in db.cases:
@@ -285,19 +553,22 @@ def create_case(case: CaseCreate):
     db.cases[case.id] = new_case
     return new_case
 
+import re
+
 @app.post("/api/evidence/upload")
 async def upload_evidence(
     case_id: str = Form(...),
     title: str = Form(...),
     description: Optional[str] = Form(None),
     type: str = Form(...),
-    file: UploadFile = File(...)
+    file: UploadFile = File(...),
+    authorization: Optional[str] = Header(None)
 ):
-    # Compute SHA-256 Hash
+    user = get_user_from_token(authorization)
+    
     file_bytes = await file.read()
     sha256 = hashlib.sha256(file_bytes).hexdigest()
     
-    # Store evidence registry
     evidence_id = str(uuid.uuid4())
     evidence_record = {
         "id": evidence_id,
@@ -311,14 +582,79 @@ async def upload_evidence(
     }
     db.evidence.append(evidence_record)
     
-    # Audit log
+    ocr_text = ""
+    ocr_extracted_data = {}
+    
+    try:
+        if file.content_type and "image" in file.content_type:
+            raise ValueError("Image file uploaded")
+        ocr_text = file_bytes.decode("utf-8")
+        if "slip" in file.filename.lower() or "receipt" in file.filename.lower():
+            if not any(k in ocr_text.lower() for k in ["amount", "account", "bank", "baht", "thb", "บาท"]):
+                raise ValueError("Force simulated slip OCR")
+    except Exception:
+        if "slip" in file.filename.lower() or "receipt" in file.filename.lower():
+            ocr_text = "TRANSFER SLIP\nFrom: Nattapong Sukprasert\nTo: Kittisak Wongsawat\nBank: Siam Commerce Bank\nAccount: 401-229-3388\nAmount: 1,250,000.00 THB\nRef: TXN-99882211\nDate: 2026-08-09 14:32:00"
+        else:
+            ocr_text = f"FILE SCAN: {file.filename}\nNo explicit bank keywords found. Simulated generic document scanning completed."
+            
+    amount_match = re.search(r"(?:amount|sum|฿|baht|thb|บาท)\s*[:=]?\s*([\d,]+(?:\.\d{2})?)", ocr_text, re.IGNORECASE)
+    account_match = re.search(r"(?:account|acc|เลขบัญชี|บัญชี)\s*[:=]?\s*(\d{3}-\d{1}-\d{5}-\d{1}|\d{3}-\d{3}-\d{4}|\d{10,12})", ocr_text, re.IGNORECASE)
+    bank_match = re.search(r"(?:bank|ธนาคาร)\s*[:=]?\s*(Siam Commerce Bank|Kasikorn Bank|SCB|KBANK|Krungthai|KTB|Bangkok Bank|BBL)", ocr_text, re.IGNORECASE)
+    
+    extracted_amount = 0.0
+    if amount_match:
+        try:
+            extracted_amount = float(amount_match.group(1).replace(",", ""))
+        except:
+            pass
+            
+    extracted_account = account_match.group(1) if account_match else None
+    extracted_bank = bank_match.group(1) if bank_match else "Siam Commerce Bank"
+    
+    if extracted_amount > 0 and extracted_account:
+        target_acc = next((a for a in db.bank_accounts if a["account_number"] == extracted_account), None)
+        if not target_acc:
+            target_acc = {
+                "id": str(uuid.uuid4()),
+                "bank_name": extracted_bank,
+                "account_number": extracted_account,
+                "account_name": "Kittisak Wongsawat" if extracted_account == "401-229-3388" else "Unknown Target"
+            }
+            db.bank_accounts.append(target_acc)
+            
+        txn_record = {
+            "id": str(uuid.uuid4()),
+            "case_id": case_id,
+            "source_account_id": None,
+            "target_account_id": target_acc["id"],
+            "amount": extracted_amount,
+            "currency": "THB",
+            "transaction_date": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "reference_number": "TXN-OCR-" + str(uuid.uuid4())[:8].upper(),
+            "evidence_id": evidence_id
+        }
+        db.transactions.append(txn_record)
+        ocr_extracted_data = {
+            "status": "extracted",
+            "bank": extracted_bank,
+            "account": extracted_account,
+            "amount": extracted_amount,
+            "transaction": txn_record
+        }
+    else:
+        ocr_extracted_data = {
+            "status": "text_only",
+            "text": ocr_text
+        }
+        
     db.audit_events.append({
         "id": str(uuid.uuid4()),
-        "user_id": None,
+        "user_id": user["email"],
         "action": "UPLOAD_EVIDENCE",
         "table_name": "evidence",
         "record_id": evidence_id,
-        "query_details": f"Uploaded file: {file.filename}, Hash: {sha256}",
+        "query_details": f"Uploaded file: {file.filename}, Hash: {sha256}. OCR status: {ocr_extracted_data['status']}",
         "logged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
     })
     
@@ -326,7 +662,8 @@ async def upload_evidence(
         "status": "success",
         "evidence_id": evidence_id,
         "hash": sha256,
-        "record": evidence_record
+        "record": evidence_record,
+        "ocr_result": ocr_extracted_data
     }
 
 @app.get("/api/entities")

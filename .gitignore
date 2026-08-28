@@ -35,3 +35,11 @@ Thumbs.db
 *.sw?
 .gemini/
 scratch/
+
+# Python Caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
