@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="th" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPPD Investigation OS — Google Antigravity Edition</title>
+    <title>CPPD AI Investigation Copilot — กก.1 บก.ปคบ.</title>
     
-    <!-- Google Fonts for Premium Typography -->
+    <!-- Google Fonts: Prompt & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome for UI Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- FontAwesome 6.5.1 Pro Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Style Sheet -->
+    <!-- Modern Polish Stylesheet -->
     <link rel="stylesheet" href="app.css">
 </head>
 <body>
@@ -22,47 +22,58 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <img src="https://cppd.cib.go.th/backend/uploads/logo_edit_500_7acc86e6d4.png" alt="CPPD Logo" style="height: 30px; width: auto; object-fit: contain;">
-                    <span>CPPD OS</span>
+                    <img src="https://cppd.cib.go.th/backend/uploads/logo_edit_500_7acc86e6d4.png" alt="CPPD Logo">
+                    <div class="logo-text">
+                        <span class="main-tag">กก.1 บก.ปคบ.</span>
+                        <span class="sub-tag">AI Investigation Copilot</span>
+                    </div>
                 </div>
-                <span class="badge">Antigravity</span>
             </div>
             
             <nav class="sidebar-nav">
+                <div class="nav-section-title">ศูนย์บัญชาการ</div>
                 <button class="nav-btn active" data-view="command-center">
-                    <i class="fa-solid fa-gauge-high"></i> <span data-i18n="nav-dashboard">Dashboard</span>
+                    <i class="fa-solid fa-gauge-high"></i> <span>แดชบอร์ดหลัก</span>
                 </button>
                 <button class="nav-btn" data-view="new-intake">
-                    <i class="fa-solid fa-folder-plus"></i> <span data-i18n="nav-new-intake">New Intake</span>
+                    <i class="fa-solid fa-inbox"></i> <span>รับเรื่อง & OCR สลิป</span>
                 </button>
+                
+                <div class="nav-section-title">งานสอบสวนคดี</div>
                 <button class="nav-btn" data-view="cases">
-                    <i class="fa-solid fa-folder-open"></i> <span data-i18n="nav-cases">Case Workspace</span>
+                    <i class="fa-solid fa-folder-open"></i> <span>พื้นที่จัดการคดี (12 แท็บ)</span>
+                    <span class="nav-badge active-count" id="badge-active-cases">3</span>
                 </button>
                 <button class="nav-btn" data-view="ai-intelligence">
-                    <i class="fa-solid fa-brain"></i> <span data-i18n="nav-ai-intelligence">AI Investigation Center</span>
+                    <i class="fa-solid fa-microchip-ai"></i> <span>ศูนย์วิเคราะห์ AI Copilot</span>
                 </button>
                 <button class="nav-btn" data-view="reports">
-                    <i class="fa-solid fa-file-invoice"></i> <span data-i18n="nav-reports">Report Generator</span>
+                    <i class="fa-solid fa-file-invoice-dollar"></i> <span>รายงาน & เอกสารคดี</span>
                 </button>
-                <button class="nav-btn" data-view="admin-audit" id="nav-admin-console" style="display: none;">
-                    <i class="fa-solid fa-users-gear"></i> <span data-i18n="nav-admin-audit">Admin/Audit</span>
+                
+                <div class="nav-section-title">การกำกับ & ตรวจสอบ</div>
+                <button class="nav-btn" data-view="supervisor-governance">
+                    <i class="fa-solid fa-user-shield"></i> <span>ผู้บังคับบัญชาตรวจสำนวน</span>
+                </button>
+                <button class="nav-btn" data-view="admin-audit" id="nav-admin-console">
+                    <i class="fa-solid fa-shield-halved"></i> <span>ความปลอดภัย & Audit</span>
                 </button>
             </nav>
             
             <div class="sidebar-footer">
-                <div class="user-profile">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80" alt="Avatar" class="avatar">
-                    <div class="user-info">
-                        <span class="user-name" id="profile-name">Somchai Dev</span>
-                        <span class="user-role" id="profile-role">Lead Investigator</span>
+                <div class="user-card" id="user-profile-badge">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80" alt="Avatar" class="user-avatar" id="profile-avatar">
+                    <div class="user-details">
+                        <span class="name" id="profile-name">พ.ต.ท. สมชาย สอบสวนสืบสวน</span>
+                        <span class="role" id="profile-role">พนักงานสอบสวน (กก.1)</span>
                     </div>
                 </div>
-                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; align-items: center; justify-content: space-between; width: 100%;">
-                    <button id="theme-toggle" class="theme-toggle-btn" style="padding: 0.4rem; flex: 1;">
-                        <i class="fa-solid fa-moon"></i>
+                <div style="display: flex; gap: 0.5rem; width: 100%;">
+                    <button id="theme-toggle" class="btn btn-secondary btn-sm" style="flex: 1;" title="Toggle Dark/Light Mode">
+                        <i class="fa-solid fa-moon"></i> โหมด
                     </button>
-                    <button id="btn-logout" class="btn btn-danger btn-sm" style="padding: 0.4rem; flex: 1; border-radius: var(--border-radius); font-size: 0.8rem;">
-                        <i class="fa-solid fa-power-off"></i> <span data-i18n="btn-signout">Sign Out</span>
+                    <button id="btn-logout" class="btn btn-danger btn-sm" style="flex: 1;" title="Sign Out">
+                        <i class="fa-solid fa-power-off"></i> ออกจากระบบ
                     </button>
                 </div>
             </div>
@@ -71,105 +82,112 @@
         <!-- Main Workspace -->
         <main class="main-content">
             <header class="main-header">
-                <div class="header-title">
-                    <h1 id="view-title">Command Center</h1>
-                    <p id="view-subtitle" class="muted-text">Overview of division status and critical alerts.</p>
-                </div>
-                <div class="header-actions" style="display: flex; align-items: center; gap: 1rem;">
-                    <div class="lang-selector">
-                        <select id="lang-select" style="padding: 0.4rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none; cursor: pointer; font-size: 0.85rem;">
-                            <option value="th">🇹🇭 ไทย (TH)</option>
-                            <option value="en">🇺🇸 English (EN)</option>
-                            <option value="zh">🇨🇳 中文 (ZH)</option>
-                        </select>
+                <div class="header-left">
+                    <div class="header-title">
+                        <h1 id="view-title">ศูนย์ปฏิบัติการและแดชบอร์ดคดี</h1>
+                        <p id="view-subtitle">ภาพรวมสถานะหน่วยงาน คดีเร่งด่วน และการแจ้งเตือนจากระบบอัจฉริยะ</p>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="status-indicator online"></span>
-                        <span class="status-text" id="status-api-text" data-i18n="api-online">API Online</span>
+                </div>
+                
+                <div class="header-right">
+                    <!-- Global Search Box -->
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="global-case-search" placeholder="ค้นหาเลขคดี, ชื่อผู้ต้องหา, บัญชี...">
+                    </div>
+                    
+                    <!-- Quick Role Switcher (For Demo/Testing) -->
+                    <div class="role-badge-pill" id="btn-quick-switch-role" title="เปลี่ยนบทบาทผู้ใช้งานเพื่อทดสอบ">
+                        <i class="fa-solid fa-id-badge"></i> <span id="current-role-label">พนักงานสอบสวน</span>
+                    </div>
+                    
+                    <!-- System Health Indicator -->
+                    <div style="display: flex; align-items: center; gap: 0.5rem; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); padding: 0.35rem 0.75rem; border-radius: 20px;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block; box-shadow: 0 0 8px var(--success);"></span>
+                        <span style="font-size: 0.78rem; font-weight: 700; color: var(--success);" id="status-api-text">API ONLINE</span>
                     </div>
                 </div>
             </header>
 
             <div class="content-wrapper">
-                <!-- VIEW: COMMAND CENTER -->
+                <!-- VIEW 1: COMMAND CENTER / DASHBOARD -->
                 <section id="view-command-center" class="view-pane active">
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-header">
-                                <span class="stat-label">Active Cases</span>
-                                <i class="fa-solid fa-folder stat-icon"></i>
+                                <span class="stat-label">คดีที่อยู่ระหว่างสอบสวน</span>
+                                <div class="stat-icon"><i class="fa-solid fa-folder-tree"></i></div>
                             </div>
                             <div class="stat-value" id="stat-cases">3</div>
-                            <span class="stat-trend success"><i class="fa-solid fa-arrow-up"></i> Stable</span>
+                            <span class="stat-trend success"><i class="fa-solid fa-circle-check"></i> ดำเนินการตามกรอบเวลา</span>
                         </div>
+                        
                         <div class="stat-card">
                             <div class="stat-header">
-                                <span class="stat-label">New Victims</span>
-                                <i class="fa-solid fa-user-group stat-icon"></i>
+                                <span class="stat-label">ผู้เสียหายลงทะเบียน</span>
+                                <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
                             </div>
-                            <div class="stat-value" id="stat-victims">2</div>
-                            <span class="stat-trend success"><i class="fa-solid fa-arrow-up"></i> +4 this week</span>
+                            <div class="stat-value" id="stat-victims">2 ราย</div>
+                            <span class="stat-trend warning"><i class="fa-solid fa-chart-line"></i> มูลค่ารวม ฿1.25M</span>
                         </div>
+                        
                         <div class="stat-card">
                             <div class="stat-header">
-                                <span class="stat-label">Evidence Items</span>
-                                <i class="fa-solid fa-box-archive stat-icon"></i>
+                                <span class="stat-label">พยานหลักฐานในคลังนิรภัย</span>
+                                <div class="stat-icon"><i class="fa-solid fa-fingerprint"></i></div>
                             </div>
-                            <div class="stat-value" id="stat-evidence">2</div>
-                            <span class="stat-trend"><i class="fa-solid fa-check-double"></i> Verified</span>
+                            <div class="stat-value" id="stat-evidence">4 ชิ้น</div>
+                            <span class="stat-trend success"><i class="fa-solid fa-shield-halved"></i> 100% SHA-256 Verified</span>
                         </div>
+                        
                         <div class="stat-card">
                             <div class="stat-header">
-                                <span class="stat-label">AI Alerts</span>
-                                <i class="fa-solid fa-circle-exclamation stat-icon warn-color"></i>
+                                <span class="stat-label">ข้อตรวจพบ / ข้อสั่งการ</span>
+                                <div class="stat-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
                             </div>
-                            <div class="stat-value" id="stat-alerts">1</div>
-                            <span class="stat-trend danger"><i class="fa-solid fa-triangle-exclamation"></i> Action required</span>
+                            <div class="stat-value" id="stat-alerts" style="color: var(--warning);">2 ประเด็น</div>
+                            <span class="stat-trend danger"><i class="fa-solid fa-bolt"></i> รอพนักงานสอบสวนแก้ไข</span>
                         </div>
                     </div>
 
-                    <div class="dashboard-split">
-                        <div class="card flex-grow">
+                    <div class="dashboard-split" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+                        <div class="card">
                             <div class="card-header">
-                                <h2>🚨 Critical Investigation Alerts</h2>
+                                <h2><i class="fa-solid fa-bell text-warning"></i> ข้อเตือนภัยและพิรุธสำคัญทางคดี (Critical Alerts)</h2>
                             </div>
                             <div class="card-body">
-                                <div class="alerts-list" id="critical-alerts-feed">
-                                    <!-- Dynamic alerts injection -->
-                                    <div class="alert-item warning">
-                                        <div class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                                        <div class="alert-details">
-                                            <h4>Cross-Case Target Match Detected</h4>
-                                            <p>Suspect account `401-229-3388` is shared between CASE-142 and CASE-087. Combined loss exceeds ฿2.1M.</p>
-                                            <span class="timestamp">10 mins ago</span>
+                                <div class="alerts-list" id="critical-alerts-feed" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <div class="alert-item warning" style="padding: 1rem; border-radius: var(--border-radius-sm); background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.25); display: flex; gap: 0.75rem; align-items: flex-start;">
+                                        <i class="fa-solid fa-circle-exclamation text-warning" style="font-size: 1.25rem; margin-top: 0.15rem;"></i>
+                                        <div>
+                                            <h4 style="margin: 0 0 0.25rem 0; font-size: 0.95rem; font-weight: 700;">ตรวจพบบัญชีม้าเชื่อมโยงข้ามคดี (Cross-Case Linkage)</h4>
+                                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);">บัญชี SCB เลขที่ <code>401-229-3388</code> ของนายกิตติศักดิ์ ถูกใช้รับโอนเงินทั้งใน <strong>CASE-142</strong> และ <strong>CASE-087</strong> รวมมูลค่าความเสียหาย ฿2,100,000</p>
+                                        </div>
+                                    </div>
+                                    <div class="alert-item danger" style="padding: 1rem; border-radius: var(--border-radius-sm); background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.25); display: flex; gap: 0.75rem; align-items: flex-start;">
+                                        <i class="fa-solid fa-clock-rotate-left text-danger" style="font-size: 1.25rem; margin-top: 0.15rem;"></i>
+                                        <div>
+                                            <h4 style="margin: 0 0 0.25rem 0; font-size: 0.95rem; font-weight: 700;">ข้อขัดแย้งของถิ่นที่อยู่ผู้ต้องหา (Alibi Discrepancy)</h4>
+                                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);">คำให้การอ้างว่าพำนักอยู่เชียงใหม่ แต่ตรวจพบบันทึกธุรกรรมและ IP ถอนเงินสดที่ตู้ ATM ลาดพร้าว กทม.</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="card w-350">
+                        <div class="card">
                             <div class="card-header">
-                                <h2>Recent System Triggers</h2>
+                                <h2><i class="fa-solid fa-list-check text-primary"></i> งานสอบสวนด่วนวันนี้</h2>
                             </div>
                             <div class="card-body">
-                                <div class="trigger-timeline" id="recent-triggers-timeline">
-                                    <!-- Timeline logs -->
-                                    <div class="timeline-step">
-                                        <div class="step-point"></div>
-                                        <div class="step-content">
-                                            <p class="step-title">VICTIM_REGISTERED</p>
-                                            <p class="step-desc">Victim Nattapong Sukprasert added to CASE-142</p>
-                                            <span class="step-time">Today, 18:45</span>
-                                        </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <div style="padding: 0.75rem; border-radius: var(--border-radius-sm); background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.2);">
+                                        <strong style="font-size: 0.85rem; display: block; color: var(--accent-glow);">1. ติดตามผลตรวจสารเคมี</strong>
+                                        <span class="text-xs muted-text">คดี CASE-142 | ครบกำหนด: วันนี้ 17:00 น.</span>
                                     </div>
-                                    <div class="timeline-step">
-                                        <div class="step-point"></div>
-                                        <div class="step-content">
-                                            <p class="step-title">EVIDENCE_UPLOADED</p>
-                                            <p class="step-desc">SHA-256 integrity verified for transfer_slip.png</p>
-                                            <span class="step-time">Yesterday, 14:32</span>
-                                        </div>
+                                    <div style="padding: 0.75rem; border-radius: var(--border-radius-sm); background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.2);">
+                                        <strong style="font-size: 0.85rem; display: block; color: #a78bfa;">2. ส่งสำนวนเสนอ ผกก.1 ตรวจ</strong>
+                                        <span class="text-xs muted-text">รายงานการสอบสวนพร้อมตรวจเสนอ</span>
                                     </div>
                                 </div>
                             </div>
@@ -177,105 +195,108 @@
                     </div>
                 </section>
 
-                <!-- VIEW: CASES -->
+                <!-- VIEW 2: CASES (12-TAB DEEP WORKSPACE COCKPIT) -->
                 <section id="view-cases" class="view-pane">
                     <div class="cases-layout">
-                        <div class="card case-list-card">
+                        <!-- Left Index Table -->
+                        <div class="card case-list-card" id="cases-list-container">
                             <div class="card-header justify-between">
-                                <h2>Investigation Index</h2>
-                                <button class="btn btn-primary" id="btn-new-case"><i class="fa-solid fa-plus"></i> New Case</button>
+                                <h2><i class="fa-solid fa-folder-tree text-primary"></i> ทะเบียนสารบบคดีสอบสวน (Case Index)</h2>
+                                <button class="btn btn-primary btn-sm" id="btn-new-case"><i class="fa-solid fa-plus"></i> รับคดีใหม่</button>
                             </div>
                             <div class="card-body no-padding">
                                 <table class="cppd-table" id="cases-table">
                                     <thead>
                                         <tr>
-                                            <th>Case ID</th>
-                                            <th>Title</th>
-                                            <th>Owning Unit</th>
-                                            <th>Status</th>
-                                            <th>Privacy</th>
+                                            <th>เลขคดี</th>
+                                            <th>ชื่อเรื่องพฤติการณ์</th>
+                                            <th>หน่วยรับผิดชอบ</th>
+                                            <th>ชั้นความลับ</th>
+                                            <th>สถานะสำนวน</th>
+                                            <th style="text-align: right;">เปิดดู</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Dynamic cases -->
+                                        <!-- Injected via JavaScript -->
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
-                        <!-- Side panel for case details -->
-                        <div class="card case-details-card" id="case-details-panel" style="display: none; width: 100%;">
-                            <!-- Comprehensive Case Header (Section 2) -->
-                            <div class="card-header justify-between" style="border-bottom: 1px solid var(--border-color); padding: 1.25rem; background: rgba(0,0,0,0.15);">
-                                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                        <!-- Right Detail Panel (Deep 12-Tab Cockpit) -->
+                        <div class="card case-details-card" id="case-details-panel" style="display: none; margin-top: 1rem;">
+                            <!-- Case Workspace Header -->
+                            <div class="card-header justify-between" style="background: rgba(15,23,42,0.6); padding: 1.25rem;">
+                                <div style="display: flex; flex-direction: column; gap: 0.35rem;">
                                     <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                        <span class="badge font-mono" id="details-case-id" style="background: var(--accent-primary); color: white; padding: 0.2rem 0.6rem; font-size: 0.85rem;">CASE-142</span>
-                                        <span class="badge" id="details-case-classification" style="background: rgba(239,68,68,0.15); color: var(--danger); font-size: 0.75rem;">CONFIDENTIAL</span>
-                                        <span class="badge" id="details-case-priority" style="background: rgba(245,158,11,0.15); color: var(--warning); font-size: 0.75rem;">HIGH PRIORITY</span>
-                                        <span class="badge" id="details-case-status" style="background: rgba(16,185,129,0.15); color: var(--success); font-size: 0.75rem;">OPEN</span>
+                                        <span class="badge font-mono" id="details-case-id" style="background: var(--accent-primary); color: white; padding: 0.25rem 0.65rem; font-size: 0.85rem;">CASE-142</span>
+                                        <span class="badge badge-confidential" id="details-case-classification">CONFIDENTIAL</span>
+                                        <span class="badge" id="details-case-priority" style="background: rgba(245,158,11,0.15); color: var(--warning);">HIGH PRIORITY</span>
+                                        <span class="badge" id="details-case-status" style="background: rgba(16,185,129,0.15); color: var(--success);">IN_INVESTIGATION</span>
                                     </div>
-                                    <h2 id="details-case-title" style="margin: 0.25rem 0 0 0; font-size: 1.2rem; font-weight: 700;">-</h2>
-                                    <span class="text-xs muted-text" id="details-case-meta">หน่วยงาน: กก.1 บก.ปคบ. | พนักงานสอบสวนผู้รับผิดชอบ: พ.ต.ท. สมชาย สอบสวนสืบสวน | วันที่รับคำร้อง: 10 ส.ค. 2569</span>
+                                    <h2 id="details-case-title" style="margin: 0.25rem 0 0 0; font-size: 1.25rem; font-weight: 700;">-</h2>
+                                    <span class="text-xs muted-text" id="details-case-meta">หน่วยงาน: กก.1 บก.ปคบ. | พนักงานสอบสวน: พ.ต.ท. สมชาย สอบสวนสืบสวน | วันที่รับคำร้อง: 10 ส.ค. 2569</span>
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                                     <button class="btn btn-primary btn-sm" id="btn-generate-briefing"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Briefing</button>
-                                    <button class="btn btn-close" id="btn-close-details"><i class="fa-solid fa-xmark"></i></button>
+                                    <button class="btn btn-outline btn-sm" id="btn-run-full-qc"><i class="fa-solid fa-clipboard-check"></i> ตรวจ QC สำนวน</button>
+                                    <button class="btn btn-outline btn-sm" id="btn-close-details"><i class="fa-solid fa-xmark"></i> ปิด</button>
                                 </div>
                             </div>
                             
-                            <div class="card-body" style="padding: 1.25rem;">
-                                <!-- 12 Modular Workspace Tabs Navigation (Section 2) -->
-                                <div class="workspace-tabs" style="display: flex; gap: 0.25rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.25rem; padding-bottom: 0.25rem; overflow-x: auto;">
-                                    <button class="tab-btn active" data-workspace-tab="overview"><i class="fa-solid fa-chart-pie"></i> 1. Overview</button>
-                                    <button class="tab-btn" data-workspace-tab="issues"><i class="fa-solid fa-list-check"></i> 2. Issues</button>
-                                    <button class="tab-btn" data-workspace-tab="people"><i class="fa-solid fa-users"></i> 3. People</button>
-                                    <button class="tab-btn" data-workspace-tab="statements"><i class="fa-solid fa-microphone-lines"></i> 4. Statements</button>
-                                    <button class="tab-btn" data-workspace-tab="evidence"><i class="fa-solid fa-fingerprint"></i> 5. Evidence</button>
-                                    <button class="tab-btn" data-workspace-tab="timeline"><i class="fa-solid fa-clock-rotate-left"></i> 6. Timeline</button>
-                                    <button class="tab-btn" data-workspace-tab="plan"><i class="fa-solid fa-map"></i> 7. Plan</button>
-                                    <button class="tab-btn" data-workspace-tab="tasks"><i class="fa-solid fa-bars-progress"></i> 8. Tasks</button>
-                                    <button class="tab-btn" data-workspace-tab="legal"><i class="fa-solid fa-scale-balanced"></i> 9. Legal</button>
-                                    <button class="tab-btn" data-workspace-tab="documents"><i class="fa-solid fa-file-contract"></i> 10. Documents</button>
-                                    <button class="tab-btn" data-workspace-tab="team"><i class="fa-solid fa-user-shield"></i> 11. Team</button>
-                                    <button class="tab-btn" data-workspace-tab="activity"><i class="fa-solid fa-timeline"></i> 12. Activity</button>
+                            <div class="card-body">
+                                <!-- 12 Tabs Navigation Bar -->
+                                <div class="workspace-tabs">
+                                    <button class="tab-btn active" data-workspace-tab="overview"><i class="fa-solid fa-chart-pie"></i> 1. ภาพรวมคดี</button>
+                                    <button class="tab-btn" data-workspace-tab="issues"><i class="fa-solid fa-list-check"></i> 2. ประเด็นสอบสวน</button>
+                                    <button class="tab-btn" data-workspace-tab="people"><i class="fa-solid fa-users"></i> 3. บุคคลในคดี</button>
+                                    <button class="tab-btn" data-workspace-tab="statements"><i class="fa-solid fa-microphone-lines"></i> 4. คำให้การ (Live Q&A)</button>
+                                    <button class="tab-btn" data-workspace-tab="evidence"><i class="fa-solid fa-fingerprint"></i> 5. คลังพยานหลักฐาน</button>
+                                    <button class="tab-btn" data-workspace-tab="timeline"><i class="fa-solid fa-clock-rotate-left"></i> 6. ลำดับเหตุการณ์</button>
+                                    <button class="tab-btn" data-workspace-tab="plan"><i class="fa-solid fa-map"></i> 7. แผนสืบสวน</button>
+                                    <button class="tab-btn" data-workspace-tab="tasks"><i class="fa-solid fa-bars-progress"></i> 8. รายการงาน</button>
+                                    <button class="tab-btn" data-workspace-tab="legal"><i class="fa-solid fa-scale-balanced"></i> 9. ข้อกฎหมาย (Matrix)</button>
+                                    <button class="tab-btn" data-workspace-tab="documents"><i class="fa-solid fa-file-contract"></i> 10. เอกสารสำนวน</button>
+                                    <button class="tab-btn" data-workspace-tab="team"><i class="fa-solid fa-user-shield"></i> 11. ทีมสอบสวน</button>
+                                    <button class="tab-btn" data-workspace-tab="activity"><i class="fa-solid fa-timeline"></i> 12. ประวัติกิจกรรม</button>
                                 </div>
                                 
                                 <!-- TAB 1: OVERVIEW -->
                                 <div id="workspace-tab-overview" class="workspace-tab-content active">
                                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
-                                        <div class="stat-card" style="padding: 0.75rem; background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.2); border-radius: 6px;">
+                                        <div class="stat-card" style="padding: 0.75rem;">
                                             <span class="text-xs muted-text">มูลค่าความเสียหาย</span>
-                                            <h3 style="margin: 0.25rem 0 0 0; color: var(--accent-primary);" id="overview-loss-val">฿1,250,000</h3>
+                                            <h3 style="margin: 0.25rem 0 0 0; color: var(--accent-glow);" id="overview-loss-val">฿1,250,000</h3>
                                         </div>
-                                        <div class="stat-card" style="padding: 0.75rem; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.2); border-radius: 6px;">
-                                            <span class="text-xs muted-text">พยานหลักฐานในสำนวน</span>
+                                        <div class="stat-card" style="padding: 0.75rem;">
+                                            <span class="text-xs muted-text">พยานหลักฐาน</span>
                                             <h3 style="margin: 0.25rem 0 0 0; color: var(--success);" id="overview-evidence-val">4 รายการ</h3>
                                         </div>
-                                        <div class="stat-card" style="padding: 0.75rem; background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.2); border-radius: 6px;">
-                                            <span class="text-xs muted-text">ประเด็นต้องพิสูจน์ (Issues)</span>
+                                        <div class="stat-card" style="padding: 0.75rem;">
+                                            <span class="text-xs muted-text">ประเด็นต้องพิสูจน์</span>
                                             <h3 style="margin: 0.25rem 0 0 0; color: var(--warning);" id="overview-issues-val">2 ประเด็น</h3>
                                         </div>
-                                        <div class="stat-card" style="padding: 0.75rem; background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.2); border-radius: 6px;">
-                                            <span class="text-xs muted-text">งานสอบสวนค้าง (Tasks)</span>
-                                            <h3 style="margin: 0.25rem 0 0 0; color: #8b5cf6;" id="overview-tasks-val">2 งาน</h3>
+                                        <div class="stat-card" style="padding: 0.75rem;">
+                                            <span class="text-xs muted-text">งานสอบสวนค้าง</span>
+                                            <h3 style="margin: 0.25rem 0 0 0; color: #a78bfa;" id="overview-tasks-val">2 งาน</h3>
                                         </div>
                                     </div>
                                     
-                                    <div class="card" style="padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                                    <div class="card" style="padding: 1rem; margin-bottom: 1rem;">
                                         <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                                            <strong class="text-sm"><i class="fa-solid fa-align-left"></i> สาระสำคัญของพฤติการณ์คดี (Narrative Summary)</strong>
-                                            <span class="badge font-mono" id="narrative-version-tag" style="font-size: 0.65rem; background: rgba(255,255,255,0.05);">v2.0</span>
+                                            <strong class="text-sm"><i class="fa-solid fa-align-left text-primary"></i> สาระสำคัญของพฤติการณ์คดี (Narrative Summary)</strong>
+                                            <span class="badge font-mono" id="narrative-version-tag">v2.0</span>
                                         </div>
                                         <p id="details-case-desc" class="text-sm" style="line-height: 1.6; color: var(--text-primary); margin: 0; white-space: pre-wrap;">-</p>
                                     </div>
 
-                                    <div class="readiness-meter" style="border: 1px solid var(--border-color); padding: 0.75rem; border-radius: var(--border-radius)">
-                                        <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.25rem;">
-                                            <span class="text-sm font-semibold">Pre-Trial Case Readiness Index (ความพร้อมสำนวนส่งอัยการ)</span>
-                                            <span class="text-sm font-bold font-mono" id="details-readiness-percent">85%</span>
+                                    <div class="card" style="padding: 1rem;">
+                                        <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                            <span class="text-sm font-semibold"><i class="fa-solid fa-gauge text-success"></i> ดัชนีความพร้อมสำนวนส่งอัยการ (Pre-Trial Case Readiness)</span>
+                                            <span class="text-sm font-bold font-mono" id="details-readiness-percent" style="color: var(--success);">100% READY</span>
                                         </div>
                                         <div style="background-color: var(--border-color); height: 8px; width: 100%; border-radius: 4px; overflow: hidden">
-                                            <div id="details-readiness-bar" style="background-color: var(--success); height: 100%; width: 85%; transition: width 0.3s ease"></div>
+                                            <div id="details-readiness-bar" style="background-color: var(--success); height: 100%; width: 100%;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -297,46 +318,28 @@
                                     <div class="detail-list" id="workspace-people-list"></div>
                                 </div>
 
-                                <!-- TAB 4: STATEMENTS -->
+                                <!-- TAB 4: STATEMENTS (Live Q&A Logger) -->
                                 <div id="workspace-tab-statements" class="workspace-tab-content" style="display: none;">
                                     <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
-                                        <strong class="text-sm">คำให้การและบันทึกสอบปากคำ (Statements & QA)</strong>
+                                        <strong class="text-sm"><i class="fa-solid fa-microphone-lines text-primary"></i> คำให้การและบันทึกสอบปากคำ (Statement & Live Q&A)</strong>
+                                        <button class="btn btn-primary btn-xs" id="btn-record-qa-modal"><i class="fa-solid fa-plus"></i> บันทึกถาม-ตอบสด</button>
                                     </div>
                                     <div class="detail-list" id="workspace-statements-list"></div>
                                 </div>
 
-                                <!-- TAB 5: EVIDENCE (Evidence Intelligence & Custody Vault) -->
+                                <!-- TAB 5: EVIDENCE -->
                                 <div id="workspace-tab-evidence" class="workspace-tab-content" style="display: none;">
                                     <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
                                         <div>
-                                            <strong class="text-sm"><i class="fa-solid fa-fingerprint text-primary"></i> คลังพยานหลักฐานและความเชื่อมโยง (Evidence Intelligence Vault)</strong>
-                                            <div class="text-xs muted-text">สลักลายเซ็น SHA-256 บันทึกห่วงโซ่การครอบครอง (Chain of Custody) และแมทริกซ์ความสมบูรณ์</div>
-                                        </div>
-                                        <div style="display: flex; gap: 0.5rem;">
-                                            <button class="btn btn-outline btn-xs" id="btn-export-evidence-pkg"><i class="fa-solid fa-file-export"></i> Export Package</button>
+                                            <strong class="text-sm"><i class="fa-solid fa-fingerprint text-primary"></i> คลังพยานหลักฐานนิรภัย (Evidence Intelligence Vault)</strong>
+                                            <div class="text-xs muted-text">สลักค่าแฮช SHA-256 บันทึกห่วงโซ่การครอบครอง (Chain of Custody) และแมทริกซ์ความสมบูรณ์</div>
                                         </div>
                                     </div>
-
-                                    <!-- Sub-navigation for Evidence Modules -->
-                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem; margin-bottom: 1rem;">
-                                        <div style="background: rgba(59,130,246,0.06); padding: 0.6rem; border-radius: 6px; border: 1px solid rgba(59,130,246,0.15);">
-                                            <span class="text-xs muted-text">สถานะความสมบูรณ์ (Integrity)</span>
-                                            <div style="font-weight: 700; color: var(--success); font-size: 0.9rem; margin-top: 0.15rem;"><i class="fa-solid fa-shield-check"></i> 100% SHA-256 MATCH</div>
-                                        </div>
-                                        <div style="background: rgba(245,158,11,0.06); padding: 0.6rem; border-radius: 6px; border: 1px solid rgba(245,158,11,0.15);">
-                                            <span class="text-xs muted-text">ช่องว่างพยานหลักฐาน (Evidence Gaps)</span>
-                                            <div style="font-weight: 700; color: var(--warning); font-size: 0.9rem; margin-top: 0.15rem;" id="evidence-gaps-count">2 รายการค้างส่ง</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Evidence List Container -->
-                                    <strong class="text-xs" style="color: var(--accent-primary); display: block; margin-bottom: 0.4rem;">รายการพยานหลักฐานและวัตถุพยานในคดี:</strong>
                                     <div class="detail-list" id="workspace-evidence-list" style="margin-bottom: 1rem;"></div>
-
-                                    <!-- Evidence Matrix Container -->
-                                    <strong class="text-xs" style="color: var(--accent-primary); display: block; margin-bottom: 0.4rem;">แมทริกซ์ความสอดคล้องพยานหลักฐาน (Evidence Matrix & Gaps):</strong>
+                                    <strong class="text-xs" style="color: var(--accent-glow); display: block; margin-bottom: 0.4rem;">แมทริกซ์ความสอดคล้องพยานหลักฐาน (Evidence Matrix & Gaps):</strong>
                                     <div class="detail-list" id="workspace-evidence-matrix-list"></div>
                                 </div>
+
                                 <!-- TAB 6: TIMELINE -->
                                 <div id="workspace-tab-timeline" class="workspace-tab-content" style="display: none;">
                                     <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
@@ -361,10 +364,10 @@
                                     <div class="detail-list" id="details-tasks-list"></div>
                                 </div>
 
-                                <!-- TAB 9: LEGAL -->
+                                <!-- TAB 9: LEGAL MATRIX -->
                                 <div id="workspace-tab-legal" class="workspace-tab-content" style="display: none;">
                                     <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
-                                        <strong class="text-sm">ประเด็นข้อกฎหมายและองค์ประกอบความผิด (Legal Elements Matrix)</strong>
+                                        <strong class="text-sm"><i class="fa-solid fa-scale-balanced text-primary"></i> องค์ประกอบความผิดตามกฎหมาย (Statutory Legal Matrix)</strong>
                                     </div>
                                     <div class="detail-list" id="details-legal-matrix-list"></div>
                                 </div>
@@ -396,389 +399,278 @@
                         </div>
                     </div>
                 </section>
-                <!-- VIEW: NEW INTAKE -->
+
+                <!-- VIEW 3: INTAKE & OCR -->
                 <section id="view-new-intake" class="view-pane">
-                    <div class="dashboard-split">
-                        <!-- Left Pane: Ingest Complaint Form -->
-                        <div class="card flex-grow">
+                    <div class="dashboard-split" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem;">
+                        <div class="card">
                             <div class="card-header">
-                                <h2>Register New Intake Complaint</h2>
+                                <h2><i class="fa-solid fa-file-circle-plus text-primary"></i> รับเรื่องร้องเรียนผู้เสียหายใหม่</h2>
                             </div>
                             <div class="card-body">
                                 <form id="victim-intake-form">
-                                    <div class="form-group" style="margin-bottom: 0.75rem;">
-                                        <label for="intake-title">Complaint Title</label>
-                                        <input type="text" id="intake-title" class="form-control" placeholder="e.g. Cosmetics scam on Facebook page" required>
+                                    <div class="form-group margin-bottom-md">
+                                        <label for="intake-title" class="form-label" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem;">หัวข้อเรื่องร้องเรียน</label>
+                                        <input type="text" id="intake-title" class="form-control" style="width: 100%; padding: 0.6rem; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); color: var(--text-primary);" placeholder="เช่น หลอกขายเครื่องสำอางผสมสารอันตรายผ่านเพจ Facebook" required>
                                     </div>
-                                    <div class="form-group" style="display: flex; gap: 1rem; margin-bottom: 0.75rem;">
+                                    <div class="form-group margin-bottom-md" style="display: flex; gap: 1rem;">
                                         <div style="flex: 1;">
-                                            <label for="intake-reporter-name">Reporter Name</label>
-                                            <input type="text" id="intake-reporter-name" class="form-control" placeholder="Full Name" required>
+                                            <label for="intake-reporter-name" class="form-label" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem;">ชื่อ-นามสกุล ผู้แจ้ง/ผู้เสียหาย</label>
+                                            <input type="text" id="intake-reporter-name" class="form-control" style="width: 100%; padding: 0.6rem; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); color: var(--text-primary);" placeholder="นายณัฐพงษ์ สุขประเสริฐ" required>
                                         </div>
                                         <div style="flex: 1;">
-                                            <label for="intake-reporter-phone">Reporter Phone</label>
-                                            <input type="text" id="intake-reporter-phone" class="form-control" placeholder="e.g. 089-xxx-xxxx" required>
+                                            <label for="intake-reporter-phone" class="form-label" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem;">เบอร์โทรศัพท์ติดต่อ</label>
+                                            <input type="text" id="intake-reporter-phone" class="form-control" style="width: 100%; padding: 0.6rem; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); color: var(--text-primary);" placeholder="089-111-2345" required>
                                         </div>
                                     </div>
-                                    <div class="form-group" style="margin-bottom: 1rem;">
-                                        <label for="intake-raw-statement">Raw Witness Statement / Chat Transcript</label>
-                                        <textarea id="intake-raw-statement" rows="5" class="form-control" placeholder="Provide copy-paste statement text..." required>My name is Nattapong Sukprasert. I was scammed by Kittisak Wongsawat. I contacted him at 089-111-2345. I made a transfer of 1,250,000 THB to SCB account 401-229-3388. Please help track my funds.</textarea>
+                                    <div class="form-group margin-bottom-lg">
+                                        <label for="intake-raw-statement" class="form-label" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem;">ข้อความคำให้การเบื้องต้น / ประวัติแชท</label>
+                                        <textarea id="intake-raw-statement" rows="5" class="form-control" style="width: 100%; padding: 0.6rem; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); color: var(--text-primary);" required>ข้าพเจ้านายณัฐพงษ์ สุขประเสริฐ ได้สั่งซื้อครีมทาหน้าจากเพจ สยาม คอสเมติกส์ และได้โอนเงินจำนวน 1,250,000 บาท ไปยังบัญชีธนาคารไทยพาณิชย์ เลขที่ 401-229-3388 ของนายกิตติศักดิ์ วงศ์สวัสดิ์ แต่ปรากฏว่าสินค้าไม่ได้รับรอง อย. และผสมสารต้องห้าม</textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary" id="btn-submit-intake" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                                        <i class="fa-solid fa-microchip"></i> Run AI Ingestion & Triage
+                                    <button type="submit" class="btn btn-primary" id="btn-submit-intake" style="width: 100%;">
+                                        <i class="fa-solid fa-microchip-ai"></i> รัน AI วิเคราะห์ข้อมูลและคัดกรองคดี (Auto-Triage)
                                     </button>
                                 </form>
                             </div>
                         </div>
-                        <div class="card w-350" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius);">
-                            <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding: 1rem;">
-                                <h2 style="margin: 0; font-size: 1.1rem;" data-i18n="ocr-header">Slip & Ledger OCR Simulator</h2>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fa-solid fa-receipt text-warning"></i> ระบบ OCR สลิปและรายการเดินบัญชี</h2>
                             </div>
-                            <div class="card-body" style="padding: 1.25rem;">
+                            <div class="card-body">
                                 <form id="ocr-upload-form">
-                                    <div class="form-group" style="margin-bottom: 0.75rem;">
-                                        <label for="ocr-case-id" class="form-label" style="display: block; font-weight: 500; font-size: 0.85rem;" data-i18n="ocr-label-case">Link to Case</label>
-                                        <select id="ocr-case-id" class="form-control" style="width: 100%; padding: 0.5rem;" required>
+                                    <div class="form-group margin-bottom-md">
+                                        <label for="ocr-case-id" class="form-label" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem;">เชื่อมโยงเข้าสำนวนคดี</label>
+                                        <select id="ocr-case-id" class="form-control" style="width: 100%; padding: 0.6rem; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); color: var(--text-primary);">
                                             <option value="CASE-142">CASE-142 - คดีหลอกขายเวชสำอางค์ปลอม (สยาม คอสเมติกส์)</option>
                                             <option value="CASE-087">CASE-087 - คดีหลอกขายทองคำออนไลน์ (ภูเก็ต โกลด์)</option>
                                             <option value="CASE-112">CASE-112 - คดีอาหารเสริมผสมไซบูทรามีน (สลิมฟิต ดีท็อกซ์)</option>
                                         </select>
                                     </div>
-                                    <div class="form-group" style="margin-bottom: 0.75rem;">
-                                        <label for="ocr-file-title" class="form-label" style="display: block; font-weight: 500; font-size: 0.85rem;" data-i18n="ocr-label-title">Document Title</label>
-                                        <input type="text" id="ocr-file-title" class="form-control" placeholder="e.g. Kasikorn Transfer Slip" style="width: 100%; padding: 0.5rem;" required>
+                                    <div class="form-group margin-bottom-md">
+                                        <label for="ocr-file-input" class="form-label" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem;">เลือกไฟล์สลิป (PNG/JPG/PDF)</label>
+                                        <input type="file" id="ocr-file-input" class="form-control" style="width: 100%; padding: 0.5rem; background: var(--bg-input); border: 1px dashed var(--border-color); border-radius: var(--border-radius-sm); color: var(--text-primary);">
                                     </div>
-                                    <div class="form-group" style="margin-bottom: 1rem;">
-                                        <label for="ocr-file-input" class="form-label" style="display: block; font-weight: 500; font-size: 0.85rem;" data-i18n="ocr-label-file">Select Slip (PNG/JPG) or Ledger (TXT)</label>
-                                        <input type="file" id="ocr-file-input" class="form-control" style="width: 100%; padding: 0.4rem; background: transparent; border: 1px dashed var(--border-color);" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary" id="btn-run-ocr" style="width: 100%; padding: 0.6rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                                        <i class="fa-solid fa-cloud-arrow-up"></i> <span data-i18n="ocr-btn-run">Upload & Process OCR</span>
+                                    <button type="submit" class="btn btn-secondary" id="btn-run-ocr" style="width: 100%;">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i> ประมวลผลและสลักแฮช SHA-256
                                     </button>
                                 </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-                                <!-- OCR Results panel -->
-                                <div id="ocr-results-panel" style="display: none; margin-top: 1rem; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); background: rgba(0,0,0,0.1);">
-                                    <h4 style="margin: 0 0 0.5rem 0; font-size: 0.85rem; display: flex; align-items: center; gap: 0.25rem;"><i class="fa-solid fa-bolt text-warning"></i> OCR Results</h4>
-                                    <p style="margin: 0 0 0.25rem 0; font-size: 0.8rem;"><strong>Bank:</strong> <span id="ocr-res-bank">-</span></p>
-                                    <p style="margin: 0 0 0.25rem 0; font-size: 0.8rem;"><strong>Account:</strong> <span id="ocr-res-account">-</span></p>
-                                    <p style="margin: 0 0 0.25rem 0; font-size: 0.8rem;"><strong>Amount:</strong> <span id="ocr-res-amount">-</span> THB</p>
-                                    <p style="margin: 0; font-size: 0.8rem;"><strong>Status:</strong> <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--success); padding: 0.1rem 0.4rem;" id="ocr-res-status">-</span></p>
+                <!-- VIEW 4: AI INVESTIGATION CENTER -->
+                <section id="view-ai-intelligence" class="view-pane">
+                    <div class="card">
+                        <div class="card-header justify-between">
+                            <h2><i class="fa-solid fa-brain text-primary"></i> ศูนย์ปฏิบัติการผู้ช่วยสืบสวนอัจฉริยะ (AI Agentic Hub)</h2>
+                        </div>
+                        <div class="card-body">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                                <div class="stat-card" style="cursor: pointer;" id="agent-btn-evidence">
+                                    <strong style="color: var(--accent-glow);"><i class="fa-solid fa-magnifying-glass-nodes"></i> Digital Evidence Agent</strong>
+                                    <p class="text-xs muted-text" style="margin-top: 0.25rem;">วิเคราะห์ไฟล์สลิป, Log IP, และตรวจจับความซ้ำซ้อนของพยานหลักฐาน</p>
+                                </div>
+                                <div class="stat-card" style="cursor: pointer;" id="agent-btn-financial">
+                                    <strong style="color: #38bdf8;"><i class="fa-solid fa-money-bill-transfer"></i> Financial Transaction Agent</strong>
+                                    <p class="text-xs muted-text" style="margin-top: 0.25rem;">แกะรอยเส้นทางการเงิน บัญชีม้าแถว 1-3 และยอดหมุนเวียน</p>
+                                </div>
+                                <div class="stat-card" style="cursor: pointer;" id="agent-btn-legal">
+                                    <strong style="color: #a78bfa;"><i class="fa-solid fa-scale-balanced"></i> Legal Mapping Agent</strong>
+                                    <p class="text-xs muted-text" style="margin-top: 0.25rem;">จับคู่พฤติการณ์เข้าองค์ประกอบความผิด พ.ร.บ.เครื่องสำอาง / ฉ้อโกง ป.อ.343</p>
+                                </div>
+                            </div>
+
+                            <div class="card" style="background: rgba(0,0,0,0.2); padding: 1rem;">
+                                <h3 style="font-size: 0.95rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-terminal text-success"></i> ผลการวิเคราะห์และข้อเสนอแนะล่าสุด (พร้อม Source Traceability):</h3>
+                                <div id="ai-hub-output-box" style="font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.7; background: rgba(0,0,0,0.4); padding: 1rem; border-radius: var(--border-radius-sm); border: 1px solid var(--border-color); color: var(--text-primary); white-space: pre-wrap;">
+[AI-ASSISTED AGENTIC OUTPUT (LOCAL NODE)]
+• สถานะคดี: CASE-142 (คดีฉ้อโกงเวชสำอางค์ปลอม)
+• การจับคู่ข้อกฎหมาย: เข้าองค์ประกอบความผิดตาม ป.อ. มาตรา 343 (ฉ้อโกงประชาชน) และ พ.ร.บ.เครื่องสำอาง พ.ศ. 2558 มาตรา 27
+• ช่องว่างที่ตรวจพบ: ยังขาดหนังสือรับรองผลตรวจพิสูจน์สารไซบูทรามีนฉบับจริงจากกรมวิทยาศาสตร์การแพทย์
+• คำสั่งที่แนะนำ: เสนอออกหนังสือราชการติดตามผลตรวจพิสูจน์ฉบับจริง
+[TAGS: FACT, INFERENCE, EVIDENCE_GAP, REQUIRES_HUMAN_REVIEW]
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Bottom Pane: Intakes Table -->
-                    <div class="card margin-top-lg" style="margin-top: 1.5rem;">
-                        <div class="card-header">
-                            <h2>Pending Intakes & AI Triage Center</h2>
+                </section>
+
+                <!-- VIEW 5: REPORTS & DOCUMENTS GENERATOR -->
+                <section id="view-reports" class="view-pane">
+                    <div class="dashboard-split" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fa-solid fa-file-lines text-primary"></i> เลือกแม่แบบเอกสาร</h2>
+                            </div>
+                            <div class="card-body">
+                                <form id="report-generator-form">
+                                    <div class="form-group margin-bottom-md">
+                                        <label for="report-case-id" class="form-label" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem;">เลือกสำนวนคดี</label>
+                                        <select id="report-case-id" class="form-control" style="width: 100%; padding: 0.6rem; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); color: var(--text-primary);">
+                                            <option value="CASE-142">CASE-142 - คดีหลอกขายเวชสำอางค์ปลอม (สยาม คอสเมติกส์)</option>
+                                            <option value="CASE-087">CASE-087 - คดีหลอกขายทองคำออนไลน์ (ภูเก็ต โกลด์)</option>
+                                            <option value="CASE-112">CASE-112 - คดีอาหารเสริมผสมไซบูทรามีน (สลิมฟิต ดีท็อกซ์)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group margin-bottom-lg">
+                                        <label for="report-type" class="form-label" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem;">ประเภทเอกสารทางคดี</label>
+                                        <select id="report-type" class="form-control" style="width: 100%; padding: 0.6rem; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); color: var(--text-primary);">
+                                            <option value="FINAL_REPORT">รายงานการสอบสวนและความเห็นทางคดี (Investigation Report)</option>
+                                            <option value="SUMMONS_WARRANT">หมายเรียกผู้ต้องหา ครั้งที่ 1 (Summons Warrant)</option>
+                                            <option value="SEARCH_WARRANT">คำร้องขอออกหมายค้นต่อศาล (Search Warrant Application)</option>
+                                            <option value="ARREST_WARRANT">คำร้องขอออกหมายจับต่อศาล (Arrest Warrant Application)</option>
+                                            <option value="ACCUSATION_RECORD">บันทึกแจ้งข้อกล่าวหาและรับคำให้การ (Accusation Record)</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" id="btn-generate-report" style="width: 100%;">
+                                        <i class="fa-solid fa-file-pen"></i> สั่งยกร่างเอกสารอัตโนมัติ (AI Copilot)
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header justify-between">
+                                <h2><i class="fa-solid fa-file-pdf text-danger"></i> หน้าต่างแสดงตัวอย่างร่างเอกสาร (Draft Preview)</h2>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-outline btn-sm" id="btn-copy-draft-report"><i class="fa-solid fa-copy"></i> คัดลอก</button>
+                                    <button class="btn btn-secondary btn-sm" id="btn-export-docx"><i class="fa-solid fa-file-word text-primary"></i> ส่งออก DOCX</button>
+                                    <button class="btn btn-danger btn-sm" id="btn-export-pdf"><i class="fa-solid fa-file-pdf"></i> ส่งออก PDF</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <textarea id="draft-report-content" class="form-control" style="width: 100%; min-height: 420px; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.7; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 1.25rem; border-radius: var(--border-radius-sm); resize: vertical;" readonly>กดปุ่ม "สั่งยกร่างเอกสารอัตโนมัติ" เพื่อสร้างร่างเอกสารพร้อมตรวจสอบ Source References...</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 6: SUPERVISOR REVIEW & GOVERNANCE -->
+                <section id="view-supervisor-governance" class="view-pane">
+                    <div class="card">
+                        <div class="card-header justify-between">
+                            <h2><i class="fa-solid fa-user-shield text-primary"></i> ศูนย์ควบคุมและตรวจสำนวนของผู้บังคับบัญชา (Supervisor Governance)</h2>
+                            <button class="btn btn-primary btn-sm" id="btn-refresh-gov-reviews"><i class="fa-solid fa-arrows-rotate"></i> รีเฟรชรายการ</button>
                         </div>
                         <div class="card-body no-padding">
-                            <table class="cppd-table" id="intakes-table">
+                            <table class="cppd-table" id="supervisor-reviews-table">
                                 <thead>
                                     <tr>
-                                        <th>Intake ID</th>
-                                        <th>Title</th>
-                                        <th>Reporter</th>
-                                        <th>Phone</th>
-                                        <th>AI Triage Urgency</th>
-                                        <th>AI Reason</th>
-                                        <th>Status</th>
-                                        <th style="text-align: right;">Action</th>
+                                        <th>รหัสตรวจสำนวน</th>
+                                        <th>เลขคดี</th>
+                                        <th>ประเภทการตรวจ</th>
+                                        <th>ระดับการตรวจ</th>
+                                        <th>ผู้ส่งตรวจ</th>
+                                        <th>สถานะการพิจารณา</th>
+                                        <th style="text-align: right;">การจัดการ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Dynamic Intakes List -->
+                                    <!-- Injected via JavaScript -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </section>
 
-                <!-- VIEW: AI INVESTIGATION CENTER -->
-                <section id="view-ai-intelligence" class="view-pane">
-                    <div class="card">
-                        <div class="card-header justify-between" style="border-bottom: 1px solid var(--border-color); padding: 1rem; display: flex; align-items: center;">
-                            <h2>AI Investigation Center</h2>
-                            <div class="ai-tab-selectors" style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-outline btn-sm active" data-ai-tab="graph" style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">Relation Network</button>
-                                <button class="btn btn-outline btn-sm" data-ai-tab="gaps" style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">Evidence Gap Analyzer</button>
-                                <button class="btn btn-outline btn-sm" data-ai-tab="contradicts" style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">Devil's Advocate</button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <!-- TAB: RELATION GRAPH -->
-                            <div id="ai-tab-content-graph" class="ai-tab-panel">
-                                <p class="muted-text margin-bottom-lg" style="margin-bottom: 1rem;">Visual representation of resolved suspects and organizations mapped across cases.</p>
-                                <div class="graph-canvas-container">
-                                    <div class="graph-canvas" id="graph-canvas-sim">
-                                        <div class="graph-node node-case" style="top: 50%; left: 30%;">
-                                            <i class="fa-solid fa-folder-open"></i>
-                                            <span>CASE-142</span>
-                                        </div>
-                                        <div class="graph-node node-person" style="top: 25%; left: 55%;">
-                                            <i class="fa-solid fa-user"></i>
-                                            <span>Kittisak (Suspect)</span>
-                                        </div>
-                                        <div class="graph-node node-phone" style="top: 50%; left: 75%;">
-                                            <i class="fa-solid fa-mobile-screen-button"></i>
-                                            <span>089-111-2345</span>
-                                        </div>
-                                        <div class="graph-node node-account" style="top: 75%; left: 55%;">
-                                            <i class="fa-solid fa-credit-card"></i>
-                                            <span>SCB 401-229-3388</span>
-                                        </div>
-                                        <svg class="graph-edges">
-                                            <line x1="30%" y1="50%" x2="55%" y2="25%"></line>
-                                            <line x1="30%" y1="50%" x2="75%" y2="50%"></line>
-                                            <line x1="30%" y1="50%" x2="55%" y2="75%"></line>
-                                            <line x1="55%" y1="25%" x2="55%" y2="75%"></line>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- TAB: EVIDENCE GAPS -->
-                            <div id="ai-tab-content-gaps" class="ai-tab-panel" style="display: none;">
-                                <p class="muted-text margin-bottom-lg" style="margin-bottom: 1rem;">AI-assisted identification of evidence voids in the active case file against required legal proof structures.</p>
-                                <div class="alert alert-warning" style="margin-bottom: 1.5rem; display: flex; gap: 0.75rem; align-items: flex-start; padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--warning); background: rgba(245,158,11,0.05);">
-                                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--warning); font-size: 1.25rem;"></i>
-                                    <div>
-                                        <h4 style="margin: 0 0 0.25rem 0; font-size: 0.95rem;">Missing Proof: Public Intent Indicator</h4>
-                                        <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Although Siam Network transfers are logged, evidence that advertisements were published to the general public (web listings, Facebook posts archive) is currently missing from CASE-142 to substantiate Section 343 charges.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- TAB: DEVIL'S ADVOCATE -->
-                            <div id="ai-tab-content-contradicts" class="ai-tab-panel" style="display: none;">
-                                <p class="muted-text margin-bottom-lg" style="margin-bottom: 1rem;">Chronology auditor checking witness statements against transactional and physical records to flag discrepancies.</p>
-                                <div class="alert alert-danger" style="margin-bottom: 1.5rem; display: flex; gap: 0.75rem; align-items: flex-start; padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--danger); background: rgba(239,68,68,0.05);">
-                                    <i class="fa-solid fa-circle-xmark" style="color: var(--danger); font-size: 1.25rem;"></i>
-                                    <div>
-                                        <h4 style="margin: 0 0 0.25rem 0; font-size: 0.95rem;">Timeline Contradiction Flagged</h4>
-                                        <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Suspect Kittisak Wongsawat asserts he was in Phuket during the transaction window of 2026-08-10, but ATM cash withdrawal logs record ATM terminal usage at Ladprao Rd, Bangkok at 11:00:00Z.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- VIEW: REPORT GENERATOR -->
-                <section id="view-reports" class="view-pane">
-                    <div class="dashboard-split">
-                        <!-- Controls Card -->
-                        <div class="card w-350">
-                            <div class="card-header">
-                                <h2>AI Document Copilot</h2>
+                <!-- VIEW 7: ADMIN, SECURITY & AUDIT CONSOLE -->
+                <section id="view-admin-audit" class="view-pane">
+                    <div class="dashboard-split" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="card">
+                            <div class="card-header justify-between">
+                                <h2><i class="fa-solid fa-shield-check text-success"></i> การตรวจสอบความสมบูรณ์ของบันทึก (Audit Hash Chain)</h2>
+                                <button class="btn btn-outline btn-sm" id="btn-verify-audit-chain"><i class="fa-solid fa-link"></i> ตรวจสอบ Hash Chain</button>
                             </div>
                             <div class="card-body">
-                                <form id="report-generator-form">
-                                    <div class="form-group margin-bottom-md" style="margin-bottom: 1rem;">
-                                        <label for="report-case-id" class="form-label">Select Case</label>
-                                        <select id="report-case-id" class="form-control" required>
-                                            <option value="CASE-142">CASE-142 - คดีหลอกขายเวชสำอางค์ปลอม (สยาม คอสเมติกส์)</option>
-                                            <option value="CASE-087">CASE-087 - คดีหลอกขายทองคำออนไลน์ (ภูเก็ต โกลด์)</option>
-                                            <option value="CASE-112">CASE-112 - คดีอาหารเสริมผสมไซบูทรามีน (สลิมฟิต ดีท็อกซ์)</option>
-                                        </select>
+                                <div id="audit-chain-status-box" style="padding: 1rem; border-radius: var(--border-radius-sm); background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.3); display: flex; align-items: center; gap: 0.75rem;">
+                                    <i class="fa-solid fa-circle-check text-success" style="font-size: 1.5rem;"></i>
+                                    <div>
+                                        <h4 style="margin: 0; font-size: 0.95rem; color: var(--success); font-weight: 700;">Audit Hash Chain Verified (100% Intact)</h4>
+                                        <span class="text-xs muted-text">บันทึกประวัติการสืบสวนและหลักฐานทุกรายการถูกร้อยเรียงด้วย SHA-256 ไม่พบการดัดแปลงแก้ไข</span>
                                     </div>
-                                    <div class="form-group margin-bottom-lg" style="margin-bottom: 1.5rem;">
-                                        <label for="report-type" class="form-label">Report Template</label>
-                                        <select id="report-type" class="form-control" required>
-                                            <option value="SUMMONS_WARRANT">หมายเรียกผู้ต้องหา ครั้งที่ 1 (Summons Warrant)</option>
-                                            <option value="SEARCH_WARRANT">คำร้องขอออกหมายค้น (Search Warrant Request)</option>
-                                            <option value="ACCUSATION_RECORD">บันทึกแจ้งข้อกล่าวหาและรับคำให้การ (Accusation Record)</option>
-                                            <option value="FINAL_REPORT">รายงานการสอบสวนและความเห็นทางคดี (Final Report)</option>
-                                            <option value="Executive Brief">Executive Brief (สรุปข้อเท็จจริง)</option>
-                                            <option value="Investigation Plan">Investigation Plan (แผนการสืบสวน)</option>
-                                            <option value="Financial Analysis">Financial Analysis (วิเคราะห์เส้นทางการเงิน)</option>
-                                            <option value="Evidence Gap Report">Evidence Gap Report (ตรวจความสมบูรณ์สำนวน)</option>
-                                        </select>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary" id="btn-generate-report" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.65rem;">
-                                        <i class="fa-solid fa-file-pen"></i> Draft Document
-                                    </button>
-                                </form>
+                                </div>
                             </div>
                         </div>
-                        
-                        <!-- Preview Card -->
-                        <div class="card flex-grow">
-                            <div class="card-header justify-between">
-                                <h2>Draft Preview Pane</h2>
-                                <button class="btn btn-outline btn-sm" id="btn-copy-draft-report"><i class="fa-solid fa-copy"></i> Copy Draft</button>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fa-solid fa-server text-primary"></i> สถานะ AI Gateway และ Hybrid Routing</h2>
                             </div>
-                            <div class="card-body" style="height: 100%; display: flex; flex-direction: column;">
-                                <textarea id="draft-report-content" class="form-control" style="flex: 1; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.6; background: rgba(0,0,0,0.15); border: 1px solid var(--border-color); color: var(--text-primary); resize: none; min-height: 300px; padding: 1rem;" readonly>Draft preview will appear here after generation...</textarea>
+                            <div class="card-body">
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;">
+                                    <div class="justify-between" style="display: flex; padding: 0.5rem; border-bottom: 1px solid var(--border-color);">
+                                        <span>Local CPPD AI Node (Llama 3.3 70B):</span>
+                                        <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--success);">ACTIVE / RESTRICTED_ENABLED</span>
+                                    </div>
+                                    <div class="justify-between" style="display: flex; padding: 0.5rem; border-bottom: 1px solid var(--border-color);">
+                                        <span>Approved Cloud AI (Gemini 1.5 Govt):</span>
+                                        <span class="badge" style="background: rgba(59,130,246,0.15); color: #60a5fa;">ACTIVE / INTERNAL_ONLY</span>
+                                    </div>
+                                    <div class="justify-between" style="display: flex; padding: 0.5rem;">
+                                        <span>Restricted Cloud AI Blocking:</span>
+                                        <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--success);"><i class="fa-solid fa-lock"></i> ENFORCED (HTTP 403)</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
-
-                <!-- VIEW: ADMIN/AUDIT -->
-                <section id="view-admin-audit" class="view-pane">
-                    <div class="dashboard-split" style="display: flex; flex-direction: column; gap: 1.5rem;">
-                        
-                        <!-- Top Row: Users and Audits -->
-                        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
-                            <!-- User approvals card -->
-                            <div class="card" style="flex: 1; min-width: 400px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius);">
-                                <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding: 1.25rem;">
-                                    <h2 style="margin: 0; font-size: 1.1rem;"><i class="fa-solid fa-users-gear text-primary"></i> User Access & Approvals</h2>
-                                </div>
-                                <div class="card-body" style="padding: 1rem;">
-                                    <table class="cppd-table" id="admin-users-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
-                                        <thead>
-                                            <tr style="border-bottom: 1px solid var(--border-color);">
-                                                <th style="padding: 0.5rem;">Name</th>
-                                                <th style="padding: 0.5rem;">Email</th>
-                                                <th style="padding: 0.5rem;">Role</th>
-                                                <th style="padding: 0.5rem;">Status</th>
-                                                <th style="padding: 0.5rem; text-align: right;">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Dynamic Users List -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            
-                            <!-- Audit Logs card -->
-                            <div class="card" style="flex: 1.5; min-width: 500px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius);">
-                                <div class="card-header justify-between" style="border-bottom: 1px solid var(--border-color); padding: 1.25rem; display: flex; align-items: center;">
-                                    <h2 style="margin: 0; font-size: 1.1rem;"><i class="fa-solid fa-receipt text-primary"></i> Compliance Audit Logs</h2>
-                                    <button class="btn btn-secondary btn-sm" id="btn-export-audit"><i class="fa-solid fa-download"></i> Export CSV</button>
-                                </div>
-                                <div class="card-body" style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border-color); display: flex; gap: 0.5rem; align-items: center;">
-                                    <input type="text" id="filter-audit-email" placeholder="Filter by Gmail..." style="padding: 0.4rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none; font-size: 0.8rem; width: 180px;">
-                                    <select id="filter-audit-action" style="padding: 0.4rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none; font-size: 0.8rem; width: 150px;">
-                                        <option value="">All Actions</option>
-                                        <option value="LOGIN_SUCCESS">LOGIN_SUCCESS</option>
-                                        <option value="LOGOUT">LOGOUT</option>
-                                        <option value="VIEW_CASE_DETAILS">VIEW_CASE_DETAILS</option>
-                                        <option value="CREATE_INTAKE">CREATE_INTAKE</option>
-                                        <option value="PROMOTE_INTAKE">PROMOTE_INTAKE</option>
-                                        <option value="GENERATE_REPORT">GENERATE_REPORT</option>
-                                    </select>
-                                    <button class="btn btn-primary btn-sm" id="btn-filter-audit" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Filter</button>
-                                </div>
-                                <div class="card-body no-padding" style="overflow-y: auto; max-height: 250px;">
-                                    <table class="cppd-table" id="audit-table" style="width: 100%; font-size: 0.8rem;">
-                                        <thead>
-                                            <tr>
-                                                <th style="padding: 0.5rem;">Timestamp</th>
-                                                <th style="padding: 0.5rem;">Action</th>
-                                                <th style="padding: 0.5rem;">User</th>
-                                                <th style="padding: 0.5rem;">Details</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Dynamic Audit Logs -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Bottom Row: Privacy and AI Configs -->
-                        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius); max-width: 800px;">
-                            <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding: 1.25rem;">
-                                <h2 style="margin: 0; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-shield-halved text-primary"></i> Local AI & Privacy Configuration</h2>
-                            </div>
-                            <div class="card-body" style="padding: 1.5rem;">
-                                <p class="muted-text" style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.85rem;">For highly confidential investigations, route all AI summarizations and extractions to on-premises local endpoints to ensure data sovereignty.</p>
-                                
-                                <form id="form-ai-settings">
-                                    <div class="form-group" style="margin-bottom: 1rem;">
-                                        <label for="ai-mode" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.85rem;">AI Processing Mode</label>
-                                        <select class="form-control" id="ai-mode" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none;">
-                                            <option value="cloud">Cloud AI Tier (Google Gemini 2.5)</option>
-                                            <option value="local_pc">Local PC Offline Mode (Ollama / Localhost)</option>
-                                            <option value="local_agency">Agency Secure Network Mode (CIB GPT / On-Premises)</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="form-group" id="group-local-endpoint" style="margin-bottom: 1rem;">
-                                        <label for="ai-endpoint" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.85rem;">Local AI Endpoint Base URL</label>
-                                        <input type="text" class="form-control" id="ai-endpoint" placeholder="e.g. http://localhost:11434/v1" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none;">
-                                        <span class="text-xs muted-text" style="display: block; margin-top: 0.25rem; font-size: 0.75rem; color: var(--text-muted);">Endpoint should support OpenAI chat completions schema.</span>
-                                    </div>
-                                    
-                                    <div class="form-group" id="group-local-model" style="margin-bottom: 1rem;">
-                                        <label for="ai-model" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.85rem;">Target Model Name</label>
-                                        <input type="text" class="form-control" id="ai-model" placeholder="e.g. llama3" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none;">
-                                    </div>
-                                    
-                                    <div class="form-group" style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
-                                        <button class="btn btn-primary btn-sm" type="submit" id="btn-save-settings">Save Configurations</button>
-                                        <button class="btn btn-outline btn-sm" type="button" id="btn-preset-ollama">Load Ollama Defaults</button>
-                                        <button class="btn btn-outline btn-sm" type="button" id="btn-preset-cib">Load CIB GPT Defaults</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
             </div>
         </main>
     </div>
 
+    <!-- TOAST NOTIFICATIONS CONTAINER -->
+    <div id="toast-container"></div>
+
     <!-- MODAL: BRIEFING DRAWER -->
-    <div id="briefing-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-        <div class="card" style="width: 90%; max-width: 800px; max-height: 85vh; display: flex; flex-direction: column; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius);">
-            <div class="card-header justify-between" style="border-bottom: 1px solid var(--border-color); display: flex; padding: 1rem;">
-                <h2 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-briefcase text-primary"></i> CPPD Command Briefing Package</h2>
-                <button class="btn btn-close" id="btn-close-briefing"><i class="fa-solid fa-xmark"></i></button>
+    <div id="briefing-modal" class="modal-overlay" style="display: none;">
+        <div class="card" style="width: 90%; max-width: 800px; max-height: 85vh; display: flex; flex-direction: column;">
+            <div class="card-header justify-between">
+                <h2><i class="fa-solid fa-briefcase text-primary"></i> รายงานสรุปสำนวนคดีเสนอผู้บังคับบัญชา (Command Briefing)</h2>
+                <button class="btn btn-outline btn-xs" id="btn-close-briefing"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="card-body" style="overflow-y: auto; padding: 1.5rem; flex: 1;">
-                <div id="briefing-content" class="markdown-body text-sm" style="white-space: pre-wrap; font-family: var(--font-mono); line-height: 1.6; color: var(--text-primary);">
-                    Loading report details...
+            <div class="card-body" style="overflow-y: auto; flex: 1;">
+                <div id="briefing-content" class="text-sm" style="white-space: pre-wrap; font-family: var(--font-mono); line-height: 1.7;">
+                    กำลังโหลดข้อมูลรายงานสรุปคดี...
                 </div>
             </div>
-            <div class="card-header justify-end" style="border-top: 1px solid var(--border-color); display: flex; gap: 0.5rem; padding: 1rem; justify-content: flex-end;">
-                <button class="btn btn-outline btn-sm" id="btn-copy-briefing"><i class="fa-solid fa-copy"></i> Copy Raw</button>
-                <button class="btn btn-primary btn-sm" id="btn-done-briefing">Done</button>
+            <div class="card-header justify-between" style="border-top: 1px solid var(--border-color);">
+                <button class="btn btn-outline btn-sm" id="btn-copy-briefing"><i class="fa-solid fa-copy"></i> คัดลอก</button>
+                <button class="btn btn-primary btn-sm" id="btn-done-briefing">เสร็จสิ้น</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL: LOGIN OVERLAY -->
-    <div id="login-overlay" style="position: fixed; inset: 0; background-color: var(--bg-app); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px);">
-        <div class="card" style="width: 90%; max-width: 400px; padding: 2rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius); text-align: center;">
-            <div style="margin-bottom: 1.5rem; display: flex; justify-content: center; align-items: center;">
-                <img src="https://cppd.cib.go.th/backend/uploads/logo_edit_500_7acc86e6d4.png" alt="CPPD Logo" style="height: 90px; width: auto; object-fit: contain;">
+    <div id="login-overlay" style="position: fixed; inset: 0; background-color: var(--bg-app); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(12px);">
+        <div class="card" style="width: 90%; max-width: 440px; padding: 2.25rem; text-align: center;">
+            <div style="margin-bottom: 1.25rem; display: flex; justify-content: center; align-items: center;">
+                <img src="https://cppd.cib.go.th/backend/uploads/logo_edit_500_7acc86e6d4.png" alt="CPPD Logo" style="height: 85px; width: auto;">
             </div>
-            <h2 class="margin-bottom-sm">CPPD Investigation OS</h2>
-            <p class="muted-text margin-bottom-lg" style="margin-bottom: 2rem; font-size: 0.9rem;">Authorized Law Enforcement Personnel Only. Secure sign-in required.</p>
+            <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 0.35rem;">กก.1 บก.ปคบ. AI Investigation OS</h2>
+            <p class="muted-text text-xs" style="margin-bottom: 1.75rem;">ระบบสนับสนุนงานสืบสวนสอบสวนอัจฉริยะ สำหรับเจ้าหน้าที่ผู้มีอำนาจเท่านั้น</p>
             
             <div class="form-group margin-bottom-lg" style="text-align: left; margin-bottom: 1.5rem;">
-                <label for="login-email-input" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Gmail or Corporate Email Address</label>
-                <input type="email" class="form-control" id="login-email-input" placeholder="e.g. investigator.anong@gmail.com" value="admin@cppd.go.th" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none; margin-bottom: 1rem;">
-                
-                <label for="login-presets" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.85rem; color: var(--text-muted);">Quick-Select Preset Account</label>
-                <select class="form-control" id="login-presets" style="width: 100%; padding: 0.4rem; background: rgba(255,255,255,0.02); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: var(--border-radius); outline: none; font-size: 0.85rem;">
-                    <option value="admin@cppd.go.th">admin@cppd.go.th (Admin)</option>
-                    <option value="commander@cppd.go.th">commander@cppd.go.th (ผบก. / Commander)</option>
-                    <option value="deputy.commander@cppd.go.th">deputy.commander@cppd.go.th (รอง ผบก. / Deputy Commander)</option>
-                    <option value="superintendent@cppd.go.th">superintendent@cppd.go.th (ผกก. / Superintendent - Financial Crimes)</option>
-                    <option value="deputy.superintendent@cppd.go.th">deputy.superintendent@cppd.go.th (รอง ผกก. / หัวหน้างานสอบสวน)</option>
-                    <option value="somchai.i@cppd.go.th">somchai.i@cppd.go.th (พนักงานสอบสวน - CASE-142)</option>
-                    <option value="clerk.a@cppd.go.th">clerk.a@cppd.go.th (เสมียนคดี - CASE-142)</option>
-                    <option value="">-- Type custom email above --</option>
+                <label for="login-presets" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.85rem;">เลือกลงชื่อเข้าใช้ด้วยบทบาททดสอบ (Quick-Select Role)</label>
+                <select class="form-control" id="login-presets" style="width: 100%; padding: 0.65rem; background: var(--bg-input); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); font-size: 0.88rem;">
+                    <option value="somchai.i@cppd.go.th">พ.ต.ท. สมชาย สอบสวนสืบสวน (พนักงานสอบสวน กก.1 - CASE-142)</option>
+                    <option value="superintendent@cppd.go.th">พ.ต.อ. อัครเดช ผู้กำกับการ (ผกก.1 บก.ปคบ. - ผู้บังคับบัญชา)</option>
+                    <option value="commander@cppd.go.th">พล.ต.ต. วิชัย บังคับการ (ผบก.ปคบ. - ผู้บังคับการ)</option>
+                    <option value="admin@cppd.go.th">admin@cppd.go.th (ผู้ดูแลระบบความปลอดภัย)</option>
+                    <option value="clerk.a@cppd.go.th">clerk.a@cppd.go.th (เสมียนคดี)</option>
                 </select>
             </div>
             
-            <button class="btn btn-primary" id="btn-google-login" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem;">
-                <i class="fa-brands fa-google"></i> Sign in with Google / Gmail
+            <button class="btn btn-primary" id="btn-google-login" style="width: 100%; padding: 0.75rem; font-size: 0.95rem;">
+                <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบปฏิบัติการสอบสวน
             </button>
         </div>
     </div>
 
-    <!-- UI Scripts -->
+    <!-- UI Controller Script -->
     <script src="app.js"></script>
 </body>
 </html>
