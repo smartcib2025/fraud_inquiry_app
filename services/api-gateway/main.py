@@ -401,6 +401,125 @@ class MockDatabase:
                 "created_at": "2026-08-12T11:00:00Z"
             }
         ]
+        # PHASE 6 COLLECTIONS (Legal Analysis & Investigation Planning Layer)
+        self.laws = [
+            {
+                "id": "law-penal-code",
+                "code": "TH-CRIMINAL-CODE",
+                "title_th": "ประมวลกฎหมายอาญา",
+                "title_en": "Criminal Code of Thailand",
+                "jurisdiction": "THAILAND",
+                "effective_from": "1957-01-01",
+                "effective_to": None,
+                "status": "ACTIVE",
+                "source_reference": "ราชกิจจานุเบกษา เล่ม 73 ตอนที่ 95",
+                "version": "2024"
+            },
+            {
+                "id": "law-computer-crime",
+                "code": "TH-COMPUTER-CRIME-ACT",
+                "title_th": "พระราชบัญญัติว่าด้วยการกระทำความผิดเกี่ยวกับคอมพิวเตอร์ พ.ศ. 2550 (และที่แก้ไขเพิ่มเติม)",
+                "title_en": "Computer Crime Act B.E. 2550",
+                "jurisdiction": "THAILAND",
+                "effective_from": "2007-07-18",
+                "effective_to": None,
+                "status": "ACTIVE",
+                "source_reference": "ราชกิจจานุเบกษา เล่ม 124 ตอนที่ 27 ก",
+                "version": "2017"
+            },
+            {
+                "id": "law-cosmetics",
+                "code": "TH-COSMETICS-ACT",
+                "title_th": "พระราชบัญญัติเครื่องสำอาง พ.ศ. 2558",
+                "title_en": "Cosmetics Act B.E. 2558",
+                "jurisdiction": "THAILAND",
+                "effective_from": "2015-09-09",
+                "effective_to": None,
+                "status": "ACTIVE",
+                "source_reference": "ราชกิจจานุเบกษา เล่ม 132 ตอนที่ 86 ก",
+                "version": "2015"
+            }
+        ]
+
+        self.legal_provisions = [
+            {
+                "id": "prov-sec-343",
+                "law_id": "law-penal-code",
+                "section": "343",
+                "subsection": None,
+                "title": "ความผิดฐานฉ้อโกงประชาชน",
+                "text_reference": "ถ้าการกระทำความผิดฐานฉ้อโกงได้กระทำด้วยการแสดงข้อความอันเป็นเท็จต่อประชาชน...",
+                "effective_from": "1957-01-01",
+                "effective_to": None
+            },
+            {
+                "id": "prov-cca-sec-14-1",
+                "law_id": "law-computer-crime",
+                "section": "14",
+                "subsection": "1",
+                "title": "นำเข้าสู่ระบบคอมพิวเตอร์ซึ่งข้อมูลอันเป็นเท็จ",
+                "text_reference": "โดยทุจริต หรือโดยหลอกลวง นำเข้าสู่ระบบคอมพิวเตอร์ซึ่งข้อมูลคอมพิวเตอร์ที่บิดเบือนหรือปลอม...",
+                "effective_from": "2017-05-24",
+                "effective_to": None
+            }
+        ]
+
+        self.case_facts = [
+            {
+                "id": "fact-142-01",
+                "case_id": "CASE-142",
+                "fact_text": "ผู้เสียหายโอนเงินจำนวน 1,250,000 บาท เข้าบัญชีธนาคารไทยพาณิชย์ เลขที่ 401-229-3388 นายกิตติศักดิ์ วงศ์สวัสดิ์ เมื่อ 9 ส.ค. 2569",
+                "fact_type": "FACT",
+                "verification_status": "VERIFIED",
+                "source_type": "EVIDENCE",
+                "source_ids": ["f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"],
+                "created_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "reviewed_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "created_at": "2026-08-10T10:10:00Z"
+            },
+            {
+                "id": "fact-142-02",
+                "case_id": "CASE-142",
+                "fact_text": "เพจเฟซบุ๊ก สยาม คอสเมติกส์ ออฟฟิเชียล มีการโฆษณาขายเวชสำอางค์ลดราคา 70% ต่อประชาชนทั่วไป",
+                "fact_type": "FACT",
+                "verification_status": "VERIFIED",
+                "source_type": "EVIDENCE",
+                "source_ids": ["11b7df3c-6622-48df-9cb9-ef77ba4c28f1"],
+                "created_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "reviewed_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "created_at": "2026-08-10T10:15:00Z"
+            }
+        ]
+
+        self.legal_element_assessments = [
+            {
+                "id": "lea-142-01",
+                "case_id": "CASE-142",
+                "legal_issue_id": "li-142-01",
+                "legal_element_id": "elem-142-01",
+                "status": "SUPPORTED",
+                "supporting_fact_ids": ["fact-142-02"],
+                "supporting_evidence_ids": ["11b7df3c-6622-48df-9cb9-ef77ba4c28f1"],
+                "contradictory_evidence_ids": [],
+                "missing_fact_description": None,
+                "analyst_comment": "มีพยานหลักฐานโพสต์ Facebook โฆษณาหลอกลวงประชาชนชัดเจน",
+                "reviewed_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "reviewed_at": "2026-08-10T11:00:00Z"
+            }
+        ]
+
+        self.human_legal_decisions = [
+            {
+                "id": "hld-142-01",
+                "case_id": "CASE-142",
+                "decision": "ACCEPT_LEGAL_MAPPING",
+                "reason": "ข้อเท็จจริงในสำนวนเข้าองค์ประกอบความผิดตาม ป.อ. ม.343 และ พ.ร.บ.คอมพิวเตอร์ฯ ม.14(1)",
+                "decided_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "decided_at": "2026-08-10T11:30:00Z",
+                "related_resource": "li-142-01"
+            }
+        ]
+
         # PHASE 5 COLLECTIONS (Statement & Interview Copilot Layer)
         self.interview_preparations = [
             {
@@ -3979,3 +4098,312 @@ async def approve_statement_review(statement_id: str, authorization: Optional[st
         "resource_type": "statement", "resource_id": statement_id, "result": "success"
     })
     return {"status": "success", "statement_status": "APPROVED"}
+
+
+# -------------------------------------------------------------
+# PHASE 6: LEGAL ANALYSIS & INVESTIGATION PLANNING SCHEMAS
+# -------------------------------------------------------------
+
+class CaseFactCreate(BaseModel):
+    fact_text: str
+    fact_type: str = "FACT"  # FACT, CLAIM, INFERENCE, CONFLICT
+    verification_status: str = "NOT_VERIFIED"  # VERIFIED, PARTIALLY_VERIFIED, NOT_VERIFIED, CONTRADICTED
+    source_type: str = "EVIDENCE"  # EVIDENCE, STATEMENT, TIMELINE, TRANSACTION
+    source_ids: Optional[List[str]] = []
+
+class LegalElementAssessmentCreate(BaseModel):
+    legal_issue_id: str
+    status: str = "SUPPORTED"  # SUPPORTED, PARTIALLY_SUPPORTED, NOT_SUPPORTED, CONTRADICTED, INSUFFICIENT_EVIDENCE
+    supporting_fact_ids: Optional[List[str]] = []
+    supporting_evidence_ids: Optional[List[str]] = []
+    contradictory_evidence_ids: Optional[List[str]] = []
+    missing_fact_description: Optional[str] = None
+    analyst_comment: Optional[str] = ""
+
+class InvestigationGapActionCreate(BaseModel):
+    title: str
+    description: str
+    action_type: str = "REQUEST_DOCUMENT"  # INTERVIEW, REQUEST_DOCUMENT, REQUEST_BANK_RECORD, OBTAIN_CCTV, DIGITAL_FORENSICS, AGENCY_REQUEST
+    priority: str = "HIGH"
+    assigned_to: Optional[str] = None
+    due_at: Optional[str] = None
+
+class HumanLegalDecisionCreate(BaseModel):
+    decision: str  # ACCEPT_LEGAL_MAPPING, REJECT_LEGAL_MAPPING, CLOSE_LEGAL_GAP, APPROVE_ELEMENT_ASSESSMENT
+    reason: str
+    related_resource: str
+
+# -------------------------------------------------------------
+# PHASE 6: LEGAL ANALYSIS & INVESTIGATION PLANNING REST APIs
+# -------------------------------------------------------------
+
+# 1. Case Facts & Fact Source Mapping
+@app.get("/api/v1/cases/{case_id}/facts")
+@app.get("/api/cases/{case_id}/facts")
+async def get_case_facts(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    facts = [f for f in getattr(db, "case_facts", []) if f.get("case_id") == case_id]
+    return {"status": "success", "facts": facts}
+
+@app.post("/api/v1/cases/{case_id}/facts")
+@app.post("/api/cases/{case_id}/facts")
+async def create_case_fact(case_id: str, payload: CaseFactCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    fact_id = f"fact-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    fact = {
+        "id": fact_id,
+        "case_id": case_id,
+        "fact_text": payload.fact_text,
+        "fact_type": payload.fact_type,
+        "verification_status": payload.verification_status,
+        "source_type": payload.source_type,
+        "source_ids": payload.source_ids or [],
+        "created_by": user["id"],
+        "reviewed_by": user["id"] if payload.verification_status == "VERIFIED" else None,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "case_facts"):
+        db.case_facts = []
+    db.case_facts.append(fact)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "LEGAL.FACT.CREATE",
+        "resource_type": "case_fact", "resource_id": fact_id, "result": "success"
+    })
+    
+    return {"status": "success", "fact": fact}
+
+# 2. Fact-Evidence-Legal Element Full Drill-down Matrix
+@app.get("/api/v1/cases/{case_id}/legal-matrix")
+@app.get("/api/cases/{case_id}/legal-matrix")
+async def get_legal_matrix_full(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    legal_issues = [li for li in getattr(db, "legal_issues", []) if li.get("case_id") == case_id]
+    legal_elements = [el for el in getattr(db, "legal_elements", []) if el.get("case_id") == case_id]
+    facts = [f for f in getattr(db, "case_facts", []) if f.get("case_id") == case_id]
+    evidences = [e for e in db.evidence if e.get("case_id") == case_id]
+    assessments = [a for a in getattr(db, "legal_element_assessments", []) if a.get("case_id") == case_id]
+    gaps = [g for g in getattr(db, "evidence_gaps", []) if g.get("case_id") == case_id]
+    
+    matrix = []
+    for issue in legal_issues:
+        issue_elems = [el for el in legal_elements if el.get("legal_issue_id") == issue.get("id")]
+        elem_list = []
+        for elem in issue_elems:
+            asm = next((a for a in assessments if a.get("legal_element_id") == elem.get("id")), None)
+            elem_gaps = [g for g in gaps if g.get("legal_element_id") == elem.get("id")]
+            supp_facts = [f for f in facts if asm and f.get("id") in asm.get("supporting_fact_ids", [])]
+            supp_evs = [e for e in evidences if asm and e.get("id") in asm.get("supporting_evidence_ids", [])]
+            
+            elem_list.append({
+                "element_id": elem.get("id"),
+                "element_code": elem.get("element_code"),
+                "title": elem.get("title"),
+                "is_required": elem.get("is_required", True),
+                "assessment_status": asm.get("status", "REQUIRES_REVIEW") if asm else "REQUIRES_REVIEW",
+                "supporting_facts": supp_facts,
+                "supporting_evidence": supp_evs,
+                "gaps": elem_gaps
+            })
+            
+        matrix.append({
+            "issue_id": issue.get("id"),
+            "issue_title": issue.get("issue_title"),
+            "legal_code": issue.get("legal_code"),
+            "status": issue.get("status"),
+            "elements": elem_list
+        })
+        
+    return {"status": "success", "case_id": case_id, "matrix": matrix}
+
+# 3. Element Assessment
+@app.post("/api/v1/legal-elements/{element_id}/assess")
+@app.post("/api/legal-elements/{element_id}/assess")
+async def assess_legal_element(element_id: str, payload: LegalElementAssessmentCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    asm_id = f"lea-{str(uuid.uuid4())[:8]}"
+    asm = {
+        "id": asm_id,
+        "legal_element_id": element_id,
+        "legal_issue_id": payload.legal_issue_id,
+        "status": payload.status,
+        "supporting_fact_ids": payload.supporting_fact_ids or [],
+        "supporting_evidence_ids": payload.supporting_evidence_ids or [],
+        "contradictory_evidence_ids": payload.contradictory_evidence_ids or [],
+        "missing_fact_description": payload.missing_fact_description,
+        "analyst_comment": payload.analyst_comment,
+        "reviewed_by": user["full_name"],
+        "reviewed_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "legal_element_assessments"):
+        db.legal_element_assessments = []
+    db.legal_element_assessments.append(asm)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "LEGAL.ELEMENT.ASSESS",
+        "resource_type": "legal_element", "resource_id": element_id, "result": "success"
+    })
+    
+    return {"status": "success", "assessment": asm}
+
+# 4. AI Legal Mapping & Evidence Sufficiency Agents
+@app.post("/api/v1/cases/{case_id}/ai/legal-mapping")
+@app.post("/api/cases/{case_id}/ai/legal-mapping")
+async def run_ai_legal_mapping(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    mapping_result = {
+        "case_id": case_id,
+        "applicable_laws": [
+            {
+                "law_title": "ประมวลกฎหมายอาญา มาตรา 343",
+                "provisions": "ความผิดฐานร่วมกันฉ้อโกงประชาชน",
+                "elements_mapped": [
+                    {"element": "หลอกลวงด้วยการแสดงข้อความอันเป็นเท็จต่อประชาชน", "evidence_support": "11b7df3c-6622-48df-9cb9-ef77ba4c28f1", "status": "SUPPORTED"},
+                    {"element": "ได้ไปซึ่งทรัพย์สินจากผู้ถูกหลอกลวง", "evidence_support": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088", "status": "SUPPORTED"}
+                ]
+            },
+            {
+                "law_title": "พ.ร.บ.ว่าด้วยการกระทำความผิดเกี่ยวกับคอมพิวเตอร์ พ.ศ. 2550 มาตรา 14(1)",
+                "provisions": "นำเข้าสู่ระบบคอมพิวเตอร์ซึ่งข้อมูลอันเป็นเท็จ",
+                "elements_mapped": [
+                    {"element": "นำเข้าข้อมูลคอมพิวเตอร์ปลอมหรือเท็จโดยประการที่น่าจะเกิดความเสียหายแก่ประชาชน", "evidence_support": "11b7df3c-6622-48df-9cb9-ef77ba4c28f1", "status": "SUPPORTED"}
+                ]
+            }
+        ],
+        "warning": "คำเตือน: AI เป็นผู้ช่วยวิเคราะห์องค์ประกอบความผิดเท่านั้น พนักงานสอบสวนต้องเป็นผู้วินิจฉัยข้อกฎหมายขั้นสุดท้าย",
+        "review_status": "REQUIRES_REVIEW"
+    }
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "LEGAL.AI.MAPPING",
+        "resource_type": "legal_mapping", "resource_id": case_id, "result": "success"
+    })
+    
+    return {"status": "success", "mapping": mapping_result}
+
+@app.post("/api/v1/cases/{case_id}/ai/evidence-sufficiency")
+@app.post("/api/cases/{case_id}/ai/evidence-sufficiency")
+async def run_ai_evidence_sufficiency(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    sufficiency_result = {
+        "case_id": case_id,
+        "overall_sufficiency": "MODERATE_SUPPORT",
+        "elements_summary": [
+            {"element_code": "SEC343-E1", "support_level": "STRONG_SUPPORT", "independent_sources": 3, "integrity_verified": True},
+            {"element_code": "SEC343-E2", "support_level": "STRONG_SUPPORT", "independent_sources": 2, "integrity_verified": True},
+            {"element_code": "SEC343-E3", "support_level": "LIMITED_SUPPORT", "independent_sources": 1, "missing_items": ["CCTV ตู้ ATM ลาดพร้าว"]}
+        ],
+        "workflow_readiness": "PARTIALLY_READY"
+    }
+    return {"status": "success", "sufficiency": sufficiency_result}
+
+# 5. AI Investigation Planning Engine
+@app.post("/api/v1/cases/{case_id}/ai/investigation-plan")
+@app.post("/api/cases/{case_id}/ai/investigation-plan")
+async def generate_ai_investigation_plan(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    suggested_actions = [
+        {
+            "priority": "URGENT",
+            "action_type": "REQUEST_BANK_RECORD",
+            "title": "ขอรายการเดินบัญชีแถวที่ 2 ธนาคารกรุงไทย ของ น.ส.พัชรี แก้วมณี",
+            "description": "ประสานงานธนาคารกรุงไทยเพื่อตรวจสอบเส้นทางการเงินและอายัดบัญชี",
+            "target_agency": "ธนาคารกรุงไทย / ปปง."
+        },
+        {
+            "priority": "HIGH",
+            "action_type": "OBTAIN_CCTV",
+            "title": "ขอภาพบันทึกกล้อง CCTV หน้าตู้ ATM สาขาลาดพร้าว",
+            "description": "ประสานขอภาพกล้องวงจรปิดขณะคนร้ายทำรายการถอนเงินสดเพื่อยืนยันตัวตน",
+            "target_agency": "ธนาคารไทยพาณิชย์ สาขาลาดพร้าว"
+        },
+        {
+            "priority": "HIGH",
+            "action_type": "INTERVIEW",
+            "title": "ออกหมายเรียกสอบปากคำ น.ส.พัชรี แก้วมณี (เจ้าของบัญชีม้า)",
+            "description": "สอบสวนที่มาของการเปิดบัญชีและการรับโอนเงินต่อจากนายกิตติศักดิ์",
+            "target_agency": "สภ.ดอนเมือง (ส่งหมายเรียก)"
+        }
+    ]
+    
+    return {"status": "success", "suggested_actions": suggested_actions}
+
+# 6. Gap Conversion to Investigation Action
+@app.post("/api/v1/investigation-gaps/{gap_id}/create-action")
+@app.post("/api/investigation-gaps/{gap_id}/create-action")
+async def create_action_from_gap(gap_id: str, payload: InvestigationGapActionCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    action_id = f"act-{str(uuid.uuid4())[:8]}"
+    action_item = {
+        "id": action_id,
+        "gap_id": gap_id,
+        "title": payload.title,
+        "description": payload.description,
+        "action_type": payload.action_type,
+        "priority": payload.priority,
+        "assigned_to": payload.assigned_to or user["id"],
+        "status": "pending",
+        "due_at": payload.due_at or time.strftime("%Y-%m-%dT17:00:00Z"),
+        "created_by": user["id"],
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "investigation_actions"):
+        db.investigation_actions = []
+    db.investigation_actions.append(action_item)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "INVESTIGATION.ACTION.CREATE",
+        "resource_type": "investigation_action", "resource_id": action_id, "result": "success"
+    })
+    
+    return {"status": "success", "action": action_item}
+
+# 7. Human Legal Decision Recording
+@app.post("/api/v1/cases/{case_id}/legal-decisions")
+@app.post("/api/cases/{case_id}/legal-decisions")
+async def record_human_legal_decision(case_id: str, payload: HumanLegalDecisionCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    decision_id = f"hld-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    decision_item = {
+        "id": decision_id,
+        "case_id": case_id,
+        "decision": payload.decision,
+        "reason": payload.reason,
+        "decided_by": user["full_name"],
+        "decided_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "related_resource": payload.related_resource
+    }
+    
+    if not hasattr(db, "human_legal_decisions"):
+        db.human_legal_decisions = []
+    db.human_legal_decisions.append(decision_item)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "HUMAN.LEGAL.DECISION",
+        "resource_type": "human_legal_decision", "resource_id": decision_id, "result": "success"
+    })
+    
+    return {"status": "success", "decision": decision_item}
