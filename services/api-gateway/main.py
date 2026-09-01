@@ -401,6 +401,81 @@ class MockDatabase:
                 "created_at": "2026-08-12T11:00:00Z"
             }
         ]
+        # PHASE 11 COLLECTIONS (Supervisor Review, Command Approval & Case Governance Layer)
+        self.supervisor_reviews = [
+            {
+                "id": "srev-142-01",
+                "case_id": "CASE-142",
+                "review_type": "INVESTIGATION_REPORT",
+                "review_level": "SUPERINTENDENT",
+                "submitted_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "submitted_at": "2026-08-16T15:00:00Z",
+                "assigned_reviewer": "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077",
+                "status": "APPROVED",
+                "case_snapshot_id": "snap-142-v1",
+                "report_version_id": "rep-142-01",
+                "quality_review_id": "rev-142-01",
+                "decision": "APPROVED",
+                "decision_reason": "รายงานการสอบสวนและพยานหลักฐานมีความสอดคล้องครบถ้วนตามองค์ประกอบความผิด",
+                "reviewed_at": "2026-08-16T16:30:00Z",
+                "created_at": "2026-08-16T15:00:00Z"
+            }
+        ]
+
+        self.supervisor_comments = [
+            {
+                "id": "scom-142-01",
+                "review_id": "srev-142-01",
+                "resource_type": "REPORT_SECTION",
+                "resource_id": "sec-facts",
+                "comment": "โปรดระบุรายละเอียดเลขที่บัญชีธนาคารปลายทางของผู้เสียหายให้ชัดเจน",
+                "severity": "MEDIUM",
+                "status": "RESOLVED",
+                "created_by": "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077",
+                "created_at": "2026-08-16T15:30:00Z"
+            }
+        ]
+
+        self.supervisor_directions = [
+            {
+                "id": "sdir-142-01",
+                "case_id": "CASE-142",
+                "review_id": "srev-142-01",
+                "title": "ขอรายการเดินบัญชีและหนังสือรับรองจากธนาคารพาณิชย์",
+                "description": "ให้พนักงานสอบสวนมีหนังสือถึงธนาคารเพื่อขอ Statement บัญชีม้าแถวที่ 2",
+                "direction_type": "OBTAIN_EVIDENCE",
+                "priority": "HIGH",
+                "issued_by": "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077",
+                "issued_at": "2026-08-16T15:35:00Z",
+                "assigned_to": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "due_at": "2026-08-20T17:00:00Z",
+                "status": "COMPLETED",
+                "completion_note": "ได้รับ Statement และลงทะเบียนเป็น EV-025 เรียบร้อยแล้ว",
+                "completed_at": "2026-08-16T16:00:00Z"
+            }
+        ]
+
+        self.governance_approval_requests = [
+            {
+                "id": "appr-142-01",
+                "case_id": "CASE-142",
+                "resource_type": "INVESTIGATION_REPORT",
+                "resource_id": "rep-142-01",
+                "resource_version": "v1.0",
+                "resource_hash": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+                "requested_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "approver_role": "SUPERINTENDENT",
+                "status": "APPROVED",
+                "approved_by": "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077",
+                "approved_at": "2026-08-16T16:30:00Z",
+                "created_at": "2026-08-16T15:00:00Z"
+            }
+        ]
+
+        self.governance_recusals = []
+        self.governance_delegations = []
+        self.case_closure_requests = []
+
         # PHASE 10 COLLECTIONS (Hybrid AI Gateway & Production Security Hardening Layer)
         self.ai_providers = [
             {
@@ -5975,3 +6050,493 @@ async def execute_via_ai_gateway(payload: AIGatewayExecutionRequest, authorizati
     })
 
     return {"status": "success", "result": execution_result}
+
+
+# -------------------------------------------------------------
+# PHASE 11: SUPERVISOR REVIEW & CASE GOVERNANCE SCHEMAS
+# -------------------------------------------------------------
+
+class SupervisorReviewCreate(BaseModel):
+    review_type: str = "INVESTIGATION_REPORT"  # CASE_PROGRESS, INVESTIGATION_REPORT, SEARCH_WARRANT, ARREST_WARRANT, PRE_FINAL_CASE, CASE_CLOSURE_REQUEST
+    review_level: str = "SUPERINTENDENT"  # INVESTIGATION_SUPERVISOR, DEPUTY_SUPERINTENDENT, SUPERINTENDENT, AUTHORIZED_COMMANDER
+    report_version_id: Optional[str] = None
+    notes: Optional[str] = "ส่งสำนวนการสอบสวนพร้อมรายงานผลการตรวจสอบคุณภาพเสนอผู้บังคับบัญชา"
+
+class SupervisorCommentCreate(BaseModel):
+    resource_type: str = "REPORT_SECTION"  # REPORT_SECTION, EVIDENCE, STATEMENT, LEGAL_ELEMENT, DOCUMENT
+    resource_id: str
+    comment: str
+    severity: str = "MEDIUM"  # INFO, LOW, MEDIUM, HIGH, BLOCKING
+
+class SupervisorReturnRequest(BaseModel):
+    reason: str
+    required_corrections: List[str]
+    due_date: Optional[str] = None
+
+class SupervisorResubmissionRequest(BaseModel):
+    changes_made: str
+    directions_addressed: List[str]
+    notes: Optional[str] = ""
+
+class SupervisorApprovalDecisionRequest(BaseModel):
+    decision_reason: str
+    authority_role: str = "SUPERINTENDENT"
+
+class SupervisorDirectionCreate(BaseModel):
+    title: str
+    description: str
+    direction_type: str = "OBTAIN_EVIDENCE"  # INVESTIGATE_FURTHER, OBTAIN_EVIDENCE, REINTERVIEW, VERIFY_FACT, LEGAL_RESEARCH, CORRECT_REPORT, CORRECT_DOCUMENT, REVIEW_CUSTODY
+    priority: str = "HIGH"
+    assigned_to: Optional[str] = None
+    due_at: Optional[str] = None
+
+class DirectionCompletionRequest(BaseModel):
+    completion_note: str
+    linked_evidence_ids: Optional[List[str]] = []
+    linked_statement_ids: Optional[List[str]] = []
+
+class ApprovalRequestCreate(BaseModel):
+    case_id: str
+    resource_type: str = "INVESTIGATION_REPORT"
+    resource_id: str
+    resource_version: str = "v1.0"
+    resource_hash: str
+    approver_role: str = "SUPERINTENDENT"
+
+class ApprovalActionRequest(BaseModel):
+    decision_reason: str
+    authority_role: str = "SUPERINTENDENT"
+
+class GovernanceRecusalRequest(BaseModel):
+    review_id: str
+    case_id: str
+    conflict_reason: str
+    reassigned_reviewer_id: str
+
+class GovernanceDelegationRequest(BaseModel):
+    delegated_to_id: str
+    scope: str = "SUPERVISOR_REVIEW"
+    start_time: str
+    end_time: str
+    authority_limit: str
+    reason: str
+
+class CaseClosureRequestCreate(BaseModel):
+    reason: str
+    report_version_id: str
+    notes: Optional[str] = "สำนวนการสอบสวนเสร็จสิ้น ส่งพนักงานอัยการพร้อมตัวผู้ต้องหาเรียบร้อยแล้ว"
+
+# -------------------------------------------------------------
+# PHASE 11: SUPERVISOR REVIEW & CASE GOVERNANCE ENDPOINTS
+# -------------------------------------------------------------
+
+# 1. Supervisor Dashboard & Review Workspace
+@app.get("/api/v1/supervisor/reviews")
+@app.get("/api/supervisor/reviews")
+async def get_supervisor_reviews_list(authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    reviews = getattr(db, "supervisor_reviews", [])
+    # Return cases awaiting review or in supervisor workflow
+    return {"status": "success", "reviews": reviews}
+
+@app.post("/api/v1/cases/{case_id}/supervisor-reviews")
+@app.post("/api/cases/{case_id}/supervisor-reviews")
+async def submit_case_for_supervisor_review(case_id: str, payload: SupervisorReviewCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    srev_id = f"srev-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    snapshot_id = f"snap-{case_id.lower()}-v{int(time.time())}"
+    
+    review = {
+        "id": srev_id,
+        "case_id": case_id,
+        "review_type": payload.review_type,
+        "review_level": payload.review_level,
+        "submitted_by": user["id"],
+        "submitted_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "assigned_reviewer": "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077",
+        "status": "SUBMITTED",
+        "case_snapshot_id": snapshot_id,
+        "report_version_id": payload.report_version_id or "rep-142-01",
+        "quality_review_id": "rev-142-01",
+        "decision": None,
+        "decision_reason": None,
+        "reviewed_at": None,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "supervisor_reviews"):
+        db.supervisor_reviews = []
+    db.supervisor_reviews.append(review)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "SUPERVISOR_REVIEW.SUBMIT",
+        "resource_type": "supervisor_review", "resource_id": srev_id, "result": "success"
+    })
+    
+    return {"status": "success", "review": review}
+
+@app.get("/api/v1/supervisor-reviews/{review_id}")
+@app.get("/api/supervisor-reviews/{review_id}")
+async def get_supervisor_review_detail(review_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    rev = next((r for r in getattr(db, "supervisor_reviews", []) if r.get("id") == review_id), None)
+    if not rev:
+        raise HTTPException(status_code=404, detail="Supervisor review not found")
+        
+    comments = [c for c in getattr(db, "supervisor_comments", []) if c.get("review_id") == review_id]
+    directions = [d for d in getattr(db, "supervisor_directions", []) if d.get("review_id") == review_id]
+    
+    # AI Supervisor Briefing
+    briefing = {
+        "case_id": rev["case_id"],
+        "status_summary": "สำนวนการสอบสวนคดีฉ้อโกงเวชสำอางค์ผ่านการรวบรวมพยานหลักฐานและตรวจสอบคุณภาพแล้ว",
+        "items_requiring_attention": [
+            "ตรวจสอบผลการชันสูตรสารเคมีของกลางจากกรมวิทยาศาสตร์การแพทย์",
+            "ตรวจความสอดคล้องของคำให้การผู้ต้องหาเรื่องสถานที่พำนัก"
+        ],
+        "evidence_matrix_status": "SUPPORTED",
+        "legal_matrix_status": "CRIMINAL_CODE_343_MAPPED",
+        "quality_score": "PASS (Ready for Supervisor Review)"
+    }
+    
+    return {
+        "status": "success",
+        "review": rev,
+        "comments": comments,
+        "directions": directions,
+        "ai_supervisor_brief": briefing
+    }
+
+# 2. Supervisor Commenting, Returning & Resubmitting
+@app.post("/api/v1/supervisor-reviews/{review_id}/comments")
+@app.post("/api/supervisor-reviews/{review_id}/comments")
+async def add_supervisor_comment(review_id: str, payload: SupervisorCommentCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    rev = next((r for r in getattr(db, "supervisor_reviews", []) if r.get("id") == review_id), None)
+    if not rev:
+        raise HTTPException(status_code=404, detail="Supervisor review not found")
+        
+    com_id = f"scom-{str(uuid.uuid4())[:8]}"
+    comment = {
+        "id": com_id,
+        "review_id": review_id,
+        "resource_type": payload.resource_type,
+        "resource_id": payload.resource_id,
+        "comment": payload.comment,
+        "severity": payload.severity,
+        "status": "OPEN",
+        "created_by": user["full_name"],
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "supervisor_comments"):
+        db.supervisor_comments = []
+    db.supervisor_comments.append(comment)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "SUPERVISOR_REVIEW.COMMENT",
+        "resource_type": "supervisor_comment", "resource_id": com_id, "result": "success"
+    })
+    
+    return {"status": "success", "comment": comment}
+
+@app.post("/api/v1/supervisor-reviews/{review_id}/return")
+@app.post("/api/supervisor-reviews/{review_id}/return")
+async def return_review_for_correction(review_id: str, payload: SupervisorReturnRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    rev = next((r for r in getattr(db, "supervisor_reviews", []) if r.get("id") == review_id), None)
+    if not rev:
+        raise HTTPException(status_code=404, detail="Supervisor review not found")
+        
+    rev["status"] = "RETURNED"
+    rev["decision"] = "RETURNED_FOR_CORRECTION"
+    rev["decision_reason"] = payload.reason
+    rev["required_corrections"] = payload.required_corrections
+    rev["reviewed_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "SUPERVISOR_REVIEW.RETURN",
+        "resource_type": "supervisor_review", "resource_id": review_id, "result": "success"
+    })
+    
+    return {"status": "success", "review": rev}
+
+@app.post("/api/v1/supervisor-reviews/{review_id}/resubmit")
+@app.post("/api/supervisor-reviews/{review_id}/resubmit")
+async def resubmit_review_after_correction(review_id: str, payload: SupervisorResubmissionRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    rev = next((r for r in getattr(db, "supervisor_reviews", []) if r.get("id") == review_id), None)
+    if not rev:
+        raise HTTPException(status_code=404, detail="Supervisor review not found")
+        
+    rev["status"] = "RESUBMITTED"
+    rev["resubmitted_by"] = user["full_name"]
+    rev["resubmitted_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    rev["changes_made"] = payload.changes_made
+    rev["directions_addressed"] = payload.directions_addressed
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "SUPERVISOR_REVIEW.RESUBMIT",
+        "resource_type": "supervisor_review", "resource_id": review_id, "result": "success"
+    })
+    
+    return {"status": "success", "review": rev}
+
+@app.post("/api/v1/supervisor-reviews/{review_id}/approve")
+@app.post("/api/supervisor-reviews/{review_id}/approve")
+async def approve_supervisor_review(review_id: str, payload: SupervisorApprovalDecisionRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    rev = next((r for r in getattr(db, "supervisor_reviews", []) if r.get("id") == review_id), None)
+    if not rev:
+        raise HTTPException(status_code=404, detail="Supervisor review not found")
+        
+    # Check Separation of Duties: Submitter cannot approve their own review
+    if rev.get("submitted_by") == user["id"] and user["role"] not in ["superintendent", "commander"]:
+        raise HTTPException(status_code=403, detail="Separation of Duties Violation: Submitter cannot approve their own review submission.")
+        
+    rev["status"] = "APPROVED"
+    rev["decision"] = "APPROVED"
+    rev["decision_reason"] = payload.decision_reason
+    rev["reviewed_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    rev["approved_by"] = user["full_name"]
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "SUPERVISOR_REVIEW.APPROVE",
+        "resource_type": "supervisor_review", "resource_id": review_id, "result": "success"
+    })
+    
+    return {"status": "success", "review": rev}
+
+# 3. Supervisor Direction Workflow
+@app.post("/api/v1/cases/{case_id}/directions")
+@app.post("/api/cases/{case_id}/directions")
+async def issue_supervisor_direction(case_id: str, payload: SupervisorDirectionCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    sdir_id = f"sdir-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    direction = {
+        "id": sdir_id,
+        "case_id": case_id,
+        "review_id": None,
+        "title": payload.title,
+        "description": payload.description,
+        "direction_type": payload.direction_type,
+        "priority": payload.priority,
+        "issued_by": user["full_name"],
+        "issued_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "assigned_to": payload.assigned_to or user["id"],
+        "due_at": payload.due_at or time.strftime("%Y-%m-%dT17:00:00Z"),
+        "status": "ISSUED",
+        "completion_note": None,
+        "completed_at": None
+    }
+    
+    if not hasattr(db, "supervisor_directions"):
+        db.supervisor_directions = []
+    db.supervisor_directions.append(direction)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "SUPERVISOR_DIRECTION.CREATE",
+        "resource_type": "supervisor_direction", "resource_id": sdir_id, "result": "success"
+    })
+    
+    return {"status": "success", "direction": direction}
+
+@app.post("/api/v1/directions/{direction_id}/acknowledge")
+@app.post("/api/directions/{direction_id}/acknowledge")
+async def acknowledge_direction(direction_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    dir_obj = next((d for d in getattr(db, "supervisor_directions", []) if d.get("id") == direction_id), None)
+    if not dir_obj:
+        raise HTTPException(status_code=404, detail="Direction not found")
+        
+    dir_obj["status"] = "ACKNOWLEDGED"
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "SUPERVISOR_DIRECTION.ACKNOWLEDGE",
+        "resource_type": "supervisor_direction", "resource_id": direction_id, "result": "success"
+    })
+    
+    return {"status": "success", "direction": dir_obj}
+
+@app.post("/api/v1/directions/{direction_id}/complete")
+@app.post("/api/directions/{direction_id}/complete")
+async def complete_direction(direction_id: str, payload: DirectionCompletionRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    dir_obj = next((d for d in getattr(db, "supervisor_directions", []) if d.get("id") == direction_id), None)
+    if not dir_obj:
+        raise HTTPException(status_code=404, detail="Direction not found")
+        
+    dir_obj["status"] = "COMPLETED"
+    dir_obj["completion_note"] = payload.completion_note
+    dir_obj["completed_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "SUPERVISOR_DIRECTION.COMPLETE",
+        "resource_type": "supervisor_direction", "resource_id": direction_id, "result": "success"
+    })
+    
+    return {"status": "success", "direction": dir_obj}
+
+# 4. Version-Bound Formal Approval & Separation of Duties
+@app.post("/api/v1/approval-requests")
+@app.post("/api/approval-requests")
+async def create_approval_request(payload: ApprovalRequestCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, payload.case_id)
+    
+    appr_id = f"appr-{payload.case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    approval = {
+        "id": appr_id,
+        "case_id": payload.case_id,
+        "resource_type": payload.resource_type,
+        "resource_id": payload.resource_id,
+        "resource_version": payload.resource_version,
+        "resource_hash": payload.resource_hash,
+        "requested_by": user["id"],
+        "approver_role": payload.approver_role,
+        "status": "PENDING",
+        "approved_by": None,
+        "approved_at": None,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "governance_approval_requests"):
+        db.governance_approval_requests = []
+    db.governance_approval_requests.append(approval)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "APPROVAL.REQUEST",
+        "resource_type": "approval_request", "resource_id": appr_id, "result": "success"
+    })
+    
+    return {"status": "success", "approval_request": approval}
+
+@app.post("/api/v1/approval-requests/{approval_id}/approve")
+@app.post("/api/approval-requests/{approval_id}/approve")
+async def approve_governance_request(approval_id: str, payload: ApprovalActionRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    appr = next((a for a in getattr(db, "governance_approval_requests", []) if a.get("id") == approval_id), None)
+    if not appr:
+        raise HTTPException(status_code=404, detail="Approval request not found")
+        
+    # Separation of duties check
+    if appr.get("requested_by") == user["id"] and user["role"] not in ["superintendent", "commander"]:
+        raise HTTPException(status_code=403, detail="Separation of Duties: The requester/maker cannot approve their own high-risk approval request.")
+        
+    appr["status"] = "APPROVED"
+    appr["decision_reason"] = payload.decision_reason
+    appr["approved_by"] = user["full_name"]
+    appr["approved_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "APPROVAL.APPROVE",
+        "resource_type": "approval_request", "resource_id": approval_id, "result": "success"
+    })
+    
+    return {"status": "success", "approval_request": appr}
+
+# 5. Governance Recusal, Delegation & Case Closure
+@app.post("/api/v1/governance/recusal")
+@app.post("/api/governance/recusal")
+async def declare_review_recusal(payload: GovernanceRecusalRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    rec_id = f"rec-{str(uuid.uuid4())[:8]}"
+    recusal = {
+        "id": rec_id,
+        "review_id": payload.review_id,
+        "case_id": payload.case_id,
+        "recused_user_id": user["id"],
+        "conflict_reason": payload.conflict_reason,
+        "reassigned_reviewer_id": payload.reassigned_reviewer_id,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "governance_recusals"):
+        db.governance_recusals = []
+    db.governance_recusals.append(recusal)
+    
+    # Reassign review
+    rev = next((r for r in getattr(db, "supervisor_reviews", []) if r.get("id") == payload.review_id), None)
+    if rev:
+        rev["assigned_reviewer"] = payload.reassigned_reviewer_id
+        
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "GOVERNANCE.RECUSAL",
+        "resource_type": "governance_recusal", "resource_id": rec_id, "result": "success"
+    })
+    
+    return {"status": "success", "recusal": recusal}
+
+@app.post("/api/v1/governance/delegate")
+@app.post("/api/governance/delegate")
+async def delegate_review_authority(payload: GovernanceDelegationRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    del_id = f"del-{str(uuid.uuid4())[:8]}"
+    delegation = {
+        "id": del_id,
+        "delegated_by": user["id"],
+        "delegated_to": payload.delegated_to_id,
+        "scope": payload.scope,
+        "start_time": payload.start_time,
+        "end_time": payload.end_time,
+        "authority_limit": payload.authority_limit,
+        "reason": payload.reason,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "governance_delegations"):
+        db.governance_delegations = []
+    db.governance_delegations.append(delegation)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "GOVERNANCE.DELEGATE",
+        "resource_type": "governance_delegation", "resource_id": del_id, "result": "success"
+    })
+    
+    return {"status": "success", "delegation": delegation}
+
+@app.post("/api/v1/cases/{case_id}/closure-request")
+@app.post("/api/cases/{case_id}/closure-request")
+async def request_case_closure(case_id: str, payload: CaseClosureRequestCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    cls_id = f"cls-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    closure_req = {
+        "id": cls_id,
+        "case_id": case_id,
+        "requested_by": user["full_name"],
+        "reason": payload.reason,
+        "report_version_id": payload.report_version_id,
+        "status": "PENDING_SUPERVISOR_APPROVAL",
+        "notes": payload.notes,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "case_closure_requests"):
+        db.case_closure_requests = []
+    db.case_closure_requests.append(closure_req)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "CASE_CLOSURE.REQUEST",
+        "resource_type": "case_closure_request", "resource_id": cls_id, "result": "success"
+    })
+    
+    return {"status": "success", "closure_request": closure_req}
