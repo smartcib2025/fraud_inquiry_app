@@ -44,6 +44,10 @@ def set_approval_status(token, user_id, approved):
 def test_admin_approvals():
     print("[Test] Initializing self-registration approval gate validation...")
 
+    # 0. Ensure clerk starts unapproved
+    admin_res, _ = try_login_with_email("admin@cppd.go.th")
+    set_approval_status(admin_res["token"], "p-clerk", approved=False)
+
     # 1. Clerk attempts login -> Should fail (approved=False by default)
     print("\n[Test] 1. Unapproved user login attempt (clerk.a@cppd.go.th)...")
     res_data, code = try_login_with_email("clerk.a@cppd.go.th")

@@ -204,85 +204,174 @@
                         </div>
 
                         <!-- Side panel for case details -->
-                        <div class="card case-details-card" id="case-details-panel" style="display: none;">
-                            <div class="card-header justify-between">
-                                <h2 id="details-case-id">CASE-142</h2>
-                                <button class="btn btn-close" id="btn-close-details"><i class="fa-solid fa-xmark"></i></button>
+                        <div class="card case-details-card" id="case-details-panel" style="display: none; width: 100%;">
+                            <!-- Comprehensive Case Header (Section 2) -->
+                            <div class="card-header justify-between" style="border-bottom: 1px solid var(--border-color); padding: 1.25rem; background: rgba(0,0,0,0.15);">
+                                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <span class="badge font-mono" id="details-case-id" style="background: var(--accent-primary); color: white; padding: 0.2rem 0.6rem; font-size: 0.85rem;">CASE-142</span>
+                                        <span class="badge" id="details-case-classification" style="background: rgba(239,68,68,0.15); color: var(--danger); font-size: 0.75rem;">CONFIDENTIAL</span>
+                                        <span class="badge" id="details-case-priority" style="background: rgba(245,158,11,0.15); color: var(--warning); font-size: 0.75rem;">HIGH PRIORITY</span>
+                                        <span class="badge" id="details-case-status" style="background: rgba(16,185,129,0.15); color: var(--success); font-size: 0.75rem;">OPEN</span>
+                                    </div>
+                                    <h2 id="details-case-title" style="margin: 0.25rem 0 0 0; font-size: 1.2rem; font-weight: 700;">-</h2>
+                                    <span class="text-xs muted-text" id="details-case-meta">หน่วยงาน: กก.1 บก.ปคบ. | พนักงานสอบสวนผู้รับผิดชอบ: พ.ต.ท. สมชาย สอบสวนสืบสวน | วันที่รับคำร้อง: 10 ส.ค. 2569</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <button class="btn btn-primary btn-sm" id="btn-generate-briefing"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Briefing</button>
+                                    <button class="btn btn-close" id="btn-close-details"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <h3 id="details-case-title" class="margin-bottom-sm">Siam Network Ledger Structuring</h3>
-                                <p id="details-case-desc" class="muted-text margin-bottom-lg">Details of case.</p>
+                            
+                            <div class="card-body" style="padding: 1.25rem;">
+                                <!-- 12 Modular Workspace Tabs Navigation (Section 2) -->
+                                <div class="workspace-tabs" style="display: flex; gap: 0.25rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.25rem; padding-bottom: 0.25rem; overflow-x: auto;">
+                                    <button class="tab-btn active" data-workspace-tab="overview"><i class="fa-solid fa-chart-pie"></i> 1. Overview</button>
+                                    <button class="tab-btn" data-workspace-tab="issues"><i class="fa-solid fa-list-check"></i> 2. Issues</button>
+                                    <button class="tab-btn" data-workspace-tab="people"><i class="fa-solid fa-users"></i> 3. People</button>
+                                    <button class="tab-btn" data-workspace-tab="statements"><i class="fa-solid fa-microphone-lines"></i> 4. Statements</button>
+                                    <button class="tab-btn" data-workspace-tab="evidence"><i class="fa-solid fa-fingerprint"></i> 5. Evidence</button>
+                                    <button class="tab-btn" data-workspace-tab="timeline"><i class="fa-solid fa-clock-rotate-left"></i> 6. Timeline</button>
+                                    <button class="tab-btn" data-workspace-tab="plan"><i class="fa-solid fa-map"></i> 7. Plan</button>
+                                    <button class="tab-btn" data-workspace-tab="tasks"><i class="fa-solid fa-bars-progress"></i> 8. Tasks</button>
+                                    <button class="tab-btn" data-workspace-tab="legal"><i class="fa-solid fa-scale-balanced"></i> 9. Legal</button>
+                                    <button class="tab-btn" data-workspace-tab="documents"><i class="fa-solid fa-file-contract"></i> 10. Documents</button>
+                                    <button class="tab-btn" data-workspace-tab="team"><i class="fa-solid fa-user-shield"></i> 11. Team</button>
+                                    <button class="tab-btn" data-workspace-tab="activity"><i class="fa-solid fa-timeline"></i> 12. Activity</button>
+                                </div>
+                                
+                                <!-- TAB 1: OVERVIEW -->
+                                <div id="workspace-tab-overview" class="workspace-tab-content active">
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
+                                        <div class="stat-card" style="padding: 0.75rem; background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.2); border-radius: 6px;">
+                                            <span class="text-xs muted-text">มูลค่าความเสียหาย</span>
+                                            <h3 style="margin: 0.25rem 0 0 0; color: var(--accent-primary);" id="overview-loss-val">฿1,250,000</h3>
+                                        </div>
+                                        <div class="stat-card" style="padding: 0.75rem; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.2); border-radius: 6px;">
+                                            <span class="text-xs muted-text">พยานหลักฐานในสำนวน</span>
+                                            <h3 style="margin: 0.25rem 0 0 0; color: var(--success);" id="overview-evidence-val">4 รายการ</h3>
+                                        </div>
+                                        <div class="stat-card" style="padding: 0.75rem; background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.2); border-radius: 6px;">
+                                            <span class="text-xs muted-text">ประเด็นต้องพิสูจน์ (Issues)</span>
+                                            <h3 style="margin: 0.25rem 0 0 0; color: var(--warning);" id="overview-issues-val">2 ประเด็น</h3>
+                                        </div>
+                                        <div class="stat-card" style="padding: 0.75rem; background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.2); border-radius: 6px;">
+                                            <span class="text-xs muted-text">งานสอบสวนค้าง (Tasks)</span>
+                                            <h3 style="margin: 0.25rem 0 0 0; color: #8b5cf6;" id="overview-tasks-val">2 งาน</h3>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card" style="padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                                        <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                            <strong class="text-sm"><i class="fa-solid fa-align-left"></i> สาระสำคัญของพฤติการณ์คดี (Narrative Summary)</strong>
+                                            <span class="badge font-mono" id="narrative-version-tag" style="font-size: 0.65rem; background: rgba(255,255,255,0.05);">v2.0</span>
+                                        </div>
+                                        <p id="details-case-desc" class="text-sm" style="line-height: 1.6; color: var(--text-primary); margin: 0; white-space: pre-wrap;">-</p>
+                                    </div>
 
-                                <div class="readiness-meter margin-bottom-lg" style="border: 1px solid var(--border-color); padding: 0.75rem; border-radius: var(--border-radius)">
-                                    <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.25rem;">
-                                        <span class="text-sm font-semibold">Case Readiness Index</span>
-                                        <span class="text-sm font-bold font-mono" id="details-readiness-percent">40%</span>
+                                    <div class="readiness-meter" style="border: 1px solid var(--border-color); padding: 0.75rem; border-radius: var(--border-radius)">
+                                        <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.25rem;">
+                                            <span class="text-sm font-semibold">Pre-Trial Case Readiness Index (ความพร้อมสำนวนส่งอัยการ)</span>
+                                            <span class="text-sm font-bold font-mono" id="details-readiness-percent">85%</span>
+                                        </div>
+                                        <div style="background-color: var(--border-color); height: 8px; width: 100%; border-radius: 4px; overflow: hidden">
+                                            <div id="details-readiness-bar" style="background-color: var(--success); height: 100%; width: 85%; transition: width 0.3s ease"></div>
+                                        </div>
                                     </div>
-                                    <div style="background-color: var(--border-color); height: 8px; width: 100%; border-radius: 4px; overflow: hidden">
-                                        <div id="details-readiness-bar" style="background-color: var(--success); height: 100%; width: 40%; transition: width 0.3s ease"></div>
+                                </div>
+
+                                <!-- TAB 2: ISSUES -->
+                                <div id="workspace-tab-issues" class="workspace-tab-content" style="display: none;">
+                                    <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                                        <strong class="text-sm">ประเด็นข้อเท็จจริงที่ต้องพิสูจน์ (Investigation Issues)</strong>
+                                        <button class="btn btn-outline btn-xs" id="btn-modal-add-issue"><i class="fa-solid fa-plus"></i> เพิ่มประเด็น</button>
                                     </div>
+                                    <div class="detail-list" id="workspace-issues-list"></div>
                                 </div>
-                                
-                                <!-- Workspace Tabs navigation -->
-                                <div class="workspace-tabs" style="display: flex; gap: 0.25rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1rem; padding-bottom: 0.25rem; overflow-x: auto;">
-                                    <button class="tab-btn active" data-workspace-tab="victims" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid var(--accent-primary); color: var(--text-primary); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Victims</button>
-                                    <button class="tab-btn" data-workspace-tab="evidence" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Evidence</button>
-                                    <button class="tab-btn" data-workspace-tab="transactions" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Transactions</button>
-                                    <button class="tab-btn" data-workspace-tab="timeline" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Timeline</button>
-                                    <button class="tab-btn" data-workspace-tab="legal-matrix" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Legal Matrix</button>
-                                    <button class="tab-btn" data-workspace-tab="interviews" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;"><i class="fa-solid fa-comments"></i> Interview Plan</button>
-                                    <button class="tab-btn" data-workspace-tab="tasks" style="padding: 0.4rem 0.8rem; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Tasks</button>
+
+                                <!-- TAB 3: PEOPLE -->
+                                <div id="workspace-tab-people" class="workspace-tab-content" style="display: none;">
+                                    <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                                        <strong class="text-sm">บุคคลและนิติบุคคลในคดี (People & Case Roles)</strong>
+                                    </div>
+                                    <div class="detail-list" id="workspace-people-list"></div>
                                 </div>
-                                
-                                <!-- Tab Contents -->
-                                <div id="workspace-tab-victims" class="workspace-tab-content active">
-                                    <div class="detail-list" id="details-victims-list"></div>
+
+                                <!-- TAB 4: STATEMENTS -->
+                                <div id="workspace-tab-statements" class="workspace-tab-content" style="display: none;">
+                                    <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                                        <strong class="text-sm">คำให้การและบันทึกสอบปากคำ (Statements & QA)</strong>
+                                    </div>
+                                    <div class="detail-list" id="workspace-statements-list"></div>
                                 </div>
-                                
+
+                                <!-- TAB 5: EVIDENCE -->
                                 <div id="workspace-tab-evidence" class="workspace-tab-content" style="display: none;">
-                                    <div class="detail-list" id="details-evidence-list"></div>
+                                    <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                                        <strong class="text-sm">คลังพยานหลักฐานและความเชื่อมโยง (Evidence & Relations)</strong>
+                                    </div>
+                                    <div class="detail-list" id="workspace-evidence-list"></div>
                                 </div>
-                                
-                                <div id="workspace-tab-transactions" class="workspace-tab-content" style="display: none;">
-                                    <div class="detail-list" id="details-transactions-list"></div>
-                                </div>
-                                
+
+                                <!-- TAB 6: TIMELINE -->
                                 <div id="workspace-tab-timeline" class="workspace-tab-content" style="display: none;">
+                                    <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                                        <strong class="text-sm">ลำดับเหตุการณ์และการจับพิรุธ (Timeline & Contradictions)</strong>
+                                    </div>
                                     <div class="detail-list" id="details-contradictions-list"></div>
                                 </div>
-                                
-                                <div id="workspace-tab-legal-matrix" class="workspace-tab-content" style="display: none;">
-                                    <div class="detail-list" id="details-legal-matrix-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
-                                        <!-- Dynamic Legal Issue Mappings -->
+
+                                <!-- TAB 7: PLAN -->
+                                <div id="workspace-tab-plan" class="workspace-tab-content" style="display: none;">
+                                    <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                                        <strong class="text-sm">แผนการสืบสวนสอบสวน (Investigation Plan & Actions)</strong>
                                     </div>
+                                    <div class="detail-list" id="workspace-plan-list"></div>
                                 </div>
 
-                                <div id="workspace-tab-interviews" class="workspace-tab-content" style="display: none;">
-                                    <div style="margin-bottom: 0.75rem; display: flex; gap: 0.5rem; align-items: center;">
-                                        <select id="interview-target-role" class="form-control" style="font-size: 0.8rem; padding: 0.35rem 0.6rem;">
-                                            <option value="suspect">Suspect (นายกิตติศักดิ์ วงศ์สวัสดิ์)</option>
-                                            <option value="victim">Complainant (นายนัฐพงษ์ สุขประเสริฐ)</option>
-                                            <option value="witness">Witness (พยานบุคคล)</option>
-                                        </select>
-                                        <button class="btn btn-outline btn-sm" id="btn-run-interview-agent" style="white-space: nowrap;"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate Questions</button>
-                                    </div>
-                                    <div class="detail-list" id="details-interviews-list" style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                        <div class="muted-text text-sm" style="padding: 1rem; text-align: center;">Click 'Generate Questions' to compile evidence-backed interrogation questions.</div>
-                                    </div>
-                                </div>
-                                
+                                <!-- TAB 8: TASKS -->
                                 <div id="workspace-tab-tasks" class="workspace-tab-content" style="display: none;">
+                                    <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                                        <strong class="text-sm">รายการงานสอบสวน (Case Tasks)</strong>
+                                    </div>
                                     <div class="detail-list" id="details-tasks-list"></div>
                                 </div>
 
-                                <div class="detail-section margin-top-lg" style="margin-top: 1.5rem;">
-                                    <button class="btn btn-primary" id="btn-generate-briefing" style="width: 100%"><i class="fa-solid fa-robot"></i> Compile Case Briefing</button>
+                                <!-- TAB 9: LEGAL -->
+                                <div id="workspace-tab-legal" class="workspace-tab-content" style="display: none;">
+                                    <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                                        <strong class="text-sm">ประเด็นข้อกฎหมายและองค์ประกอบความผิด (Legal Elements Matrix)</strong>
+                                    </div>
+                                    <div class="detail-list" id="details-legal-matrix-list"></div>
+                                </div>
+
+                                <!-- TAB 10: DOCUMENTS -->
+                                <div id="workspace-tab-documents" class="workspace-tab-content" style="display: none;">
+                                    <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                                        <strong class="text-sm">เอกสารสำนวนและประวัติเวอร์ชัน (Case Documents & Approvals)</strong>
+                                    </div>
+                                    <div class="detail-list" id="workspace-documents-list"></div>
+                                </div>
+
+                                <!-- TAB 11: TEAM -->
+                                <div id="workspace-tab-team" class="workspace-tab-content" style="display: none;">
+                                    <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                                        <strong class="text-sm">คณะพนักงานสืบสวนสอบสวน (Case Team)</strong>
+                                    </div>
+                                    <div class="detail-list" id="workspace-team-list"></div>
+                                </div>
+
+                                <!-- TAB 12: ACTIVITY -->
+                                <div id="workspace-tab-activity" class="workspace-tab-content" style="display: none;">
+                                    <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                                        <strong class="text-sm">บันทึกกิจกรรมคดีทั้งหมด (Case Domain Activity Feed)</strong>
+                                    </div>
+                                    <div class="detail-list" id="workspace-activity-list"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
-
                 <!-- VIEW: NEW INTAKE -->
                 <section id="view-new-intake" class="view-pane">
                     <div class="dashboard-split">

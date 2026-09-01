@@ -377,125 +377,281 @@ document.addEventListener("DOMContentLoaded", () => {
         const titleHeader = document.getElementById("details-case-title");
         const descPara = document.getElementById("details-case-desc");
         
-        const victimsList = document.getElementById("details-victims-list");
-        const evidenceList = document.getElementById("details-evidence-list");
-        const tasksList = document.getElementById("details-tasks-list");
-        
-        let caseData;
-        try {
-            const res = await fetch(`${API_BASE}/api/cases/${caseId}`);
-            if (res.status === 403) {
-                alert("Permission Denied: You do not have authorization to view this case.");
-                detailsPanel.style.display = "none";
-                return;
-            }
-            if (!res.ok) throw new Error("API issue");
-            caseData = await res.json();
-        } catch (e) {
-            // Mock case details fallback
-            caseData = {
-                case: state.cases.find(c => c.id === caseId) || { id: caseId, title: "Siam Network Ledger Structuring", description: "Details of investigation", status: "open" },
-                victims: [
-                    { id: "v-1", full_name: "Nattapong Sukprasert", phone: "081-555-0192", loss_amount: 1250000.00 }
-                ],
-                evidence: [
-                    { id: "ev-1", title: "Transfer slip receipt", type: "document", file_hash: "a3f82cb304b5...21415", status: "sealed" },
-                    { id: "ev-2", title: "Line Chat Logs screenshot", type: "document", file_hash: "e7b92f7a63bc...1122a", status: "sealed" }
-                ],
-                tasks: [
-                    { id: "t-1", title: "Verify Kittisak Wongsawat identity", description: "Cross-check details.", status: "pending", due_date: "2026-08-25" },
-                    { id: "t-2", title: "Analyze bank transactions flow", description: "Evaluate layering flow.", status: "in_progress", due_date: "2026-08-28" }
-                ]
-            };
-        }
-
-        idHeader.textContent = caseData.case.id;
-        titleHeader.textContent = caseData.case.title;
-        descPara.textContent = caseData.case.description;
-
-        // Render Victims
-        victimsList.innerHTML = caseData.victims.map(v => `
-            <div class="detail-item">
-                <strong>${v.full_name}</strong><br>
-                <span class="text-sm muted-text">Claimed Loss: ฿${v.loss_amount.toLocaleString()} | Phone: ${v.phone}</span>
-            </div>
-        `).join("") || '<p class="text-sm muted-text">No victims registered.</p>';
-
-        // Render Evidence
-        evidenceList.innerHTML = caseData.evidence.map(ev => `
-            <div class="detail-item">
-                <strong>${ev.title}</strong> (${ev.type})<br>
-                <span class="text-sm muted-text" style="font-family: var(--font-mono)">SHA-256: ${ev.file_hash.substring(0, 16)}...</span><br>
-                <span class="badge" style="background-color: rgba(255,255,255,0.05); color: var(--text-primary); font-size: 0.65rem; padding: 0.1rem 0.3rem; display: inline-block; margin-top: 0.25rem">${ev.status.toUpperCase()}</span>
-            </div>
-        `).join("") || '<p class="text-sm muted-text">No evidence logs registered.</p>';
-
-        // Render Tasks
-        tasksList.innerHTML = caseData.tasks.map(t => `
-            <div class="detail-item">
-                <div class="justify-between" style="display: flex; align-items: center">
-                    <strong>${t.title}</strong>
-                    <span class="badge" style="background-color: ${t.status === 'completed' ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)'}; color: ${t.status === 'completed' ? 'var(--success)' : 'var(--warning)'}">${t.status.toUpperCase()}</span>
-                </div>
-                <p class="text-xs muted-text margin-top-md">${t.description || ''}</p>
-                <span class="text-xs muted-text">Deadline: ${t.due_date.split("T")[0]}</span>
-            </div>
-        `).join("") || '<p class="text-sm muted-text">No active tasks.</p>';
-
-        // Fetch readiness
-        let readinessPercent = 40;
-        try {
-            const res = await fetch(`${API_BASE}/api/cases/${caseId}/readiness`);
-            const readiness = await res.json();
-            readinessPercent = readiness.readiness_percentage;
-        } catch (e) {
-            readinessPercent = caseId === "CASE-142" ? 75 : 40;
-        }
-        document.getElementById("details-readiness-percent").textContent = readinessPercent + "%";
-        document.getElementById("details-readiness-bar").style.width = readinessPercent + "%";
-
-        // Fetch timeline contradictions
-        let timelineEvents = [];
-        try {
-            const res = await fetch(`${API_BASE}/api/cases/${caseId}/timeline`);
-            const timeline = await res.json();
-            timelineEvents = timeline.events;
-        } catch (e) {
-            timelineEvents = [
-                { date: "2026-08-09 14:32:00", event: "ผู้เสียหาย นายนัฐพงษ์ โอนเงิน 1.25 ล้านบาท เข้าบัญชี SCB 401-229-3388", source: "คำให้การผู้เสียหาย", status: "consistent" },
-                { date: "2026-08-09 15:00:00", event: "ผู้ต้องหา นายกิตติศักดิ์ อ้างว่าอยู่ต่างจังหวัดที่เชียงใหม่และทำบัตรหาย", source: "คำให้การผู้ต้องหา", status: "contradictory", conflict_notes: "บันทึกการเข้าใช้งาน SCB Mobile Banking ตรวจพบ IP ในกรุงเทพฯ เวลา 14:32 น. ขัดแย้งกับข้ออ้าง Alibi เชียงใหม่" }
-            ];
-        }
-        
-        const contradictionsList = document.getElementById("details-contradictions-list");
-        contradictionsList.innerHTML = timelineEvents.map(e => `
-            <div class="detail-item" style="border-left: 3px solid ${e.status === 'contradictory' ? 'var(--danger)' : 'var(--border-color)'}">
-                <div class="justify-between" style="display: flex; align-items: center">
-                    <strong>${e.event}</strong>
-                    <span class="badge" style="background-color: ${e.status === 'contradictory' ? 'rgba(239,68,68,0.15)' : 'rgba(255,255,255,0.05)'}; color: ${e.status === 'contradictory' ? 'var(--danger)' : 'var(--text-muted)'}; font-size: 0.65rem; padding: 0.1rem 0.3rem">${e.status.toUpperCase()}</span>
-                </div>
-                <span class="text-xs muted-text">Date: ${e.date} | Source: ${e.source}</span>
-                ${e.conflict_notes ? `<p class="text-xs text-danger" style="margin-top: 0.25rem"><i class="fa-solid fa-triangle-exclamation"></i> ${e.conflict_notes}</p>` : ''}
-            </div>
-        `).join("") || '<p class="text-sm muted-text">No statements audited yet.</p>';
-
-        // Render Transactions list
-        const txList = document.getElementById("details-transactions-list");
-        const caseTxs = caseData.transactions || [
-            { reference_number: "TXN-99882211", amount: 1250000.0, transaction_date: "2026-08-09T14:32:00Z" }
-        ];
-        txList.innerHTML = caseTxs.map(t => `
-            <div class="detail-item">
-                <div class="justify-between" style="display: flex">
-                    <span class="font-mono text-sm">${t.reference_number}</span>
-                    <strong class="warn-color">฿${parseFloat(t.amount).toLocaleString()}</strong>
-                </div>
-                <span class="text-xs muted-text">Date: ${t.transaction_date.split("T")[0]}</span>
-            </div>
-        `).join("") || '<p class="text-sm muted-text">No transaction logs registered.</p>';
-
         detailsPanel.style.display = "block";
-        logAuditLocal("VIEW_CASE_DETAILS", "cases", caseId, `User viewed complete detail profile for case ${caseId}`);
+        detailsPanel.scrollIntoView({ behavior: "smooth" });
+
+        idHeader.textContent = caseId;
+        titleHeader.textContent = "กำลังโหลดข้อมูลสำนวนคดี...";
+
+        try {
+            // Parallel Fetch all Phase 2 Workspace Data
+            const [ovRes, isRes, stRes, evRes, plRes, legRes, docRes, actRes, readRes, timeRes, caseRes] = await Promise.allSettled([
+                fetch(`${API_BASE}/api/v1/cases/${caseId}/overview`),
+                fetch(`${API_BASE}/api/v1/cases/${caseId}/issues`),
+                fetch(`${API_BASE}/api/v1/cases/${caseId}/statements`),
+                fetch(`${API_BASE}/api/v1/cases/${caseId}/evidence-relations`),
+                fetch(`${API_BASE}/api/v1/cases/${caseId}/investigation-plan`),
+                fetch(`${API_BASE}/api/v1/cases/${caseId}/legal-issues`),
+                fetch(`${API_BASE}/api/v1/cases/${caseId}/documents`),
+                fetch(`${API_BASE}/api/v1/cases/${caseId}/activity`),
+                fetch(`${API_BASE}/api/cases/${caseId}/readiness`),
+                fetch(`${API_BASE}/api/cases/${caseId}/timeline`),
+                fetch(`${API_BASE}/api/cases/${caseId}`)
+            ]);
+
+            const ovData = ovRes.status === "fulfilled" ? await ovRes.value.json() : null;
+            const isData = isRes.status === "fulfilled" ? await isRes.value.json() : { issues: [] };
+            const stData = stRes.status === "fulfilled" ? await stRes.value.json() : { statements: [] };
+            const evData = evRes.status === "fulfilled" ? await evRes.value.json() : { relations: [] };
+            const plData = plRes.status === "fulfilled" ? await plRes.value.json() : { plan: null };
+            const legData = legRes.status === "fulfilled" ? await legRes.value.json() : { legal_issues: [] };
+            const docData = docRes.status === "fulfilled" ? await docRes.value.json() : { documents: [] };
+            const actData = actRes.status === "fulfilled" ? await actRes.value.json() : { activities: [] };
+            const readData = readRes.status === "fulfilled" ? await readRes.value.json() : { readiness_percentage: 85 };
+            const timeData = timeRes.status === "fulfilled" ? await timeRes.value.json() : { events: [] };
+            const fullCase = caseRes.status === "fulfilled" ? await caseRes.value.json() : null;
+
+            // 1. Header & Overview
+            if (ovData && ovData.case) {
+                titleHeader.textContent = ovData.case.title;
+                descPara.textContent = ovData.case.description;
+                document.getElementById("overview-loss-val").textContent = "฿" + (ovData.metrics?.total_loss_thb || 0).toLocaleString();
+                document.getElementById("overview-evidence-val").textContent = (ovData.metrics?.evidence_count || 0) + " รายการ";
+                document.getElementById("overview-issues-val").textContent = (ovData.metrics?.open_issue_count || 0) + " ประเด็น";
+                document.getElementById("overview-tasks-val").textContent = (ovData.metrics?.open_task_count || 0) + " งาน";
+            } else if (fullCase && fullCase.case) {
+                titleHeader.textContent = fullCase.case.title;
+                descPara.textContent = fullCase.case.description;
+            }
+
+            const readinessVal = readData?.readiness_percentage || 85;
+            document.getElementById("details-readiness-percent").textContent = readinessVal + "%";
+            document.getElementById("details-readiness-bar").style.width = readinessVal + "%";
+
+            // 2. Tab: Issues (ประเด็นต้องพิสูจน์)
+            const issuesContainer = document.getElementById("workspace-issues-list");
+            const issues = isData?.issues || [];
+            issuesContainer.innerHTML = issues.map(iss => `
+                <div class="detail-item" style="border-left: 3px solid ${iss.priority === 'HIGH' ? 'var(--danger)' : 'var(--accent-primary)'}; margin-bottom: 0.5rem;">
+                    <div class="justify-between" style="display: flex; align-items: center;">
+                        <strong class="text-sm font-semibold">${iss.title}</strong>
+                        <span class="badge" style="background: rgba(245,158,11,0.15); color: var(--warning); font-size: 0.65rem;">${iss.status}</span>
+                    </div>
+                    <p class="text-xs muted-text" style="margin: 0.25rem 0;">${iss.description}</p>
+                    <div class="justify-between" style="display: flex; font-size: 0.7rem; color: var(--text-muted);">
+                        <span>หมวด: ${iss.category} | ความสำคัญ: ${iss.priority}</span>
+                        <span>ที่มา: ${iss.source}</span>
+                    </div>
+                </div>
+            `).join("") || '<p class="text-sm muted-text">ไม่มีประเด็นต้องพิสูจน์ที่บันทึกไว้</p>';
+
+            // 3. Tab: People (บุคคลในคดี)
+            const peopleContainer = document.getElementById("workspace-people-list");
+            const victims = fullCase?.victims || [];
+            const suspects = fullCase?.suspects || [];
+            const personsList = [
+                ...victims.map(v => ({ name: v.full_name, role: "ผู้เสียหาย (Victim)", loss: `฿${v.loss_amount.toLocaleString()}`, phone: v.phone, extra: "ให้การต่อ พงส. แล้ว" })),
+                ...suspects.map(s => ({ name: s.full_name, role: "ผู้ต้องสงสัย (Suspect)", loss: "-", phone: s.phone, extra: `บัญชีรับโอน: ${s.bank_account || '-'}` })),
+                { name: "นายสมชาย แสนสุข", role: "พยาน / กรรมการนอมินี", loss: "-", phone: "089-111-2345", extra: "บจก. สยาม เน็ตเวิร์ค" }
+            ];
+            peopleContainer.innerHTML = personsList.map(p => `
+                <div class="detail-item" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <div>
+                        <strong>${p.name}</strong> <span class="badge" style="font-size: 0.65rem; background: rgba(59,130,246,0.1); color: var(--accent-primary);">${p.role}</span>
+                        <div class="text-xs muted-text" style="margin-top: 0.15rem;">เบอร์โทร: ${p.phone} | ${p.extra}</div>
+                    </div>
+                    ${p.loss !== '-' ? `<span class="badge" style="background: rgba(239,68,68,0.1); color: var(--danger); font-size: 0.75rem;">ความเสียหาย ${p.loss}</span>` : ''}
+                </div>
+            `).join("");
+
+            // 4. Tab: Statements (คำให้การ & QA)
+            const statementsContainer = document.getElementById("workspace-statements-list");
+            const statements = stData?.statements || [];
+            statementsContainer.innerHTML = statements.map(st => `
+                <div class="detail-item" style="border-left: 3px solid var(--accent-primary); margin-bottom: 0.75rem;">
+                    <div class="justify-between" style="display: flex; align-items: center;">
+                        <strong class="text-sm font-semibold">${st.statement_number} (${st.statement_type})</strong>
+                        <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--success); font-size: 0.65rem;">${st.status} (v${st.version})</span>
+                    </div>
+                    <div class="text-xs muted-text" style="margin: 0.25rem 0;">ผู้สอบปากคำ: ${st.interviewed_by} | สถานที่: ${st.location}</div>
+                    ${(st.qa_list && st.qa_list.length > 0) ? `
+                        <div style="background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem;">
+                            <strong class="text-xs" style="color: var(--accent-primary);">รายการคำถาม-คำตอบ (Statement Q&A):</strong>
+                            ${st.qa_list.map(qa => `
+                                <div style="margin-top: 0.25rem; font-size: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 0.25rem;">
+                                    <div><strong>ถาม #${qa.sequence}:</strong> ${qa.question}</div>
+                                    <div style="color: var(--text-primary); margin-top: 0.1rem;"><strong>ตอบ:</strong> ${qa.answer}</div>
+                                    <div class="text-xs muted-text"><em>หมายเหตุ: ${qa.notes}</em></div>
+                                </div>
+                            `).join("")}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join("") || '<p class="text-sm muted-text">ยังไม่มีการบันทึกคำให้การในคดีนี้</p>';
+
+            // 5. Tab: Evidence & Relations
+            const evidenceContainer = document.getElementById("workspace-evidence-list");
+            const rawEv = fullCase?.evidence || [];
+            const relations = evData?.relations || [];
+            evidenceContainer.innerHTML = rawEv.map(ev => {
+                const linkedRel = relations.filter(r => r.evidence_id === ev.id);
+                return `
+                    <div class="detail-item" style="margin-bottom: 0.5rem;">
+                        <div class="justify-between" style="display: flex; align-items: center;">
+                            <strong>${ev.title}</strong>
+                            <span class="badge" style="background: rgba(255,255,255,0.05); font-size: 0.65rem;">${ev.status.toUpperCase()}</span>
+                        </div>
+                        <div class="text-xs font-mono muted-text" style="margin: 0.2rem 0;">SHA-256: ${ev.file_hash.substring(0, 24)}...</div>
+                        ${linkedRel.length > 0 ? `
+                            <div style="margin-top: 0.35rem; display: flex; flex-wrap: wrap; gap: 0.25rem;">
+                                ${linkedRel.map(r => `
+                                    <span class="badge" style="background: rgba(59,130,246,0.15); color: var(--accent-primary); font-size: 0.65rem;">
+                                        <i class="fa-solid fa-link"></i> ${r.relation_type} (${r.target_type})
+                                    </span>
+                                `).join("")}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join("") || '<p class="text-sm muted-text">ไม่มีรายการพยานหลักฐาน</p>';
+
+            // 6. Tab: Timeline
+            const timelineContainer = document.getElementById("details-contradictions-list");
+            const timeEvents = timeData?.events || [];
+            timelineContainer.innerHTML = timeEvents.map(e => `
+                <div class="detail-item" style="border-left: 3px solid ${e.status === 'contradictory' ? 'var(--danger)' : 'var(--border-color)'}; margin-bottom: 0.5rem;">
+                    <div class="justify-between" style="display: flex; align-items: center">
+                        <strong>${e.event}</strong>
+                        <span class="badge" style="background-color: ${e.status === 'contradictory' ? 'rgba(239,68,68,0.15)' : 'rgba(16,185,129,0.15)'}; color: ${e.status === 'contradictory' ? 'var(--danger)' : 'var(--success)'}; font-size: 0.65rem;">${e.status === 'contradictory' ? '⚠️ ข้อพิรุธ CONTRADICTORY' : '✅ ตรวจสอบแล้ว CONSISTENT'}</span>
+                    </div>
+                    <span class="text-xs muted-text">วันเวลา: ${e.date} | แหล่งที่มา: ${e.source}</span>
+                    ${e.conflict_notes ? `<p class="text-xs text-danger" style="margin: 0.25rem 0 0 0;"><i class="fa-solid fa-triangle-exclamation"></i> ${e.conflict_notes}</p>` : ''}
+                </div>
+            `).join("");
+
+            // 7. Tab: Investigation Plan
+            const planContainer = document.getElementById("workspace-plan-list");
+            const plan = plData?.plan;
+            if (plan) {
+                planContainer.innerHTML = `
+                    <div class="detail-item" style="border-left: 3px solid var(--accent-primary); margin-bottom: 0.75rem;">
+                        <div class="justify-between" style="display: flex; align-items: center;">
+                            <strong class="text-sm font-semibold">วัตถุประสงค์การสืบสวน: ${plan.objective}</strong>
+                            <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--success); font-size: 0.65rem;">${plan.status}</span>
+                        </div>
+                        <div class="text-xs muted-text" style="margin: 0.25rem 0;">ผู้รับผิดชอบหลัก: ${plan.responsible_investigator} | กำหนดส่งสำนวน: ${plan.target_date}</div>
+                        <div style="margin-top: 0.5rem;">
+                            <strong class="text-xs" style="color: var(--accent-primary);">รายการปฏิบัติการสอบสวน (Action Items):</strong>
+                            ${plan.actions.map(act => `
+                                <div class="justify-between" style="display: flex; align-items: center; background: rgba(0,0,0,0.15); padding: 0.4rem 0.6rem; border-radius: 4px; margin-top: 0.25rem;">
+                                    <div>
+                                        <div class="text-xs font-semibold">${act.title}</div>
+                                        <div class="text-xs muted-text">${act.description}</div>
+                                    </div>
+                                    <span class="badge" style="background: rgba(245,158,11,0.15); color: var(--warning); font-size: 0.65rem;">${act.status}</span>
+                                </div>
+                            `).join("")}
+                        </div>
+                    </div>
+                `;
+            } else {
+                planContainer.innerHTML = '<p class="text-sm muted-text">ยังไม่มีแผนการสืบสวนสำหรับคดีนี้</p>';
+            }
+
+            // 8. Tab: Tasks
+            const tasksContainer = document.getElementById("details-tasks-list");
+            const tasks = fullCase?.tasks || [];
+            tasksContainer.innerHTML = tasks.map(t => `
+                <div class="detail-item" style="margin-bottom: 0.5rem;">
+                    <div class="justify-between" style="display: flex; align-items: center">
+                        <strong>${t.title}</strong>
+                        <span class="badge" style="background-color: ${t.status === 'completed' ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)'}; color: ${t.status === 'completed' ? 'var(--success)' : 'var(--warning)'}">${t.status.toUpperCase()}</span>
+                    </div>
+                    <p class="text-xs muted-text" style="margin: 0.2rem 0;">${t.description || ''}</p>
+                    <span class="text-xs muted-text">กำหนดส่ง: ${t.due_date ? t.due_date.split("T")[0] : '-'}</span>
+                </div>
+            `).join("") || '<p class="text-sm muted-text">ไม่มีงานค้าง</p>';
+
+            // 9. Tab: Legal Matrix
+            const legalContainer = document.getElementById("details-legal-matrix-list");
+            const legIssues = legData?.legal_issues || [];
+            legalContainer.innerHTML = legIssues.map(li => `
+                <div class="detail-item" style="border-left: 3px solid var(--accent-primary); margin-bottom: 0.75rem;">
+                    <div class="justify-between" style="display: flex; align-items: center">
+                        <strong class="text-sm">${li.legal_code || li.issue_title}</strong>
+                        <span class="badge" style="background-color: rgba(16,185,129,0.15); color: var(--success); font-size: 0.65rem;">${li.status.toUpperCase()}</span>
+                    </div>
+                    <p class="text-xs muted-text" style="margin: 0.25rem 0;">${li.description || ''}</p>
+                    ${(li.elements && li.elements.length > 0) ? `
+                        <div style="margin-top: 0.5rem; background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 4px;">
+                            <strong class="text-xs" style="color: var(--accent-primary);">องค์ประกอบทางกฎหมาย (Legal Elements Matrix):</strong>
+                            ${li.elements.map(el => `
+                                <div style="margin-top: 0.35rem; font-size: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 0.25rem;">
+                                    <div class="justify-between" style="display: flex;">
+                                        <strong>• ${el.element_title}</strong>
+                                        <span class="badge" style="background: rgba(59,130,246,0.15); color: var(--accent-primary); font-size: 0.6rem;">${el.review_status}</span>
+                                    </div>
+                                    <div class="text-xs muted-text">ข้อเท็จจริงสนับสนุน: ${el.supporting_facts}</div>
+                                    ${el.missing_evidence ? `<div class="text-xs text-warning"><i class="fa-solid fa-triangle-exclamation"></i> พยานหลักฐานที่ยังขาด: ${el.missing_evidence}</div>` : ''}
+                                </div>
+                            `).join("")}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join("") || '<p class="text-sm muted-text">ไม่มีการบันทึกประเด็นข้อกฎหมาย</p>';
+
+            // 10. Tab: Documents & Approvals
+            const docContainer = document.getElementById("workspace-documents-list");
+            const docs = docData?.documents || [];
+            docContainer.innerHTML = docs.map(d => `
+                <div class="detail-item" style="border-left: 3px solid ${d.approval_status === 'APPROVED' ? 'var(--success)' : 'var(--warning)'}; margin-bottom: 0.5rem;">
+                    <div class="justify-between" style="display: flex; align-items: center;">
+                        <strong class="text-sm">${d.title}</strong>
+                        <span class="badge" style="background: ${d.approval_status === 'APPROVED' ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)'}; color: ${d.approval_status === 'APPROVED' ? 'var(--success)' : 'var(--warning)'}; font-size: 0.65rem;">${d.approval_status} (v${d.version})</span>
+                    </div>
+                    <div class="text-xs muted-text" style="margin: 0.2rem 0;">ผู้ร่าง: ${d.author} | ผู้ตรวจพิจารณา: ${d.reviewer}</div>
+                    <div class="justify-between" style="display: flex; align-items: center; margin-top: 0.35rem;">
+                        <span class="text-xs muted-text">อัปเดต: ${d.updated_at.split("T")[0]}</span>
+                        <button class="btn btn-outline btn-xs" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;"><i class="fa-solid fa-eye"></i> ดูฉบับเต็ม</button>
+                    </div>
+                </div>
+            `).join("") || '<p class="text-sm muted-text">ยังไม่มีเอกสารสำนวนที่ร่างไว้</p>';
+
+            // 11. Tab: Team
+            const teamContainer = document.getElementById("workspace-team-list");
+            const team = ovData?.case_team || [
+                { name: "พ.ต.ท. สมชาย สอบสวนสืบสวน", role: "Lead Investigator (หัวหน้าพนักงานสอบสวน)", unit: "กก.1 บก.ปคบ." },
+                { name: "ร.ต.อ. สมศักดิ์ สืบสวนไว", role: "Co-Investigator (พนักงานสอบสวนร่วม)", unit: "กก.1 บก.ปคบ." },
+                { name: "ส.ต.อ. สุรชัย คดีมั่น", role: "Case Clerk (เสมียนคดีและดูแลพยานหลักฐาน)", unit: "กก.1 บก.ปคบ." }
+            ];
+            teamContainer.innerHTML = team.map(m => `
+                <div class="detail-item" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <div>
+                        <strong>${m.name}</strong>
+                        <div class="text-xs muted-text">${m.unit}</div>
+                    </div>
+                    <span class="badge" style="background: rgba(59,130,246,0.15); color: var(--accent-primary); font-size: 0.7rem;">${m.role}</span>
+                </div>
+            `).join("");
+
+            // 12. Tab: Activity
+            const activityContainer = document.getElementById("workspace-activity-list");
+            const activities = actData?.activities || [];
+            activityContainer.innerHTML = activities.map(a => `
+                <div class="detail-item" style="border-left: 2px solid var(--accent-primary); padding-left: 0.6rem; margin-bottom: 0.4rem;">
+                    <div class="justify-between" style="display: flex; align-items: center;">
+                        <strong class="text-xs font-mono">${a.action}</strong>
+                        <span class="text-xs muted-text">${a.timestamp.replace("T", " ").replace("Z", "")}</span>
+                    </div>
+                    <div class="text-xs" style="margin-top: 0.15rem;">${a.summary}</div>
+                    <div class="text-xs muted-text">ผู้ดำเนินการ: ${a.actor}</div>
+                </div>
+            `).join("") || '<p class="text-sm muted-text">ไม่มีประวัติกิจกรรม</p>';
+
+            logAuditLocal("VIEW_CASE_WORKSPACE", "cases", caseId, `User viewed full 12-tab workspace for case ${caseId}`);
+        } catch (err) {
+            console.error("Error loading case workspace:", err);
+        }
     }
 
     document.getElementById("btn-close-details").addEventListener("click", () => {
