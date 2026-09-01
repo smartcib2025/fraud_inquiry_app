@@ -460,8 +460,8 @@ document.addEventListener("DOMContentLoaded", () => {
             timelineEvents = timeline.events;
         } catch (e) {
             timelineEvents = [
-                { date: "2026-08-09 14:32:00", event: "Victim Nattapong transfers 1.25M THB to SCB account 401-229-3388", source: "Victim Statement", status: "consistent" },
-                { date: "2026-08-09 15:00:00", event: "Suspect Kittisak claims he was out of town in Chiang Mai and card was lost", source: "Suspect Statement", status: "contradictory", conflict_notes: "SCB login registers IP location in Bangkok at 14:32, contradicting Chiang Mai alibi." }
+                { date: "2026-08-09 14:32:00", event: "ผู้เสียหาย นายนัฐพงษ์ โอนเงิน 1.25 ล้านบาท เข้าบัญชี SCB 401-229-3388", source: "คำให้การผู้เสียหาย", status: "consistent" },
+                { date: "2026-08-09 15:00:00", event: "ผู้ต้องหา นายกิตติศักดิ์ อ้างว่าอยู่ต่างจังหวัดที่เชียงใหม่และทำบัตรหาย", source: "คำให้การผู้ต้องหา", status: "contradictory", conflict_notes: "บันทึกการเข้าใช้งาน SCB Mobile Banking ตรวจพบ IP ในกรุงเทพฯ เวลา 14:32 น. ขัดแย้งกับข้ออ้าง Alibi เชียงใหม่" }
             ];
         }
         

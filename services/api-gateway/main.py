@@ -50,8 +50,8 @@ class MockDatabase:
         self.cases = {
             "CASE-142": {
                 "id": "CASE-142",
-                "title": "Siam Network Ledger Structuring",
-                "description": "Investigation into structured cash transfers and suspected layering using fake online commerce entities.",
+                "title": "คดีหลอกจำหน่ายเวชสำอางค์และผลิตภัณฑ์ความงามปลอม (เพจ สยาม คอสเมติกส์)",
+                "description": "กลุ่มมิจฉาชีพเปิดเพจเฟซบุ๊กหลอกขายเวชสำอางค์แบรนด์เนมปลอมไม่มีเลข อย. และหลอกลวงให้โอนเงินเข้าบัญชีม้าก่อนปิดเพจหลบหนี มูลค่าความเสียหายรวมกว่า 1.25 ล้านบาท",
                 "status": "open",
                 "owning_unit": "Financial Crimes Division 1",
                 "sensitive": False,
@@ -60,8 +60,8 @@ class MockDatabase:
             },
             "CASE-087": {
                 "id": "CASE-087",
-                "title": "Phuket Cyber Cash Layering",
-                "description": "Tracking illegal offshore gambling proceeds routed through local proxy banking accounts.",
+                "title": "คดีหลอกขายทองคำรูปพรรณออนไลน์น้ำหนักและเปอร์เซ็นต์ต่ำกว่ามาตรฐาน (ภูเก็ต โกลด์ ออนไลน์)",
+                "description": "ขบวนการไลฟ์สด TikTok หลอกขายทองรูปพรรณราคาต่ำกว่าท้องตลาด อ้างทองคำแท้ 96.5% แต่ผลตรวจจากสถาบัน GIT พบมีทองคำผสมเพียง 12% มีผู้เสียหายกว่า 50 ราย รวมความเสียหายกว่า 4.8 ล้านบาท",
                 "status": "open",
                 "owning_unit": "Financial Crimes Division 1",
                 "sensitive": False,
@@ -70,8 +70,8 @@ class MockDatabase:
             },
             "CASE-112": {
                 "id": "CASE-112",
-                "title": "Bangkok Shell Company Network",
-                "description": "Network of interrelated shell companies sharing directors and bank accounts.",
+                "title": "คดีลักลอบผลิตและจำหน่ายผลิตภัณฑ์เสริมอาหารผสมสารไซบูทรามีน (สลิมฟิต ดีท็อกซ์)",
+                "description": "กลุ่มบริษัทนอมินีลักลอบนำเข้าวัตถุออกฤทธิ์ต่อจิตและประสาทประเภท 1 (ไซบูทรามีน) มาผสมในผลิตภัณฑ์อาหารเสริมลดน้ำหนัก ปลอมแปลงเครื่องหมาย อย. และโฆษณาชวนเชื่อทางออนไลน์ เป็นอันตรายต่อสุขภาพผู้บริโภค",
                 "status": "under_review",
                 "owning_unit": "Cyber Division",
                 "sensitive": True,
@@ -86,77 +86,105 @@ class MockDatabase:
             {"case_id": "CASE-112", "user_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", "assignment_role": "co-lead"}
         ]
         self.profiles = {
-            "d2f0998c-8c1d-4099-ae1e-f3f2a89366df": {"id": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df", "email": "somchai.i@cppd.go.th", "full_name": "Somchai Dev (พนักงานสอบสวน กก.1)", "org_unit": "Financial Crimes Division 1", "role": "investigator", "approved": True},
-            "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d": {"id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", "email": "somsak.b@cppd.go.th", "full_name": "Somsak Code (พนักงานสอบสวน กก.1)", "org_unit": "Financial Crimes Division 1", "role": "investigator", "approved": True},
-            "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077": {"id": "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077", "email": "superintendent@cppd.go.th", "full_name": "Anong Head (ผกก. กก.1 บก.ปคบ.)", "org_unit": "Financial Crimes Division 1", "role": "superintendent", "approved": True},
-            "e37b98d2-430b-488f-9a73-982ee3f2112e": {"id": "e37b98d2-430b-488f-9a73-982ee3f2112e", "email": "commander@cppd.go.th", "full_name": "Prapas Chief (ผบก.ปคบ.)", "org_unit": "Division HQ", "role": "commander", "approved": True},
-            "p-admin": {"id": "p-admin", "email": "admin@cppd.go.th", "full_name": "Admin Chief", "org_unit": "Division HQ", "role": "admin", "approved": True},
-            "p-deputy-commander": {"id": "p-deputy-commander", "email": "deputy.commander@cppd.go.th", "full_name": "deputy.commander (รอง ผบก.ปคบ.)", "org_unit": "Division HQ", "role": "deputy_commander", "approved": True},
-            "p-deputy-superintendent": {"id": "p-deputy-superintendent", "email": "deputy.superintendent@cppd.go.th", "full_name": "Anong Head (รอง ผกก. กก.1 บก.ปคบ.)", "org_unit": "Financial Crimes Division 1", "role": "deputy_superintendent", "approved": True},
-            "p-clerk": {"id": "p-clerk", "email": "clerk.a@cppd.go.th", "full_name": "Clerk A (เสมียนคดี กก.1)", "org_unit": "Financial Crimes Division 1", "role": "clerk", "approved": False},
-            "p-anong": {"id": "p-anong", "email": "investigator.anong@gmail.com", "full_name": "Anong Investigator", "org_unit": "Financial Crimes Division 1", "role": "supervisor", "approved": True}
+            "d2f0998c-8c1d-4099-ae1e-f3f2a89366df": {"id": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df", "email": "somchai.i@cppd.go.th", "full_name": "พ.ต.ท. สมชาย สอบสวนสืบสวน (พนักงานสอบสวน กก.1)", "org_unit": "Financial Crimes Division 1", "role": "investigator", "approved": True},
+            "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d": {"id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", "email": "somsak.b@cppd.go.th", "full_name": "ร.ต.อ. สมศักดิ์ สืบสวนไว (พนักงานสอบสวน กก.1)", "org_unit": "Financial Crimes Division 1", "role": "investigator", "approved": True},
+            "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077": {"id": "f8c3de7d-94d7-46e2-bc2f-e8b9fb6cb077", "email": "superintendent@cppd.go.th", "full_name": "พ.ต.อ. อนงค์ บังคับการ (ผกก. กก.1 บก.ปคบ.)", "org_unit": "Financial Crimes Division 1", "role": "superintendent", "approved": True},
+            "e37b98d2-430b-488f-9a73-982ee3f2112e": {"id": "e37b98d2-430b-488f-9a73-982ee3f2112e", "email": "commander@cppd.go.th", "full_name": "พล.ต.ต. ประภาส พิทักษ์ธรรม (ผบก.ปคบ.)", "org_unit": "Division HQ", "role": "commander", "approved": True},
+            "p-admin": {"id": "p-admin", "email": "admin@cppd.go.th", "full_name": "ผู้ดูแลระบบ บก.ปคบ. (Admin)", "org_unit": "Division HQ", "role": "admin", "approved": True},
+            "p-deputy-commander": {"id": "p-deputy-commander", "email": "deputy.commander@cppd.go.th", "full_name": "พ.ต.อ. สามารถ ปราบปราม (รอง ผบก.ปคบ.)", "org_unit": "Division HQ", "role": "deputy_commander", "approved": True},
+            "p-deputy-superintendent": {"id": "p-deputy-superintendent", "email": "deputy.superintendent@cppd.go.th", "full_name": "พ.ต.ท. วิชัย เชี่ยวชาญ (รอง ผกก. กก.1 บก.ปคบ.)", "org_unit": "Financial Crimes Division 1", "role": "deputy_superintendent", "approved": True},
+            "p-clerk": {"id": "p-clerk", "email": "clerk.a@cppd.go.th", "full_name": "ส.ต.อ. สุรชัย คดีมั่น (เสมียนคดี กก.1)", "org_unit": "Financial Crimes Division 1", "role": "clerk", "approved": False},
+            "p-anong": {"id": "p-anong", "email": "investigator.anong@gmail.com", "full_name": "พ.ต.ท. อนงค์ สอบสวน (ผู้บังคับบัญชาสอบสวน)", "org_unit": "Financial Crimes Division 1", "role": "supervisor", "approved": True}
         }
         self.sessions = {}
         
-        # 1. INTAKES
+        # 1. INTAKES (คำร้องเรียนจากประชาชน 3 คดี)
         self.intakes = [
             {
                 "id": "INTAKE-001",
-                "case_id": None,
-                "title": "Cosmetics Scam Complaint",
-                "description": "Complaint regarding fake luxury lipsticks sold by 'Siam Network' on Facebook.",
-                "reporter_name": "Sunisa Saelim",
-                "reporter_phone": "082-111-9988",
-                "raw_statement": "I ordered 5 luxury lipsticks from Siam Network page for 15,000 THB but received counterfeit ones. The seller refused refund and blocked me.",
+                "case_id": "CASE-142",
+                "title": "ร้องเรียนถูกเพจ 'สยาม คอสเมติกส์' หลอกขายเวชสำอางค์ปลอม",
+                "description": "ผู้เสียหายสั่งซื้อเซรั่มและครีมบำรุงผิวหน้าแบรนด์เนมรวม 1,250,000 บาท แต่ได้รับสินค้าปลอมไม่มีเลข อย. และผู้ขายปิดเพจหลบหนี",
+                "reporter_name": "นายนัฐพงษ์ สุขประเสริฐ",
+                "reporter_phone": "081-555-0192",
+                "raw_statement": "ข้าพเจ้านายนัฐพงษ์ สุขประเสริฐ ได้ติดต่อสั่งซื้อเวชสำอางค์จากเพจเฟซบุ๊ก สยาม คอสเมติกส์ ออฟฟิเชียล โดยผู้ขายชื่อนายกิตติศักดิ์ วงศ์สวัสดิ์ เบอร์โทร 089-111-2345 ได้โอนเงินจำนวน 1,250,000 บาท เข้าบัญชีธนาคารไทยพาณิชย์ เลขที่ 401-229-3388 ภายหลังได้รับสินค้าปลอมและติดต่อไม่ได้",
                 "triage_urgency": "high",
-                "triage_reason": "Multiple similar complaints logged against this seller within 24 hours.",
-                "status": "pending",
-                "created_at": "2026-08-16T09:00:00Z"
+                "triage_reason": "มูลค่าความเสียหายสูงเกิน 1 ล้านบาท และเข้าข่ายความผิดหลอกลวงประชาชนผ่านระบบคอมพิวเตอร์",
+                "status": "promoted",
+                "created_at": "2026-08-10T09:00:00Z"
             },
             {
                 "id": "INTAKE-002",
-                "case_id": None,
-                "title": "Unauthorized Subscription Charge",
-                "description": "Complaint regarding unauthorized health supplement subscription charges on credit card.",
-                "reporter_name": "Piyabut Somdee",
-                "reporter_phone": "085-333-2211",
-                "raw_statement": "I bought a supplement trial bottle from Phuket supplements site. They charged my card 3,500 THB next month without my consent.",
-                "triage_urgency": "medium",
-                "triage_reason": "Single transaction dispute, needs consumer protection terms review.",
+                "case_id": "CASE-087",
+                "title": "ร้องเรียนเพจ 'ภูเก็ต โกลด์ ออนไลน์' หลอกขายทองคำเปอร์เซ็นต์ต่ำ",
+                "description": "สั่งซื้อสร้อยคอทองคำน้ำหนัก 5 บาท อ้างทองคำแท้ 96.5% ราคา 150,000 บาท เมื่อนำไปตรวจที่ร้านทองพบเป็นทองชุบผสมเพียง 12%",
+                "reporter_name": "นางสาวมณีรัตน์ ทองแท้",
+                "reporter_phone": "086-777-8899",
+                "raw_statement": "ข้าพเจ้าสั่งซื้อสร้อยคอทองคำจากไลฟ์สดเพจ ภูเก็ตไซเบอร์โกลด์ โอนเงินเข้าบัญชีธนาคารกสิกรไทย เลขที่ 702-888-1123 รวม 480,000 บาท พบว่าทองคำไม่ได้มาตรฐานและมีผู้เสียหายรวมกลุ่มกันกว่า 50 คน",
+                "triage_urgency": "high",
+                "triage_reason": "มีผู้เสียหายจำนวนมาก กระทบต่อระบบเศรษฐกิจการค้าทองคำ",
+                "status": "promoted",
+                "created_at": "2026-08-12T10:30:00Z"
+            },
+            {
+                "id": "INTAKE-003",
+                "case_id": "CASE-112",
+                "title": "ร้องเรียนผลิตภัณฑ์เสริมอาหาร 'สลิมฟิต ดีท็อกซ์' มีอาการข้างเคียงรุนแรง",
+                "description": "รับประทานผลิตภัณฑ์เสริมอาหารลดน้ำหนักแล้วเกิดอาการหัวใจสั่น แน่นหน้าอก และตรวจพบสารไซบูทรามีน",
+                "reporter_name": "นางกัลยา สุขภาพดี",
+                "reporter_phone": "084-222-1133",
+                "raw_statement": "สั่งซื้อผลิตภัณฑ์ SlimFit Detox ทางออนไลน์ รับประทานแล้วเกิดอาการหัวใจเต้นผิดจังหวะรุนแรง แพทย์ระบุได้รับสารต้องห้าม จึงขอมอบตัวอย่างให้ ปคบ. ตรวจสอบดำเนินคดี",
+                "triage_urgency": "high",
+                "triage_reason": "เป็นอันตรายต่อสุขภาพและสุขอนามัยของประชาชน เข้าข่ายวัตถุออกฤทธิ์ต่อจิตประสาท",
                 "status": "pending",
-                "created_at": "2026-08-17T11:00:00Z"
+                "created_at": "2026-08-14T08:15:00Z"
             }
         ]
         
-        # 2. PERSONS
+        # 2. PERSONS (บุคคลที่เกี่ยวข้องใน 3 คดี)
         self.persons = [
-            {"id": "p-kittisak", "case_id": "CASE-142", "name": "Kittisak Wongsawat", "national_id": "1-1002-88832-11-2", "role": "Suspect", "phone": "089-111-2345", "address": "12/5 Ladprao Rd, Bangkok"},
-            {"id": "p-sunisa", "case_id": "CASE-142", "name": "Sunisa Saelim", "national_id": "3-1209-99823-00-1", "role": "Witness/Victim", "phone": "082-111-9988", "address": "45 Vibhavadi Rd, Bangkok"},
-            {"id": "p-somchai", "case_id": "CASE-142", "name": "Somchai Sukdee", "national_id": "1-1003-77723-11-0", "role": "Witness (Proxy Director)", "phone": "081-999-8888", "address": "77 Ratchada Rd, Bangkok"}
+            # Case 1: สยาม คอสเมติกส์
+            {"id": "p-kittisak", "case_id": "CASE-142", "name": "นายกิตติศักดิ์ วงศ์สวัสดิ์", "national_id": "1-1002-88832-11-2", "role": "Suspect", "phone": "089-111-2345", "address": "12/5 ถนนลาดพร้าว แขวงจอมพล เขตจตุจักร กรุงเทพมหานคร"},
+            {"id": "p-nattapong", "case_id": "CASE-142", "name": "นายนัฐพงษ์ สุขประเสริฐ", "national_id": "3-1209-99823-00-1", "role": "Victim", "phone": "081-555-0192", "address": "123/4 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร"},
+            {"id": "p-somchai-proxy", "case_id": "CASE-142", "name": "นายสมชาย แสนสุข", "national_id": "1-1003-77723-11-0", "role": "Witness (Proxy Director)", "phone": "081-999-8888", "address": "77 ถนนรัชดาภิเษก แขวงห้วยขวาง เขตห้วยขวาง กรุงเทพมหานคร"},
+            # Case 2: ภูเก็ต โกลด์
+            {"id": "p-wichan", "case_id": "CASE-087", "name": "นายวิชาญ ทองประเสริฐ", "national_id": "1-8399-00212-33-4", "role": "Suspect", "phone": "082-333-4455", "address": "88/12 ถนนราษฎร์อุทิศ 200 ปี ตำบลป่าตอง อำเภอกะทู้ จังหวัดภูเก็ต"},
+            {"id": "p-maneerat", "case_id": "CASE-087", "name": "นางสาวมณีรัตน์ ทองแท้", "national_id": "3-1005-44321-99-8", "role": "Victim", "phone": "086-777-8899", "address": "45/2 ถนนเทพกระษัตรี ตำบลตลาดใหญ่ อำเภอเมือง จังหวัดภูเก็ต"},
+            # Case 3: สลิมฟิต ดีท็อกซ์
+            {"id": "p-narongchai", "case_id": "CASE-112", "name": "นายณรงค์ชัย โอสถสิทธิ์", "national_id": "1-1005-77889-22-1", "role": "Suspect", "phone": "091-888-9900", "address": "99/1 ถนนพระราม 2 แขวงบางมด เขตจอมทอง กรุงเทพมหานคร"},
+            {"id": "p-kanlaya", "case_id": "CASE-112", "name": "นางกัลยา สุขภาพดี", "national_id": "3-1205-11223-44-5", "role": "Victim", "phone": "084-222-1133", "address": "55/1 ถนนเพชรเกษม แขวงบางหว้า เขตภาษีเจริญ กรุงเทพมหานคร"}
         ]
         
-        # 3. ORGANIZATIONS
+        # 3. ORGANIZATIONS (นิติบุคคลและเครือข่าย)
         self.organizations = [
-            {"id": "org-siam-net", "case_id": "CASE-142", "name": "Siam Network Co., Ltd.", "registration_number": "0105563023145", "type": "Company", "address": "100/1 Sukhumvit Rd, Bangkok", "status": "active"},
-            {"id": "org-phuket-supp", "case_id": "CASE-087", "name": "Phuket Supplements Co.", "registration_number": "0765561002231", "type": "Store/Manufacturer", "address": "55/9 Patong Beach Rd, Phuket", "status": "active"}
+            {"id": "org-siam-net", "case_id": "CASE-142", "name": "บริษัท สยาม เน็ตเวิร์ค จำกัด", "registration_number": "0105566099123", "type": "Company", "address": "100/1 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร", "status": "active"},
+            {"id": "org-phuket-gold", "case_id": "CASE-087", "name": "ห้างหุ้นส่วนจำกัด ภูเก็ตไซเบอร์โกลด์", "registration_number": "0833560001221", "type": "Partnership", "address": "55/9 ถนนป่าตอง ตำบลป่าตอง อำเภอกะทู้ จังหวัดภูเก็ต", "status": "active"},
+            {"id": "org-bangkok-health", "case_id": "CASE-112", "name": "บริษัท บางกอก นิวทริชั่น เฮลท์ จำกัด", "registration_number": "0105559002341", "type": "Manufacturer", "address": "120/4 ถนนบางขุนเทียน แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร", "status": "active"}
         ]
         
-        # 4. VICTIMS
+        # 4. VICTIMS (ข้อมูลผู้เสียหาย)
         self.victims = [
-            {"id": "cf2f8c5b-38ab-41c1-903c-83b66d4db02a", "case_id": "CASE-142", "full_name": "Nattapong Sukprasert", "email": "nattapong.s@gmail.com", "phone": "081-555-0192", "address": "123/4 Sukhumvit Rd, Bangkok", "loss_amount": 1250000.00, "intake_source": "portal"},
-            {"id": "8b3e9fb3-83bc-42b7-8ce6-90bd551deeb3", "case_id": "CASE-087", "full_name": "Chaiwat Mongkol", "email": "chaiwat.m@yahoo.com", "phone": "089-777-1234", "address": "56/9 Patong Beach Rd, Phuket", "loss_amount": 850000.00, "intake_source": "portal"}
+            {"id": "cf2f8c5b-38ab-41c1-903c-83b66d4db02a", "case_id": "CASE-142", "full_name": "นายนัฐพงษ์ สุขประเสริฐ", "email": "nattapong.s@gmail.com", "phone": "081-555-0192", "address": "123/4 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร", "loss_amount": 1250000.00, "intake_source": "portal"},
+            {"id": "8b3e9fb3-83bc-42b7-8ce6-90bd551deeb3", "case_id": "CASE-087", "full_name": "นางสาวมณีรัตน์ ทองแท้", "email": "maneerat.t@yahoo.com", "phone": "086-777-8899", "address": "45/2 ถนนเทพกระษัตรี อำเภอเมือง จังหวัดภูเก็ต", "loss_amount": 480000.00, "intake_source": "portal"},
+            {"id": "c71a82d1-99ee-41a2-8bc1-12f3e8b9fb6c", "case_id": "CASE-112", "full_name": "นางกัลยา สุขภาพดี", "email": "kanlaya.health@gmail.com", "phone": "084-222-1133", "address": "55/1 ถนนเพชรเกษม เขตภาษีเจริญ กรุงเทพมหานคร", "loss_amount": 250000.00, "intake_source": "portal"}
         ]
         
-        # 5. EVIDENCE
+        # 5. EVIDENCE (พยานหลักฐานในสำนวนพร้อม SHA-256)
         self.evidence = [
-            {"id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088", "case_id": "CASE-142", "title": "Transfer slip receipt", "description": "Bank receipt slip showing 1.25M THB transfer to SCB account.", "type": "document", "file_hash": "a3f82cb304b5f883201de374ffea57bd8c928e1832049e3bfd12cf88c9d21415", "status": "sealed", "created_at": "2026-08-10T10:05:00Z"},
-            {"id": "11b7df3c-6622-48df-9cb9-ef77ba4c28f1", "case_id": "CASE-142", "title": "Line Chat Logs screenshot", "description": "Screenshots showing contact between suspect and victim.", "type": "document", "file_hash": "e7b92f7a63bc1a2384a56c07221ee9f08cb18d9f10928e3bcfde204d80a1122a", "status": "sealed", "created_at": "2026-08-10T10:10:00Z"}
+            # Case 1 Evidence
+            {"id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088", "case_id": "CASE-142", "title": "สลิปการโอนเงินธนาคารไทยพาณิชย์ 1.25 ล้านบาท", "description": "สลิปหลักฐานการโอนเงินจากบัญชีผู้เสียหายเข้าบัญชี SCB เลขที่ 401-229-3388", "type": "document", "file_hash": "a3f82cb304b5f883201de374ffea57bd8c928e1832049e3bfd12cf88c9d21415", "status": "sealed", "created_at": "2026-08-10T10:05:00Z"},
+            {"id": "11b7df3c-6622-48df-9cb9-ef77ba4c28f1", "case_id": "CASE-142", "title": "ภาพบันทึกบทสนทนา Line Chat 'Siam Cosmetics'", "description": "ภาพแคปหน้าจอการตกลงซื้อขายและการหลอกลวงให้โอนเงินพร้อมหมายเลขโทรศัพท์ 089-111-2345", "type": "document", "file_hash": "e7b92f7a63bc1a2384a56c07221ee9f08cb18d9f10928e3bcfde204d80a1122a", "status": "sealed", "created_at": "2026-08-10T10:10:00Z"},
+            # Case 2 Evidence
+            {"id": "ev-gold-cert", "case_id": "CASE-087", "title": "หนังสือรับรองผลตรวจวิเคราะห์ทองคำจากสถาบัน GIT", "description": "ผลการตรวจทางวิทยาศาสตร์ยืนยันทองรูปพรรณมีส่วนผสมทองคำแท้เพียง 12.4% (โฆษณาเท็จ 96.5%)", "type": "document", "file_hash": "c4b819f2a01d4099ae1ef3f2a89366df01928374a56c07221ee9f08cb18d9f10", "status": "sealed", "created_at": "2026-08-12T14:00:00Z"},
+            # Case 3 Evidence
+            {"id": "ev-food-lab", "case_id": "CASE-112", "title": "รายงานผลการตรวจวิเคราะห์สารไซบูทรามีนจากกรมวิทยาศาสตร์การแพทย์", "description": "รายงานผลตรวจพิสูจน์ยืนยันการปนเปื้อนสารวัตถุออกฤทธิ์ต่อจิตประสาทประเภท 1 (ไซบูทรามีน) ในตัวอย่างอาหารเสริม", "type": "document", "file_hash": "99a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8", "status": "sealed", "created_at": "2026-08-14T16:00:00Z"}
         ]
         
-        # 6. TRANSACTIONS
+        # 6. TRANSACTIONS & BANK ACCOUNTS (บัญชีธนาคารและธุรกรรม)
         self.bank_accounts = [
-            {"id": "b07e2a9b-38cc-4d32-bc10-ef239ab82811", "bank_name": "Siam Commerce Bank", "account_number": "401-229-3388", "account_name": "Kittisak Wongsawat"},
-            {"id": "b08e3a9c-49dd-5e43-cd21-f0340bc93922", "bank_name": "Kasikorn Bank", "account_number": "702-888-1123", "account_name": "Siam Electronics Co. Ltd"}
+            {"id": "b07e2a9b-38cc-4d32-bc10-ef239ab82811", "bank_name": "ธนาคารไทยพาณิชย์ (SCB)", "account_number": "401-229-3388", "account_name": "นายกิตติศักดิ์ วงศ์สวัสดิ์"},
+            {"id": "b08e3a9c-49dd-5e43-cd21-f0340bc93922", "bank_name": "ธนาคารกสิกรไทย (KBANK)", "account_number": "702-888-1123", "account_name": "หจก. ภูเก็ตไซเบอร์โกลด์"},
+            {"id": "b09e4a9d-50ee-6f54-de32-f1451cd04033", "bank_name": "ธนาคารกรุงเทพ (BBL)", "account_number": "128-4-55667-8", "account_name": "บจก. บางกอก นิวทริชั่น เฮลท์"}
         ]
         self.transactions = [
             {
@@ -169,60 +197,85 @@ class MockDatabase:
                 "transaction_date": "2026-08-09T14:32:00Z", 
                 "reference_number": "TXN-99882211", 
                 "evidence_id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"
+            },
+            {
+                "id": "a02c4d9b-2233-4455-6677-8899aabbccdd", 
+                "case_id": "CASE-087", 
+                "source_account_id": None, 
+                "target_account_id": "b08e3a9c-49dd-5e43-cd21-f0340bc93922", 
+                "amount": 480000.00, 
+                "currency": "THB", 
+                "transaction_date": "2026-08-11T11:15:00Z", 
+                "reference_number": "TXN-77665544", 
+                "evidence_id": "ev-gold-cert"
+            },
+            {
+                "id": "a03c5d9c-3344-5566-7788-99aabbccddee", 
+                "case_id": "CASE-112", 
+                "source_account_id": None, 
+                "target_account_id": "b09e4a9d-50ee-6f54-de32-f1451cd04033", 
+                "amount": 250000.00, 
+                "currency": "THB", 
+                "transaction_date": "2026-08-13T09:45:00Z", 
+                "reference_number": "TXN-11223344", 
+                "evidence_id": "ev-food-lab"
             }
         ]
         
-        # 7. TIMELINE
+        # 7. TIMELINE (ลำดับเหตุการณ์ในคดี)
         self.timeline = [
-            {"id": "ev-1", "case_id": "CASE-142", "event_date": "2026-08-01T09:00:00Z", "title": "Siam Network Co. Registration", "description": "Siam Network Co., Ltd. registered with Department of Business Development.", "evidence_id": None},
-            {"id": "ev-2", "case_id": "CASE-142", "event_date": "2026-08-05T10:00:00Z", "title": "Suspect Opens Mule Account", "description": "Kittisak Wongsawat opens Siam Commerce Bank account number 401-229-3388.", "evidence_id": None},
-            {"id": "ev-3", "case_id": "CASE-142", "event_date": "2026-08-09T14:32:00Z", "title": "Victim Bank Transfer", "description": "Victim Nattapong Sukprasert transfers 1.25M Baht to Siam Commerce Bank account 401-229-3388.", "evidence_id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"},
-            {"id": "ev-4", "case_id": "CASE-142", "event_date": "2026-08-10T11:00:00Z", "title": "Cash Withdrawal at Ladprao ATM", "description": "ATM records show 1.25M Baht cash withdrawal by Kittisak. (Alibi contradiction flag).", "evidence_id": None}
+            {"id": "ev-1", "case_id": "CASE-142", "event_date": "2026-08-01T09:00:00Z", "title": "จดทะเบียนจัดตั้ง บริษัท สยาม เน็ตเวิร์ค จำกัด", "description": "นายกิตติศักดิ์และนายสมชายจดทะเบียนจัดตั้งบริษัทกับกรมพัฒนาธุรกิจการค้า", "evidence_id": None},
+            {"id": "ev-2", "case_id": "CASE-142", "event_date": "2026-08-05T10:00:00Z", "title": "เปิดบัญชีม้าธนาคารไทยพาณิชย์", "description": "นายกิตติศักดิ์ วงศ์สวัสดิ์ ดำเนินการเปิดบัญชีเงินฝาก SCB เลขที่ 401-229-3388", "evidence_id": None},
+            {"id": "ev-3", "case_id": "CASE-142", "event_date": "2026-08-09T14:32:00Z", "title": "ผู้เสียหายโอนเงินสั่งซื้อเวชสำอางค์ 1.25 ล้านบาท", "description": "นายนัฐพงษ์ สุขประเสริฐ โอนเงิน 1,250,000 บาท เข้าบัญชี SCB 401-229-3388", "evidence_id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"},
+            {"id": "ev-4", "case_id": "CASE-142", "event_date": "2026-08-10T11:00:00Z", "title": "ถอนเงินสดและทำธุรกรรมผ่านตู้ ATM ลาดพร้าว", "description": "ตรวจพบบันทึกการเข้าใช้งานระบบผ่าน IP ในกรุงเทพฯ และถอนเงินสด ขัดแย้งกับคำให้การที่อ้างว่าอยู่เชียงใหม่", "evidence_id": None}
         ]
         
-        # 8. LEGAL_ISSUES
+        # 8. LEGAL_ISSUES (ประเด็นข้อกฎหมายและองค์ประกอบความผิด)
         self.legal_issues = [
-            {"id": "li-1", "case_id": "CASE-142", "issue_title": "Public Fraud (ฉ้อโกงประชาชน)", "legal_code": "Section 343 of Criminal Code", "description": "Fraudulent online listings targeting public consumer purchase.", "status": "substantiated", "evidence_ids": ["f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"]},
-            {"id": "li-2", "case_id": "CASE-142", "issue_title": "False Advertising (โฆษณาเป็นเท็จ)", "legal_code": "Section 22 of Consumer Protection Act B.E. 2522", "description": "Misrepresentation of cosmetic product quality and certifications.", "status": "under_review", "evidence_ids": ["11b7df3c-6622-48df-9cb9-ef77ba4c28f1"]},
-            {"id": "li-3", "case_id": "CASE-142", "issue_title": "Computer Crimes", "legal_code": "Section 14(1) of Computer Crimes Act", "description": "Inputting false information into computer systems.", "status": "substantiated", "evidence_ids": ["11b7df3c-6622-48df-9cb9-ef77ba4c28f1"]}
+            {"id": "li-1", "case_id": "CASE-142", "issue_title": "ร่วมกันฉ้อโกงประชาชน", "legal_code": "ประมวลกฎหมายอาญา มาตรา 343", "description": "หลอกลวงด้วยการแสดงข้อความอันเป็นเท็จต่อประชาชนทั่วไปผ่านเพจ Facebook", "status": "substantiated", "evidence_ids": ["f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"]},
+            {"id": "li-2", "case_id": "CASE-142", "issue_title": "การโฆษณาเครื่องสำอางโอ้อวดเป็นเท็จ", "legal_code": "พ.ร.บ.เครื่องสำอาง พ.ศ. 2558 มาตรา 48", "description": "การโฆษณาคุณประโยชน์ที่ก่อให้เกิดความเข้าใจผิดในสาระสำคัญของสินค้า", "status": "under_review", "evidence_ids": ["11b7df3c-6622-48df-9cb9-ef77ba4c28f1"]},
+            {"id": "li-3", "case_id": "CASE-142", "issue_title": "นำเข้าข้อมูลคอมพิวเตอร์อันเป็นเท็จ", "legal_code": "พ.ร.บ.คอมพิวเตอร์ฯ พ.ศ. 2550 มาตรา 14(1)", "description": "นำเข้าข้อมูลอันเป็นเท็จโดยประการที่น่าจะเกิดความเสียหายแก่ประชาชน", "status": "substantiated", "evidence_ids": ["11b7df3c-6622-48df-9cb9-ef77ba4c28f1"]},
+            {"id": "li-4", "case_id": "CASE-087", "issue_title": "ร่วมกันหลอกลวงจำหน่ายทองคำต่ำกว่ามาตรฐาน", "legal_code": "ประมวลกฎหมายอาญา มาตรา 271 ประกอบ พ.ร.บ.คุ้มครองผู้บริโภคฯ", "description": "ขายทองคำโดยหลอกลวงเรื่องปริมาณ คุณภาพ หรือความบริสุทธิ์ของทองคำ", "status": "substantiated", "evidence_ids": ["ev-gold-cert"]},
+            {"id": "li-5", "case_id": "CASE-112", "issue_title": "จำหน่ายอาหารไม่บริสุทธิ์ผสมวัตถุออกฤทธิ์ต่อจิตประสาท", "legal_code": "พ.ร.บ.อาหาร พ.ศ. 2522 มาตรา 26 ประกอบประมวลกฎหมายยาเสพติด", "description": "ลักลอบผสมสารไซบูทรามีนในอาหารเสริมลดน้ำหนัก", "status": "substantiated", "evidence_ids": ["ev-food-lab"]}
         ]
         
-        # 9. TASKS
+        # 9. TASKS (รายการงานสืบสวนสอบสวน)
         self.tasks = [
-            {"id": "918d6e3c-8c5e-4c7b-8395-5db460cb7d10", "case_id": "CASE-142", "title": "Verify Kittisak Wongsawat identity", "description": "Cross-check suspect ID with Department of Provincial Administration registry.", "assigned_to": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df", "status": "pending", "due_date": "2026-08-25T17:00:00Z"},
-            {"id": "918d6e3c-8c5e-4c7b-8395-5db460cb7d11", "case_id": "CASE-142", "title": "Analyze bank transactions flow", "description": "Review layering indicators from transaction reports on SCB 401-229-3388.", "assigned_to": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df", "status": "in_progress", "due_date": "2026-08-28T17:00:00Z"}
+            {"id": "918d6e3c-8c5e-4c7b-8395-5db460cb7d10", "case_id": "CASE-142", "title": "ตรวจสอบประวัติและอัตลักษณ์บุคคล นายกิตติศักดิ์ วงศ์สวัสดิ์", "description": "ตรวจสอบข้อมูลทะเบียนราษฎร์ (Linkage) กรมการปกครอง และหมายจับค้างเก่า", "assigned_to": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df", "status": "pending", "due_date": "2026-08-25T17:00:00Z"},
+            {"id": "918d6e3c-8c5e-4c7b-8395-5db460cb7d11", "case_id": "CASE-142", "title": "วิเคราะห์เส้นทางการเงินและขออายัดบัญชีธนาคาร", "description": "ประสาน ปปง. และธนาคารไทยพาณิชย์เพื่ออายัดเงินในบัญชี 401-229-3388 และบัญชีแถวที่สอง", "assigned_to": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df", "status": "in_progress", "due_date": "2026-08-28T17:00:00Z"},
+            {"id": "918d6e3c-8c5e-4c7b-8395-5db460cb7d12", "case_id": "CASE-087", "title": "ออกหมายเรียกผู้ต้องหาคดีทองคำปลอมภูเก็ต", "description": "ออกหมายเรียกนายวิชาญ ทองประเสริฐ เข้าพบพนักงานสอบสวน กก.1 บก.ปคบ.", "assigned_to": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", "status": "pending", "due_date": "2026-08-30T17:00:00Z"}
         ]
         
-        # 10. REPORTS
+        # 10. REPORTS (รายงานและเอกสารทางคดี)
         self.reports = [
-            {"id": "rep-001", "case_id": "CASE-142", "report_type": "Executive Brief", "title": "Siam Network Triage Briefing", "content": "DRAFT REPORT\nSummary of Siam Network cosmetics scam...", "created_at": "2026-08-17T12:00:00Z"}
+            {"id": "rep-001", "case_id": "CASE-142", "report_type": "Executive Brief", "title": "รายงานสรุปข้อเท็จจริงคดีสยาม คอสเมติกส์", "content": "# รายงานสรุปย่อผู้บังคับบัญชา\nคดีหลอกจำหน่ายเวชสำอางค์ปลอมผ่านเพจ Facebook...", "version": 1, "status": "AI_DRAFT", "created_at": "2026-08-17T12:00:00Z"}
         ]
         
-        # 11. COMMUNICATIONS
+        # 11. COMMUNICATIONS (บันทึกการสื่อสารดิจิทัล)
         self.communications = [
             {
                 "id": "comm-001",
                 "case_id": "CASE-142",
                 "channel": "LINE_CHAT",
-                "sender_identifier": "089-111-2345 (Seller)",
-                "recipient_identifier": "081-555-0192 (Victim Nattapong)",
+                "sender_identifier": "089-111-2345 (แอดมินเพจ สยาม คอสเมติกส์)",
+                "recipient_identifier": "081-555-0192 (นายนัฐพงษ์ สุขประเสริฐ)",
                 "timestamp": "2026-08-09T14:15:00Z",
-                "content_text": "Please transfer 1,250,000 THB to SCB account 401-229-3388 to secure discount cosmetics stock.",
+                "content_text": "รบกวนโอนเงินจำนวน 1,250,000 บาท เข้าบัญชี SCB 401-229-3388 นายกิตติศักดิ์ วงศ์สวัสดิ์ เพื่อล็อคสต็อกสินค้าเวชสำอางค์ล็อตพิเศษครับ",
                 "evidence_id": "11b7df3c-6622-48df-9cb9-ef77ba4c28f1"
             },
             {
                 "id": "comm-002",
                 "case_id": "CASE-142",
                 "channel": "PHONE_CALL",
-                "sender_identifier": "089-111-2345 (Suspect)",
-                "recipient_identifier": "081-555-0192 (Victim Nattapong)",
+                "sender_identifier": "089-111-2345 (นายกิตติศักดิ์)",
+                "recipient_identifier": "081-555-0192 (นายนัฐพงษ์)",
                 "timestamp": "2026-08-09T14:20:00Z",
-                "content_text": "Voice call confirming order details and delivery timetable.",
+                "content_text": "บันทึกการโทรศัพท์ยืนยันยอดเงินและนัดหมายส่งมอบสินค้าที่คลังสินค้าบางเขน",
                 "evidence_id": None
             }
         ]
 
-        # 12. AI_ANALYSES (Isolated from Original Evidence)
+        # 12. AI_ANALYSES (ผลวิเคราะห์ AI แยกจาก Original Evidence)
         self.ai_analyses = [
             {
                 "id": "ana-001",
@@ -230,12 +283,12 @@ class MockDatabase:
                 "agent_name": "TimelineAgent",
                 "analysis_type": "TIMELINE_CONTRADICTION",
                 "fact_tags": [
-                    {"tag": "FACT", "text": "Victim transfer 1.25M to SCB 401-229-3388 at 14:32:00", "source_evidence_id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"},
-                    {"tag": "CLAIM", "text": "Suspect claims he was in Chiang Mai and card was lost", "source_evidence_id": None},
-                    {"tag": "CONFLICT", "text": "SCB online IP registers login in Bangkok at 14:32", "source_evidence_id": "11b7df3c-6622-48df-9cb9-ef77ba4c28f1"}
+                    {"tag": "FACT", "text": "ผู้เสียหายโอนเงิน 1.25 ล้านบาท เข้าบัญชี SCB 401-229-3388 เวลา 14:32:00 น.", "source_evidence_id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"},
+                    {"tag": "CLAIM", "text": "ผู้ต้องหาอ้างว่าตนเองอยู่เชียงใหม่และทำบัตร ATM หาย", "source_evidence_id": None},
+                    {"tag": "CONFLICT", "text": "ตรวจพบบันทึกการเข้าสู่ระบบผ่าน IP ในกรุงเทพฯ เวลา 14:32 น. ขัดแย้งกับข้ออ้าง Alibi", "source_evidence_id": "11b7df3c-6622-48df-9cb9-ef77ba4c28f1"}
                 ],
-                "findings_summary": "Alibi contradiction detected between suspect claim and IP location.",
-                "confidence_score": 0.92,
+                "findings_summary": "ตรวจพบข้อขัดแย้งสำคัญของคำให้การผู้ต้องหากับพิกัด IP และประวัติการทำธุรกรรม",
+                "confidence_score": 0.94,
                 "review_status": "REQUIRES_HUMAN_REVIEW",
                 "reviewed_by": None,
                 "investigator_notes": None,
@@ -255,8 +308,8 @@ class MockDatabase:
                 "subject_id": "cf2f8c5b-38ab-41c1-903c-83b66d4db02a", 
                 "subject_type": "victim", 
                 "recorded_at": "2026-08-10T10:00:00Z", 
-                "transcript": "I was contacted by a seller on Facebook offering bulk electronics at discount. I transferred 1.25M Baht to Siam Commerce Bank account number 401-229-3388. After payment, the seller deleted the Facebook page. The phone number they contacted me with was 089-111-2345.", 
-                "summary": "Victim defrauded of 1.25M THB by fake Facebook seller. Funds transferred to SCB 401-229-3388. Contact phone: 089-111-2345.",
+                "transcript": "ข้าพเจ้านายนัฐพงษ์ สุขประเสริฐ ได้รับการติดต่อเสนอขายสินค้าเวชสำอางค์ราคาพิเศษผ่านเพจเฟซบุ๊ก จึงหลงเชื่อโอนเงินจำนวน 1,250,000 บาท เข้าบัญชีธนาคารไทยพาณิชย์ เลขที่ 401-229-3388 นายกิตติศักดิ์ วงศ์สวัสดิ์ หมายเลขติดต่อ 089-111-2345 ภายหลังได้รับสินค้าปลอมและผู้ขายปิดเพจหลบหนี", 
+                "summary": "ผู้เสียหายถูกหลอกโอนเงิน 1.25 ล้านบาท ซื้อเวชสำอางค์ปลอมผ่านเพจเฟซบุ๊ก โอนเข้า SCB 401-229-3388 เบอร์ติดต่อ 089-111-2345",
                 "created_at": "2026-08-10T10:00:00Z"
             }
         ]
@@ -266,7 +319,7 @@ class MockDatabase:
                 "case_id": "CASE-142",
                 "entity_type": "BANK_ACCOUNT",
                 "entity_name": "401-229-3388",
-                "details": "Linked to Kittisak Wongsawat, active in Siam Network Ledger Structuring case",
+                "details": "เชื่อมโยงกับ นายกิตติศักดิ์ วงศ์สวัสดิ์ ในคดีหลอกจำหน่ายเวชสำอางค์ปลอม",
                 "confidence": 0.95,
                 "status": "unverified",
                 "created_at": "2026-08-17T12:00:00Z"
