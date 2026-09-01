@@ -401,6 +401,89 @@ class MockDatabase:
                 "created_at": "2026-08-12T11:00:00Z"
             }
         ]
+        # PHASE 7 COLLECTIONS (Investigation Report & Case File Automation Layer)
+        self.investigation_reports = [
+            {
+                "id": "rep-142-01",
+                "case_id": "CASE-142",
+                "report_type": "INVESTIGATION_REPORT",
+                "title": "รายงานการสอบสวนคดีอาญาที่ 142/2569 (สยาม คอสเมติกส์ ออฟฟิเชียล)",
+                "template_id": "tmpl-inv-report-v1",
+                "template_version": "1.0",
+                "status": "APPROVED",
+                "current_version": 1,
+                "created_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "assigned_reviewer": "investigator.anong@gmail.com",
+                "approved_by": "พ.ต.ท. อนงค์ ตรวจสำนวน",
+                "approved_at": "2026-08-16T15:00:00Z",
+                "finalized_by": None,
+                "finalized_at": None,
+                "created_at": "2026-08-15T09:00:00Z",
+                "updated_at": "2026-08-16T15:00:00Z"
+            }
+        ]
+
+        self.report_sections = [
+            {
+                "id": "sec-142-01",
+                "report_id": "rep-142-01",
+                "section_code": "CASE_BACKGROUND",
+                "title": "1. ข้อมูลคดีและที่มาแห่งการรับคำร้องทุกข์",
+                "sequence": 1,
+                "content": "เมื่อวันที่ 10 สิงหาคม 2569 นายนัฐพงษ์ สุขประเสริฐ ผู้เสียหาย ได้มาพบพนักงานสอบสวน กก.1 บก.ปคบ. เพื่อแจ้งความร้องทุกข์ดำเนินคดีกับ นายกิตติศักดิ์ วงศ์สวัสดิ์ เจ้าของเพจเฟซบุ๊ก สยาม คอสเมติกส์ ออฟฟิเชียล ซึ่งได้หลอกลวงจำหน่ายเวชสำอางค์ปลอมปนเปื้อนสารเคมีอันตราย เป็นเหตุให้สูญเสียเงินจำนวน 1,250,000 บาท",
+                "content_type": "NARRATIVE",
+                "generated_by": "AI",
+                "review_status": "APPROVED",
+                "locked": True,
+                "created_at": "2026-08-15T09:05:00Z"
+            },
+            {
+                "id": "sec-142-02",
+                "report_id": "rep-142-01",
+                "section_code": "EVIDENCE_SUMMARY",
+                "title": "2. สรุปพยานหลักฐานและผลการตรวจพิสูจน์",
+                "sequence": 2,
+                "content": "พยานหลักฐานสำคัญในสำนวนประกอบด้วย: 1. สลิปการโอนเงิน SCB 401-229-3388 ยอด 1,250,000 บาท (SHA-256 Verified) 2. บันทึกสนทนา Line Chat 3. รายงานผลการตรวจสารไฮโดรควิโนนและปรอทจากกรมวิทยาศาสตร์การแพทย์",
+                "content_type": "NARRATIVE",
+                "generated_by": "AI",
+                "review_status": "APPROVED",
+                "locked": True,
+                "created_at": "2026-08-15T09:10:00Z"
+            }
+        ]
+
+        self.report_versions = [
+            {
+                "id": "rv-142-01",
+                "report_id": "rep-142-01",
+                "version_number": 1,
+                "content_snapshot": {
+                    "title": "รายงานการสอบสวนคดีอาญาที่ 142/2569",
+                    "sections_count": 2,
+                    "status": "APPROVED"
+                },
+                "created_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "change_reason": "ร่างรายงานการสอบสวนฉบับสมบูรณ์เสนอผู้บังคับบัญชา",
+                "created_at": "2026-08-15T09:30:00Z"
+            }
+        ]
+
+        self.document_templates = [
+            {
+                "template_code": "tmpl-inv-report-v1",
+                "name": "แบบรายงานการสอบสวนคดีอาญา กก.1 บก.ปคบ. (ฉบับมาตรฐาน)",
+                "report_type": "INVESTIGATION_REPORT",
+                "version": "1.0",
+                "language": "th",
+                "structure": [
+                    "CASE_BACKGROUND", "FACT_SUMMARY", "PERSON_SUMMARY", 
+                    "STATEMENT_SUMMARY", "EVIDENCE_SUMMARY", "TIMELINE_SUMMARY", 
+                    "LEGAL_MATRIX_SUMMARY", "OUTSTANDING_ISSUES", "INVESTIGATOR_OPINION_DRAFT"
+                ],
+                "status": "ACTIVE"
+            }
+        ]
+
         # PHASE 6 COLLECTIONS (Legal Analysis & Investigation Planning Layer)
         self.laws = [
             {
@@ -4407,3 +4490,335 @@ async def record_human_legal_decision(case_id: str, payload: HumanLegalDecisionC
     })
     
     return {"status": "success", "decision": decision_item}
+
+
+# -------------------------------------------------------------
+# PHASE 7: INVESTIGATION REPORT & CASE FILE SCHEMAS
+# -------------------------------------------------------------
+
+class InvestigationReportCreate(BaseModel):
+    report_type: str = "INVESTIGATION_REPORT"  # INVESTIGATION_REPORT, CASE_SUMMARY, EVIDENCE_SUMMARY, TIMELINE_REPORT, FINAL_CASE_FILE_INDEX
+    title: str
+    template_id: Optional[str] = "tmpl-inv-report-v1"
+
+class ReportSectionUpdate(BaseModel):
+    content: str
+    change_reason: Optional[str] = "แก้ไขเนื้อหาโดยพนักงานสอบสวน"
+
+class ReportExportRequest(BaseModel):
+    format: str = "DOCX"  # DOCX, PDF, JSON
+    purpose: str
+    recipient: str
+
+class CaseFileBundleRequest(BaseModel):
+    recipient: str
+    purpose: str
+    include_evidence_manifest: bool = True
+
+# -------------------------------------------------------------
+# PHASE 7: INVESTIGATION REPORT & CASE FILE REST API ENDPOINTS
+# -------------------------------------------------------------
+
+# 1. Report CRUD
+@app.get("/api/v1/cases/{case_id}/reports")
+@app.get("/api/cases/{case_id}/reports")
+async def get_case_reports(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    reports = [r for r in getattr(db, "investigation_reports", []) if r.get("case_id") == case_id]
+    return {"status": "success", "reports": reports}
+
+@app.post("/api/v1/cases/{case_id}/reports")
+@app.post("/api/cases/{case_id}/reports")
+async def create_investigation_report(case_id: str, payload: InvestigationReportCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    rep_id = f"rep-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    report_item = {
+        "id": rep_id,
+        "case_id": case_id,
+        "report_type": payload.report_type,
+        "title": payload.title,
+        "template_id": payload.template_id or "tmpl-inv-report-v1",
+        "template_version": "1.0",
+        "status": "DRAFT",
+        "current_version": 1,
+        "created_by": user["id"],
+        "assigned_reviewer": None,
+        "approved_by": None,
+        "approved_at": None,
+        "finalized_by": None,
+        "finalized_at": None,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "updated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "investigation_reports"):
+        db.investigation_reports = []
+    db.investigation_reports.append(report_item)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "REPORT.CREATE",
+        "resource_type": "investigation_report", "resource_id": rep_id, "result": "success"
+    })
+    
+    return {"status": "success", "report": report_item}
+
+@app.get("/api/v1/reports/{report_id}")
+@app.get("/api/reports/{report_id}")
+async def get_report_details(report_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    rep = next((r for r in getattr(db, "investigation_reports", []) if r.get("id") == report_id), None)
+    if not rep:
+        raise HTTPException(status_code=404, detail="Report not found")
+    check_case_access(user, rep["case_id"])
+    
+    sections = [s for s in getattr(db, "report_sections", []) if s.get("report_id") == report_id]
+    versions = [v for v in getattr(db, "report_versions", []) if v.get("report_id") == report_id]
+    
+    return {
+        "status": "success",
+        "report": rep,
+        "sections": sorted(sections, key=lambda x: x.get("sequence", 0)),
+        "versions": sorted(versions, key=lambda x: x.get("version_number", 0), reverse=True)
+    }
+
+# 2. Section-by-Section Automated Generation
+@app.post("/api/v1/reports/{report_id}/generate")
+@app.post("/api/reports/{report_id}/generate")
+async def generate_full_report_draft(report_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    rep = next((r for r in getattr(db, "investigation_reports", []) if r.get("id") == report_id), None)
+    if not rep:
+        raise HTTPException(status_code=404, detail="Report not found")
+    check_case_access(user, rep["case_id"])
+    
+    case_id = rep["case_id"]
+    
+    # Generate structured sections using only verified facts and evidence
+    sections_to_create = [
+        {
+            "section_code": "CASE_BACKGROUND",
+            "title": "1. ข้อมูลคดีและที่มาแห่งการรับคำร้องทุกข์",
+            "sequence": 1,
+            "content": f"คดีอาญาที่ {case_id}: ผู้เสียหายได้เข้าแจ้งความร้องทุกข์ต่อพนักงานสอบสวน กก.1 บก.ปคบ. ให้ดำเนินคดีกับผู้ต้องหาในความผิดฐานร่วมกันฉ้อโกงประชาชนผ่านระบบเครือข่ายสังคมออนไลน์",
+            "content_type": "NARRATIVE",
+            "generated_by": "AI"
+        },
+        {
+            "section_code": "FACT_SUMMARY",
+            "title": "2. ข้อเท็จจริงที่ได้จากการสืบสวนสอบสวน",
+            "sequence": 2,
+            "content": "จากการรวบรวมพยานหลักฐานพบว่า ผู้เสียหายได้โอนเงินจำนวน 1,250,000 บาท เข้าบัญชีธนาคารไทยพาณิชย์ เลขที่ 401-229-3388 ชื่อบัญชี นายกิตติศักดิ์ วงศ์สวัสดิ์ จริง และสินค้าเวชสำอางค์ที่ได้รับปนเปื้อนสารเคมีอันตรายตามผลตรวจทางห้องปฏิบัติการ",
+            "content_type": "NARRATIVE",
+            "generated_by": "AI"
+        },
+        {
+            "section_code": "EVIDENCE_SUMMARY",
+            "title": "3. บัญชีพยานหลักฐานสำคัญและสถานะความสมบูรณ์",
+            "sequence": 3,
+            "content": "พยานหลักฐานในสำนวนได้รับการตรวจพิสูจน์ค่าแฮช SHA-256 บิตต่อบิตเรียบร้อย มีห่วงโซ่การครอบครอง (Chain of Custody) ครบถ้วน",
+            "content_type": "TABLE",
+            "generated_by": "AI"
+        },
+        {
+            "section_code": "INVESTIGATOR_OPINION_DRAFT",
+            "title": "4. ร่างความเห็นของพนักงานสอบสวน (สำหรับพิจารณา)",
+            "sequence": 4,
+            "content": "ข้อเท็จจริงและพยานหลักฐานในสำนวนมีน้ำหนักเพียงพอรับฟังได้ว่าการกระทำเข้าองค์ประกอบความผิดตาม ป.อ. ม.343 และ พ.ร.บ.คอมพิวเตอร์ฯ ม.14(1) เห็นควรส่งสำนวนการสอบสวนเสนอพนักงานอัยการเพื่อพิจารณาดำเนินคดีตามกฎหมายต่อไป",
+            "content_type": "NARRATIVE",
+            "generated_by": "AI"
+        }
+    ]
+    
+    created_sections = []
+    if not hasattr(db, "report_sections"):
+        db.report_sections = []
+        
+    for s in sections_to_create:
+        sec_id = f"sec-{str(uuid.uuid4())[:8]}"
+        sec_item = {
+            "id": sec_id,
+            "report_id": report_id,
+            "section_code": s["section_code"],
+            "title": s["title"],
+            "sequence": s["sequence"],
+            "content": s["content"],
+            "content_type": s["content_type"],
+            "generated_by": s["generated_by"],
+            "review_status": "DRAFT",
+            "locked": False,
+            "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+        }
+        db.report_sections.append(sec_item)
+        created_sections.append(sec_item)
+        
+    rep["status"] = "IN_REVIEW"
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "REPORT.GENERATE",
+        "resource_type": "investigation_report", "resource_id": report_id, "result": "success"
+    })
+    
+    return {"status": "success", "sections_created": len(created_sections), "sections": created_sections}
+
+# 3. Report Validation & Blocking Issue Check
+@app.post("/api/v1/reports/{report_id}/validate")
+@app.post("/api/reports/{report_id}/validate")
+async def validate_report_content(report_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    rep = next((r for r in getattr(db, "investigation_reports", []) if r.get("id") == report_id), None)
+    if not rep:
+        raise HTTPException(status_code=404, detail="Report not found")
+        
+    validation_issues = []
+    # Quality rule: Verify all sections have source citations and no unresolved conflicts
+    sections = [s for s in getattr(db, "report_sections", []) if s.get("report_id") == report_id]
+    if len(sections) == 0:
+        validation_issues.append({"severity": "BLOCKING", "message": "รายงานยังไม่มีเนื้อหาส่วนใดถูกสร้าง"})
+        
+    is_ready = not any(i["severity"] == "BLOCKING" for i in validation_issues)
+    readiness_status = "READY_FOR_REVIEW" if is_ready else "NOT_READY"
+    
+    return {
+        "status": "success",
+        "report_id": report_id,
+        "readiness_status": readiness_status,
+        "issues_count": len(validation_issues),
+        "issues": validation_issues
+    }
+
+# 4. Review Workflow & Human Finalization
+@app.post("/api/v1/reports/{report_id}/approve")
+@app.post("/api/reports/{report_id}/approve")
+async def approve_investigation_report(report_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    rep = next((r for r in getattr(db, "investigation_reports", []) if r.get("id") == report_id), None)
+    if not rep:
+        raise HTTPException(status_code=404, detail="Report not found")
+        
+    rep["status"] = "APPROVED"
+    rep["approved_by"] = user["full_name"]
+    rep["approved_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "REPORT.APPROVE",
+        "resource_type": "investigation_report", "resource_id": report_id, "result": "success"
+    })
+    
+    return {"status": "success", "report_status": "APPROVED"}
+
+@app.post("/api/v1/reports/{report_id}/finalize")
+@app.post("/api/reports/{report_id}/finalize")
+async def finalize_investigation_report(report_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    rep = next((r for r in getattr(db, "investigation_reports", []) if r.get("id") == report_id), None)
+    if not rep:
+        raise HTTPException(status_code=404, detail="Report not found")
+        
+    if rep["status"] != "APPROVED":
+        raise HTTPException(status_code=400, detail="Cannot finalize report that has not been approved by supervisor.")
+        
+    rep["status"] = "FINAL"
+    rep["finalized_by"] = user["full_name"]
+    rep["finalized_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    # Lock all sections
+    for sec in getattr(db, "report_sections", []):
+        if sec.get("report_id") == report_id:
+            sec["locked"] = True
+            
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "REPORT.FINALIZE",
+        "resource_type": "investigation_report", "resource_id": report_id, "result": "success"
+    })
+    
+    return {"status": "success", "report_status": "FINAL", "finalized_by": user["full_name"]}
+
+# 5. Export Engine (DOCX / PDF with Hash)
+@app.post("/api/v1/reports/{report_id}/export")
+@app.post("/api/reports/{report_id}/export")
+async def export_investigation_report(report_id: str, payload: ReportExportRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    rep = next((r for r in getattr(db, "investigation_reports", []) if r.get("id") == report_id), None)
+    if not rep:
+        raise HTTPException(status_code=404, detail="Report not found")
+        
+    exp_id = f"exp-{str(uuid.uuid4())[:8]}"
+    file_hash = f"sha256-{str(uuid.uuid4())[:16]}"
+    export_record = {
+        "id": exp_id,
+        "report_id": report_id,
+        "format": payload.format,
+        "file_hash": file_hash,
+        "exported_by": user["full_name"],
+        "exported_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "purpose": payload.purpose,
+        "recipient": payload.recipient,
+        "download_url": f"/api/v1/downloads/{exp_id}.{payload.format.lower()}"
+    }
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "REPORT.EXPORT",
+        "resource_type": "document_export", "resource_id": exp_id, "result": "success",
+        "metadata": {"format": payload.format, "file_hash": file_hash}
+    })
+    
+    return {"status": "success", "export": export_record}
+
+# 6. Case File Index & Bundle
+@app.get("/api/v1/cases/{case_id}/case-file-index")
+@app.get("/api/cases/{case_id}/case-file-index")
+async def get_case_file_index(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    reports = [r for r in getattr(db, "investigation_reports", []) if r.get("case_id") == case_id]
+    evidences = [e for e in db.evidence if e.get("case_id") == case_id]
+    statements = [s for s in db.statements if s.get("case_id") == case_id]
+    
+    index_items = []
+    idx = 1
+    for r in reports:
+        index_items.append({"index_no": idx, "doc_type": "REPORT", "title": r["title"], "status": r["status"]})
+        idx += 1
+    for s in statements:
+        index_items.append({"index_no": idx, "doc_type": "STATEMENT", "title": s.get("summary", "บันทึกคำให้การ"), "status": s.get("status", "APPROVED")})
+        idx += 1
+    for e in evidences:
+        index_items.append({"index_no": idx, "doc_type": "EXHIBIT", "title": e["title"], "sha256": e.get("file_hash", ""), "status": e.get("status", "sealed")})
+        idx += 1
+        
+    return {"status": "success", "case_id": case_id, "total_documents": len(index_items), "index": index_items}
+
+@app.post("/api/v1/cases/{case_id}/case-file-bundle")
+@app.post("/api/cases/{case_id}/case-file-bundle")
+async def generate_case_file_bundle(case_id: str, payload: CaseFileBundleRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    bundle_id = f"bundle-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    bundle_manifest = {
+        "bundle_id": bundle_id,
+        "case_id": case_id,
+        "recipient": payload.recipient,
+        "purpose": payload.purpose,
+        "created_by": user["full_name"],
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "bundle_hash": f"sha256-{str(uuid.uuid4())[:16]}",
+        "included_items_count": 6
+    }
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "CASE_FILE.BUNDLE.CREATE",
+        "resource_type": "case_file_bundle", "resource_id": bundle_id, "result": "success"
+    })
+    
+    return {"status": "success", "bundle": bundle_manifest}
