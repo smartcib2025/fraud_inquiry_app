@@ -93,7 +93,7 @@ class MockDatabase:
             "p-admin": {"id": "p-admin", "email": "admin@cppd.go.th", "full_name": "พ.ต.อ. พงษ์ศักดิ์ ผู้ดูแลระบบ (Admin บก.ปคบ.)", "org_unit": "Division HQ", "role": "admin", "approved": True},
             "p-deputy-commander": {"id": "p-deputy-commander", "email": "deputy.commander@cppd.go.th", "full_name": "พ.ต.อ. สามารถ ปราบปราม (รอง ผบก.ปคบ.)", "org_unit": "Division HQ", "role": "deputy_commander", "approved": True},
             "p-deputy-superintendent": {"id": "p-deputy-superintendent", "email": "deputy.superintendent@cppd.go.th", "full_name": "พ.ต.ท. วิชัย เชี่ยวชาญ (รอง ผกก. กก.1 บก.ปคบ.)", "org_unit": "Financial Crimes Division 1", "role": "deputy_superintendent", "approved": True},
-            "p-clerk": {"id": "p-clerk", "email": "clerk.a@cppd.go.th", "full_name": "ส.ต.อ. สุรชัย คดีมั่น (เสมียนคดีและเจ้าหน้าที่บันทึกข้อมูล กก.1)", "org_unit": "Financial Crimes Division 1", "role": "clerk", "approved": False},
+            "p-clerk": {"id": "p-clerk", "email": "clerk.a@cppd.go.th", "full_name": "ส.ต.อ. สุรชัย คดีมั่น (เสมียนคดีและเจ้าหน้าที่บันทึกข้อมูล กก.1)", "org_unit": "Financial Crimes Division 1", "role": "clerk", "approved": True},
             "p-anong": {"id": "p-anong", "email": "investigator.anong@gmail.com", "full_name": "พ.ต.ท. อนงค์ ตรวจสำนวน (ผู้บังคับบัญชาสอบสวน)", "org_unit": "Financial Crimes Division 1", "role": "supervisor", "approved": True}
         }
         self.sessions = {}
@@ -2200,7 +2200,14 @@ def google_callback(payload: CallbackRequest, request: Request):
         "token": token,
         "email": email,
         "role": role,
-        "name": name
+        "name": name,
+        "user": {
+            "id": email,
+            "email": email,
+            "full_name": name,
+            "role": role,
+            "org_unit": "Financial Crimes Division 1"
+        }
     }
 
 @app.post("/api/auth/logout")

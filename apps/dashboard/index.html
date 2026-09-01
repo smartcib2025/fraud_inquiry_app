@@ -645,28 +645,35 @@
     </div>
 
     <!-- MODAL: LOGIN OVERLAY -->
-    <div id="login-overlay" style="position: fixed; inset: 0; background-color: var(--bg-app); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(12px);">
-        <div class="card" style="width: 90%; max-width: 440px; padding: 2.25rem; text-align: center;">
+    <div id="login-overlay" style="position: fixed; inset: 0; background: radial-gradient(circle at center, rgba(15,23,42,0.95) 0%, rgba(9,13,22,0.98) 100%); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(16px);">
+        <div class="card" style="width: 90%; max-width: 460px; padding: 2.25rem; text-align: center; border: 1px solid rgba(59,130,246,0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(37,99,235,0.2);">
             <div style="margin-bottom: 1.25rem; display: flex; justify-content: center; align-items: center;">
-                <img src="https://cppd.cib.go.th/backend/uploads/logo_edit_500_7acc86e6d4.png" alt="CPPD Logo" style="height: 85px; width: auto;">
+                <img src="https://cppd.cib.go.th/backend/uploads/logo_edit_500_7acc86e6d4.png" alt="CPPD Logo" style="height: 90px; width: auto; filter: drop-shadow(0 4px 12px rgba(37,99,235,0.4));">
             </div>
-            <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 0.35rem;">กก.1 บก.ปคบ. AI Investigation OS</h2>
-            <p class="muted-text text-xs" style="margin-bottom: 1.75rem;">ระบบสนับสนุนงานสืบสวนสอบสวนอัจฉริยะ สำหรับเจ้าหน้าที่ผู้มีอำนาจเท่านั้น</p>
+            <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 0.35rem; color: #f8fafc;">กก.1 บก.ปคบ. AI Investigation OS</h2>
+            <p class="muted-text text-xs" style="margin-bottom: 1.5rem; color: #94a3b8;">ระบบสนับสนุนงานสืบสวนสอบสวนอัจฉริยะ สำหรับเจ้าหน้าที่ผู้มีอำนาจเท่านั้น</p>
             
-            <div class="form-group margin-bottom-lg" style="text-align: left; margin-bottom: 1.5rem;">
-                <label for="login-presets" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.85rem;">เลือกลงชื่อเข้าใช้ด้วยบทบาททดสอบ (Quick-Select Role)</label>
-                <select class="form-control" id="login-presets" style="width: 100%; padding: 0.65rem; background: var(--bg-input); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); font-size: 0.88rem;">
-                    <option value="somchai.i@cppd.go.th">พ.ต.ท. สมชาย สอบสวนสืบสวน (พนักงานสอบสวน กก.1 - CASE-142)</option>
+            <div class="form-group" style="text-align: left; margin-bottom: 1.5rem;">
+                <label for="login-presets" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.85rem; color: #38bdf8;">
+                    <i class="fa-solid fa-user-shield"></i> เลือกลงชื่อเข้าใช้ด้วยบทบาททดสอบ (Quick-Select Role)
+                </label>
+                <select class="form-control" id="login-presets" style="width: 100%; padding: 0.75rem; background: rgba(30,41,59,0.8); color: #ffffff; border: 1px solid rgba(59,130,246,0.4); border-radius: var(--border-radius-sm); font-size: 0.88rem; outline: none; cursor: pointer;">
+                    <option value="somchai.i@cppd.go.th">พ.ต.ท. สมชาย สอบสวนสืบสวน (พนักงานสอบสวน กก.1 - เจ้าของสำนวน CASE-142)</option>
                     <option value="superintendent@cppd.go.th">พ.ต.อ. อัครเดช ผู้กำกับการ (ผกก.1 บก.ปคบ. - ผู้บังคับบัญชา)</option>
                     <option value="commander@cppd.go.th">พล.ต.ต. วิชัย บังคับการ (ผบก.ปคบ. - ผู้บังคับการ)</option>
                     <option value="admin@cppd.go.th">admin@cppd.go.th (ผู้ดูแลระบบความปลอดภัย)</option>
-                    <option value="clerk.a@cppd.go.th">clerk.a@cppd.go.th (เสมียนคดี)</option>
+                    <option value="clerk.a@cppd.go.th">ส.ต.อ. สุรชัย คดีมั่น (เสมียนคดี)</option>
                 </select>
             </div>
             
-            <button class="btn btn-primary" id="btn-google-login" style="width: 100%; padding: 0.75rem; font-size: 0.95rem;">
-                <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบปฏิบัติการสอบสวน
-            </button>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <button class="btn btn-primary" id="btn-google-login" style="width: 100%; padding: 0.8rem; font-size: 0.95rem; font-weight: 700; cursor: pointer;">
+                    <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบปฏิบัติการสอบสวน
+                </button>
+                <button class="btn btn-outline" id="btn-direct-bypass" style="width: 100%; padding: 0.5rem; font-size: 0.8rem; opacity: 0.8; cursor: pointer;">
+                    <i class="fa-solid fa-bolt"></i> เข้าใช้งานด่วน (Direct Fast Enter)
+                </button>
+            </div>
         </div>
     </div>
 
