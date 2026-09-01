@@ -401,6 +401,68 @@ class MockDatabase:
                 "created_at": "2026-08-12T11:00:00Z"
             }
         ]
+        # PHASE 8 COLLECTIONS (Official Documents, Warrants & Legal Document Automation)
+        self.case_documents = [
+            {
+                "id": "doc-142-01",
+                "case_id": "CASE-142",
+                "document_type": "OFFICIAL_LETTER",
+                "document_number": "ตช 0026.1/142",
+                "title": "หนังสือขออายัดบัญชีเงินฝากและขอรายการเดินบัญชี ธนาคารไทยพาณิชย์",
+                "template_id": "tmpl-bank-req-v1",
+                "template_version": "1.0",
+                "status": "APPROVED",
+                "classification": "CONFIDENTIAL",
+                "current_version": 1,
+                "created_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "assigned_reviewer": "investigator.anong@gmail.com",
+                "approved_by": "พ.ต.ท. อนงค์ ตรวจสำนวน",
+                "approved_at": "2026-08-11T14:00:00Z",
+                "finalized_by": None,
+                "finalized_at": None,
+                "created_at": "2026-08-11T10:00:00Z",
+                "updated_at": "2026-08-11T14:00:00Z"
+            }
+        ]
+
+        self.search_warrant_applications = [
+            {
+                "id": "swa-142-01",
+                "case_id": "CASE-142",
+                "target_type": "PREMISES",
+                "target_location": "เลขที่ 12/5 ถนนลาดพร้าว แขวงจอมพล เขตจตุจักร กรุงเทพมหานคร",
+                "target_person_id": "p-kittisak",
+                "purpose": "ตรวจค้นและยึดอุปกรณ์คอมพิวเตอร์ โทรศัพท์มือถือ และเวชสำอางค์ของกลาง",
+                "facts_supporting_request": "นายกิตติศักดิ์ วงศ์สวัสดิ์ ผู้ต้องหา พักอาศัยและใช้เป็นสถานที่ดำเนินการโฆษณาหลอกลวงประชาชนและรับโอนเงิน",
+                "evidence_ids": ["11b7df3c-6622-48df-9cb9-ef77ba4c28f1", "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"],
+                "legal_basis": "ป.วิ.อ. มาตรา 69, 70",
+                "urgency": "HIGH",
+                "status": "APPROVED",
+                "prepared_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "reviewed_by": "investigator.anong@gmail.com",
+                "approved_by": "พ.ต.ท. อนงค์ ตรวจสำนวน",
+                "created_at": "2026-08-12T09:00:00Z"
+            }
+        ]
+
+        self.arrest_warrant_applications = [
+            {
+                "id": "awa-142-01",
+                "case_id": "CASE-142",
+                "target_person_id": "p-kittisak",
+                "identity_status": "VERIFIED",
+                "facts_supporting_request": "มีพยานหลักฐานตามสมควรว่า นายกิตติศักดิ์ วงศ์สวัสดิ์ ได้ร่วมกันกระทำความผิดฐานฉ้อโกงประชาชนและนำเข้าข้อมูลคอมพิวเตอร์อันเป็นเท็จ และมีเหตุอันควรเชื่อว่าจะหลบหนีหรือไปยุ่งเหยิงกับพยานหลักฐาน",
+                "evidence_ids": ["f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088", "11b7df3c-6622-48df-9cb9-ef77ba4c28f1", "ev-142-lab"],
+                "legal_basis": "ป.วิ.อ. มาตรา 66, ป.อ. มาตรา 343, พ.ร.บ.คอมพิวเตอร์ฯ มาตรา 14(1)",
+                "risk_factors": "ความเสียหายมูลค่าสูงเกิน 1 ล้านบาท และผู้ต้องหาเริ่มปิดเพจหลบหนี",
+                "status": "APPROVED",
+                "prepared_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "reviewed_by": "investigator.anong@gmail.com",
+                "approved_by": "พ.ต.ท. อนงค์ ตรวจสำนวน",
+                "created_at": "2026-08-13T10:00:00Z"
+            }
+        ]
+
         # PHASE 7 COLLECTIONS (Investigation Report & Case File Automation Layer)
         self.investigation_reports = [
             {
@@ -1091,6 +1153,7 @@ class MockDatabase:
                 "id": "doc-142-01",
                 "case_id": "CASE-142",
                 "document_type": "SUMMONS_WARRANT",
+                "document_number": "ตช 0026.1/142",
                 "title": "หมายเรียกผู้ต้องหา ครั้งที่ 1 - นายกิตติศักดิ์ วงศ์สวัสดิ์",
                 "content": "หมายเรียกผู้ต้องหา ครั้งที่ 1 กก.1 บก.ปคบ. เรียกนายกิตติศักดิ์ วงศ์สวัสดิ์...",
                 "version": 1,
@@ -2452,10 +2515,13 @@ class LegalElementCreate(BaseModel):
     review_status: str = "SUPPORTED"  # SUPPORTED, PARTIALLY_SUPPORTED, NOT_SUPPORTED, CONTRADICTED, REQUIRES_REVIEW
 
 class CaseDocumentCreate(BaseModel):
-    document_type: str  # SUMMONS_WARRANT, SEARCH_WARRANT, ACCUSATION_RECORD, FINAL_REPORT, OFFICIAL_LETTER, INVESTIGATION_NOTE
+    document_type: str = "OFFICIAL_LETTER"  # SUMMONS_WARRANT, SEARCH_WARRANT, ACCUSATION_RECORD, FINAL_REPORT, OFFICIAL_LETTER, BANK_INFORMATION_REQUEST
     title: str
-    content: str
-    source_references: List[str] = []
+    content: Optional[str] = ""
+    document_number: Optional[str] = None
+    template_id: Optional[str] = "tmpl-official-letter-v1"
+    classification: Optional[str] = "INTERNAL"
+    source_references: Optional[List[str]] = []
 
 class CaseDocumentVersionCreate(BaseModel):
     content: str
@@ -4822,3 +4888,364 @@ async def generate_case_file_bundle(case_id: str, payload: CaseFileBundleRequest
     })
     
     return {"status": "success", "bundle": bundle_manifest}
+
+
+# -------------------------------------------------------------
+# PHASE 8: OFFICIAL DOCUMENTS & WARRANTS SCHEMAS
+# -------------------------------------------------------------
+
+class CaseDocumentCreate(BaseModel):
+    document_type: str = "OFFICIAL_LETTER"  # OFFICIAL_LETTER, OFFICIAL_MEMORANDUM, INFORMATION_REQUEST, SUMMONS_DRAFT, BANK_INFORMATION_REQUEST, EXPERT_EXAMINATION_REQUEST
+    title: str
+    document_number: Optional[str] = None
+    template_id: Optional[str] = "tmpl-official-letter-v1"
+    classification: Optional[str] = "INTERNAL"
+
+class SearchWarrantAppCreate(BaseModel):
+    target_type: str = "PREMISES"  # PLACE, PREMISES, VEHICLE, DEVICE
+    target_location: str
+    target_person_id: Optional[str] = None
+    purpose: str
+    facts_supporting_request: str
+    evidence_ids: Optional[List[str]] = []
+    legal_basis: str = "ป.วิ.อ. มาตรา 69, 70"
+    urgency: str = "HIGH"
+
+class ArrestWarrantAppCreate(BaseModel):
+    target_person_id: str
+    facts_supporting_request: str
+    evidence_ids: Optional[List[str]] = []
+    legal_basis: str = "ป.วิ.อ. มาตรา 66"
+    risk_factors: Optional[str] = "มีเหตุอันควรเชื่อว่าจะหลบหนีหรือไปยุ่งเหยิงกับพยานหลักฐาน"
+
+class WarrantExportRequest(BaseModel):
+    format: str = "DOCX"  # DOCX, PDF
+    purpose: str
+    recipient: str = "ศาลอาญา"
+
+# -------------------------------------------------------------
+# PHASE 8: OFFICIAL DOCUMENTS & WARRANTS REST API ENDPOINTS
+# -------------------------------------------------------------
+
+# 1. Official Documents CRUD
+@app.get("/api/v1/cases/{case_id}/documents")
+@app.get("/api/cases/{case_id}/documents")
+async def get_case_documents(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    docs = [d for d in getattr(db, "case_documents", []) if d.get("case_id") == case_id]
+    return {"status": "success", "documents": docs}
+
+@app.post("/api/v1/cases/{case_id}/documents")
+@app.post("/api/cases/{case_id}/documents")
+async def create_case_document(case_id: str, payload: CaseDocumentCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    doc_id = f"doc-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    doc_item = {
+        "id": doc_id,
+        "case_id": case_id,
+        "document_type": payload.document_type,
+        "document_number": payload.document_number or f"ตช 0026.1/{case_id.replace('CASE-', '')}",
+        "title": payload.title,
+        "template_id": payload.template_id or "tmpl-official-letter-v1",
+        "template_version": "1.0",
+        "status": "DRAFT",
+        "classification": payload.classification or "INTERNAL",
+        "current_version": 1,
+        "created_by": user["id"],
+        "assigned_reviewer": None,
+        "approved_by": None,
+        "approved_at": None,
+        "finalized_by": None,
+        "finalized_at": None,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "updated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "case_documents"):
+        db.case_documents = []
+    db.case_documents.append(doc_item)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "DOCUMENT.CREATE",
+        "resource_type": "case_document", "resource_id": doc_id, "result": "success"
+    })
+    
+    return {"status": "success", "document": doc_item}
+
+@app.get("/api/v1/documents/{document_id}")
+@app.get("/api/documents/{document_id}")
+async def get_document_details(document_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    doc = next((d for d in getattr(db, "case_documents", []) if d.get("id") == document_id), None)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    check_case_access(user, doc["case_id"])
+    
+    return {"status": "success", "document": doc}
+
+@app.post("/api/v1/documents/{document_id}/generate")
+@app.post("/api/documents/{document_id}/generate")
+async def generate_document_content(document_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    doc = next((d for d in getattr(db, "case_documents", []) if d.get("id") == document_id), None)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    check_case_access(user, doc["case_id"])
+    
+    # Generate official letter content
+    content_draft = (
+        f"บันทึกข้อความ / หนังสือราชการ\n"
+        f"ที่: {doc.get('document_number', 'ตช 0026.1/--')}\n"
+        f"เรื่อง: {doc.get('title')}\n"
+        f"เรียน: ผู้จัดการฝ่ายกฎหมายและคดี ธนาคารไทยพาณิชย์ จำกัด (มหาชน)\n\n"
+        f"ด้วย กองกำกับการ 1 กองบังคับการปราบปรามการกระทำความผิดเกี่ยวกับการคุ้มครองผู้บริโภค (บก.ปคบ.) "
+        f"ได้ทำการสอบสวนคดีอาญาที่ {doc['case_id']} กรณีหลอกลวงจำหน่ายเวชสำอางค์ปลอมปนเปื้อนสารเคมีอันตราย\n\n"
+        f"จึงขอความร่วมมือทำการอายัดบัญชีเงินฝากและขอสำเนารายการเดินบัญชี (Bank Statement) ของบัญชีเลขที่ 401-229-3388 "
+        f"ชื่อบัญชี นายกิตติศักดิ์ วงศ์สวัสดิ์ ตั้งแต่วันที่ 1 สิงหาคม 2569 ถึงปัจจุบัน เพื่อใช้ประกอบสำนวนการสอบสวนต่อไป\n\n"
+        f"ขอแสดงความนับถือ\n"
+        f"พนักงานสอบสวน กก.1 บก.ปคบ."
+    )
+    doc["content"] = content_draft
+    doc["status"] = "IN_REVIEW"
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "DOCUMENT.GENERATE",
+        "resource_type": "case_document", "resource_id": document_id, "result": "success"
+    })
+    
+    return {"status": "success", "document": doc, "content_draft": content_draft}
+
+@app.post("/api/v1/documents/{document_id}/validate")
+@app.post("/api/documents/{document_id}/validate")
+async def validate_case_document(document_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    doc = next((d for d in getattr(db, "case_documents", []) if d.get("id") == document_id), None)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+        
+    validation_issues = []
+    if not doc.get("document_number"):
+        validation_issues.append({"severity": "BLOCKING", "message": "ยังไม่ได้ระบุเลขที่หนังสือราชการ"})
+        
+    is_ready = not any(i["severity"] == "BLOCKING" for i in validation_issues)
+    readiness_status = "READY_FOR_REVIEW" if is_ready else "NOT_READY"
+    
+    return {
+        "status": "success",
+        "document_id": document_id,
+        "readiness_status": readiness_status,
+        "issues_count": len(validation_issues),
+        "issues": validation_issues
+    }
+
+@app.post("/api/v1/documents/{document_id}/approve")
+@app.post("/api/documents/{document_id}/approve")
+async def approve_case_document(document_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    doc = next((d for d in getattr(db, "case_documents", []) if d.get("id") == document_id), None)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+        
+    doc["status"] = "APPROVED"
+    doc["approved_by"] = user["full_name"]
+    doc["approved_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "DOCUMENT.APPROVE",
+        "resource_type": "case_document", "resource_id": document_id, "result": "success"
+    })
+    
+    return {"status": "success", "document_status": "APPROVED"}
+
+@app.post("/api/v1/documents/{document_id}/finalize")
+@app.post("/api/documents/{document_id}/finalize")
+async def finalize_case_document(document_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    doc = next((d for d in getattr(db, "case_documents", []) if d.get("id") == document_id), None)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+        
+    if doc["status"] != "APPROVED":
+        raise HTTPException(status_code=400, detail="Cannot finalize document that has not been approved.")
+        
+    doc["status"] = "FINAL"
+    doc["finalized_by"] = user["full_name"]
+    doc["finalized_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "DOCUMENT.FINALIZE",
+        "resource_type": "case_document", "resource_id": document_id, "result": "success"
+    })
+    
+    return {"status": "success", "document_status": "FINAL"}
+
+@app.post("/api/v1/documents/{document_id}/export")
+@app.post("/api/documents/{document_id}/export")
+async def export_case_document(document_id: str, payload: WarrantExportRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    doc = next((d for d in getattr(db, "case_documents", []) if d.get("id") == document_id), None)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+        
+    exp_id = f"exp-doc-{str(uuid.uuid4())[:8]}"
+    file_hash = f"sha256-{str(uuid.uuid4())[:16]}"
+    export_record = {
+        "id": exp_id,
+        "document_id": document_id,
+        "format": payload.format,
+        "file_hash": file_hash,
+        "exported_by": user["full_name"],
+        "exported_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "purpose": payload.purpose,
+        "recipient": payload.recipient,
+        "download_url": f"/api/v1/downloads/{exp_id}.{payload.format.lower()}"
+    }
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "DOCUMENT.EXPORT",
+        "resource_type": "case_document_export", "resource_id": exp_id, "result": "success"
+    })
+    
+    return {"status": "success", "export": export_record}
+
+# 2. Search Warrant Applications
+@app.post("/api/v1/cases/{case_id}/search-warrant-applications")
+@app.post("/api/cases/{case_id}/search-warrant-applications")
+async def create_search_warrant_application(case_id: str, payload: SearchWarrantAppCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    swa_id = f"swa-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    swa_item = {
+        "id": swa_id,
+        "case_id": case_id,
+        "target_type": payload.target_type,
+        "target_location": payload.target_location,
+        "target_person_id": payload.target_person_id,
+        "purpose": payload.purpose,
+        "facts_supporting_request": payload.facts_supporting_request,
+        "evidence_ids": payload.evidence_ids or [],
+        "legal_basis": payload.legal_basis,
+        "urgency": payload.urgency,
+        "status": "DRAFT",
+        "prepared_by": user["id"],
+        "reviewed_by": None,
+        "approved_by": None,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "search_warrant_applications"):
+        db.search_warrant_applications = []
+    db.search_warrant_applications.append(swa_item)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "WARRANT.SEARCH.CREATE",
+        "resource_type": "search_warrant_application", "resource_id": swa_id, "result": "success"
+    })
+    
+    return {"status": "success", "search_warrant_application": swa_item}
+
+@app.post("/api/v1/search-warrant-applications/{app_id}/generate")
+@app.post("/api/search-warrant-applications/{app_id}/generate")
+async def generate_search_warrant_draft(app_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    swa = next((s for s in getattr(db, "search_warrant_applications", []) if s.get("id") == app_id), None)
+    if not swa:
+        raise HTTPException(status_code=404, detail="Search warrant application not found")
+        
+    draft_text = (
+        f"คำร้องขอหมายค้น (แบบ ค.๑)\n"
+        f"ศาลอาญา\n"
+        f"สถานที่ตรวจค้น: {swa['target_location']}\n"
+        f"เหตุผลและความจำเป็น: {swa['facts_supporting_request']}\n"
+        f"พยานหลักฐานประกอบคำร้อง: {', '.join(swa.get('evidence_ids', []))}\n"
+        f"อาศัยอำนาจตาม: {swa['legal_basis']}\n\n"
+        f"(DRAFT ONLY -- SUBJECT TO COURT AUTHORIZATION)"
+    )
+    swa["draft_content"] = draft_text
+    swa["status"] = "IN_REVIEW"
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "WARRANT.SEARCH.GENERATE",
+        "resource_type": "search_warrant_application", "resource_id": app_id, "result": "success"
+    })
+    
+    return {"status": "success", "draft_content": draft_text}
+
+# 3. Arrest Warrant Applications
+@app.post("/api/v1/cases/{case_id}/arrest-warrant-applications")
+@app.post("/api/cases/{case_id}/arrest-warrant-applications")
+async def create_arrest_warrant_application(case_id: str, payload: ArrestWarrantAppCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    awa_id = f"awa-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    awa_item = {
+        "id": awa_id,
+        "case_id": case_id,
+        "target_person_id": payload.target_person_id,
+        "identity_status": "VERIFIED",
+        "facts_supporting_request": payload.facts_supporting_request,
+        "evidence_ids": payload.evidence_ids or [],
+        "legal_basis": payload.legal_basis,
+        "risk_factors": payload.risk_factors,
+        "status": "DRAFT",
+        "prepared_by": user["id"],
+        "reviewed_by": None,
+        "approved_by": None,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "arrest_warrant_applications"):
+        db.arrest_warrant_applications = []
+    db.arrest_warrant_applications.append(awa_item)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "WARRANT.ARREST.CREATE",
+        "resource_type": "arrest_warrant_application", "resource_id": awa_id, "result": "success"
+    })
+    
+    return {"status": "success", "arrest_warrant_application": awa_item}
+
+@app.post("/api/v1/arrest-warrant-applications/{app_id}/generate")
+@app.post("/api/arrest-warrant-applications/{app_id}/generate")
+async def generate_arrest_warrant_draft(app_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    awa = next((a for a in getattr(db, "arrest_warrant_applications", []) if a.get("id") == app_id), None)
+    if not awa:
+        raise HTTPException(status_code=404, detail="Arrest warrant application not found")
+        
+    person = next((p for p in db.persons if p.get("id") == awa["target_person_id"]), None)
+    person_name = person["name"] if person else "ผู้ต้องหา"
+    
+    draft_text = (
+        f"คำร้องขอหมายจับ (แบบ จ.๑)\n"
+        f"ศาลอาญา\n"
+        f"บุคคลเป้าหมาย: {person_name} (สถานะอัตลักษณ์: {awa['identity_status']})\n"
+        f"พฤติการณ์และการกระทำความผิด: {awa['facts_supporting_request']}\n"
+        f"เหตุผลความจำเป็นและพฤติการณ์หลบหนี: {awa.get('risk_factors')}\n"
+        f"พยานหลักฐานประกอบคำร้อง: {', '.join(awa.get('evidence_ids', []))}\n"
+        f"อาศัยอำนาจตาม: {awa['legal_basis']}\n\n"
+        f"(DRAFT ONLY -- SUBJECT TO COURT AUTHORIZATION)"
+    )
+    awa["draft_content"] = draft_text
+    awa["status"] = "IN_REVIEW"
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "WARRANT.ARREST.GENERATE",
+        "resource_type": "arrest_warrant_application", "resource_id": app_id, "result": "success"
+    })
+    
+    return {"status": "success", "draft_content": draft_text}
