@@ -387,6 +387,63 @@ class MockDatabase:
                 "created_at": "2026-08-12T11:00:00Z"
             }
         ]
+        # PHASE 4 COLLECTIONS (AI Orchestrator & Multi-Agent Engine)
+        self.ai_executions = [
+            {
+                "id": "exec-142-01",
+                "case_id": "CASE-142",
+                "requested_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "agent_type": "EvidenceAnalysisAgent",
+                "provider": "LOCAL_SECURE_LLM",
+                "model_name": "typhoon-2-70b-instruct",
+                "model_version": "v2.1",
+                "prompt_version": "v1.4",
+                "input_source_ids": ["f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"],
+                "data_classification": "CONFIDENTIAL",
+                "status": "SUCCEEDED",
+                "started_at": "2026-08-10T10:06:00Z",
+                "completed_at": "2026-08-10T10:06:04Z",
+                "token_usage": {"prompt_tokens": 1240, "completion_tokens": 380, "total_tokens": 1620},
+                "cost_metadata": {"estimated_cost_thb": 0.0},
+                "created_at": "2026-08-10T10:06:00Z"
+            }
+        ]
+
+        self.prompt_registry = [
+            {
+                "prompt_id": "prompt-intake-triage-v1",
+                "agent_type": "IntakeCaseTriageAgent",
+                "version": "1.0",
+                "language": "th",
+                "system_prompt": "คุณคือ AI ผู้ช่วยคัดกรองคดี กก.1 บก.ปคบ. แยกบุคคล เหตุการณ์ พยานหลักฐาน และประเด็นต้องสงสัย ห้ามสรุปความผิดเด็ดขาด",
+                "status": "ACTIVE"
+            },
+            {
+                "prompt_id": "prompt-investigation-planning-v1",
+                "agent_type": "InvestigationPlanningAgent",
+                "version": "1.0",
+                "language": "th",
+                "system_prompt": "คุณคือ AI วางแผนการสืบสวนสอบสวน กก.1 บก.ปคบ. เสนอประเด็นตรวจพิสูจน์ พยานหลักฐานที่ต้องรวบรวม และหน่วยงานที่ต้องประสาน",
+                "status": "ACTIVE"
+            },
+            {
+                "prompt_id": "prompt-timeline-agent-v1",
+                "agent_type": "TimelineAgent",
+                "version": "1.0",
+                "language": "th",
+                "system_prompt": "คุณคือ AI ตรวจสอบและเรียบเรียงลำดับเวลาคดีอาญา กก.1 บก.ปคบ. ระบุข้อขัดแย้งและคำให้การที่ขัดแย้งกัน",
+                "status": "ACTIVE"
+            },
+            {
+                "prompt_id": "prompt-legal-mapping-v1",
+                "agent_type": "LegalMappingAgent",
+                "version": "1.0",
+                "language": "th",
+                "system_prompt": "คุณคือ AI วิเคราะห์องค์ประกอบความผิดตามกฎหมาย (ป.อ. ม.343, พ.ร.บ.คอมพิวเตอร์ฯ) ห้ามวินิจฉัยความผิดเด็ดขาด",
+                "status": "ACTIVE"
+            }
+        ]
+
         # PHASE 3 COLLECTIONS (Evidence Intelligence Layer)
         self.evidence_files = [
             {
@@ -3161,3 +3218,310 @@ async def detect_evidence_duplicates(case_id: str, authorization: Optional[str] 
                 hashes[h] = e
                 
     return {"status": "success", "duplicates_count": len(duplicates), "duplicates": duplicates}
+
+
+# -------------------------------------------------------------
+# PHASE 4: AI ORCHESTRATOR & AGENTS SCHEMAS
+# -------------------------------------------------------------
+
+class AIOrchestrationRunRequest(BaseModel):
+    agent_type: str  # IntakeCaseTriageAgent, InvestigationPlanningAgent, EvidenceAnalysisAgent, TimelineAgent, StatementComparisonAgent, FinancialTransactionAgent, LegalMappingAgent, EvidenceGapAgent
+    purpose: str
+    data_classification: Optional[str] = "CONFIDENTIAL"  # PUBLIC, INTERNAL, CONFIDENTIAL, RESTRICTED
+    provider_preference: Optional[str] = "AUTO"  # AUTO, LOCAL, CLOUD
+    input_source_ids: Optional[List[str]] = []
+    language: Optional[str] = "th"
+
+class AIAnalysisReviewRequest(BaseModel):
+    review_status: str  # ACCEPTED, PARTIALLY_ACCEPTED, REJECTED
+    comments: Optional[str] = ""
+
+class AIResultConvertRequest(BaseModel):
+    target_type: str  # TIMELINE_EVENT, CASE_TASK, INVESTIGATION_ISSUE, EVIDENCE_GAP
+    finding_index: int = 0
+    title: Optional[str] = None
+    description: Optional[str] = None
+    priority: Optional[str] = "HIGH"
+
+# -------------------------------------------------------------
+# PHASE 4: AI ORCHESTRATOR & AGENTS REST API ENDPOINTS
+# -------------------------------------------------------------
+
+# 1. Prompt Registry
+@app.get("/api/v1/ai/prompts")
+@app.get("/api/ai/prompts")
+async def get_prompt_registry(authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    return {"status": "success", "prompts": getattr(db, "prompt_registry", [])}
+
+# 2. AI Execution Run (Central Orchestrator)
+@app.post("/api/v1/cases/{case_id}/ai/run")
+@app.post("/api/cases/{case_id}/ai/run")
+async def run_ai_orchestrator(case_id: str, payload: AIOrchestrationRunRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    target_case = db.cases.get(case_id, {})
+    is_sensitive = target_case.get("sensitive", False) or payload.data_classification == "RESTRICTED"
+    
+    # Provider Routing Policy
+    if is_sensitive and payload.provider_preference == "CLOUD":
+        # Block Cloud Provider for sensitive/restricted cases
+        db.audit_log.append({
+            "event_id": str(uuid.uuid4()),
+            "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "actor_user_id": user["id"],
+            "action": "AI.POLICY.DENY",
+            "resource_type": "ai_execution",
+            "resource_id": case_id,
+            "result": "denied",
+            "metadata": {"reason": "Cloud AI strictly prohibited for RESTRICTED/sensitive cases"}
+        })
+        raise HTTPException(status_code=403, detail="Security Policy Violation: Cloud AI provider is prohibited for RESTRICTED or sensitive cases. Use Local Provider only.")
+        
+    selected_provider = "LOCAL_SECURE_LLM" if is_sensitive else ("ON_PREMISE_CPPD_AI" if payload.provider_preference != "CLOUD" else "APPROVED_GOV_CLOUD_AI")
+    
+    exec_id = f"exec-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    analysis_id = f"ai-an-{str(uuid.uuid4())[:8]}"
+    
+    # Retrieve scoped evidence/sources
+    scoped_ev = [e for e in db.evidence if e.get("case_id") == case_id]
+    if payload.input_source_ids:
+        scoped_ev = [e for e in scoped_ev if e.get("id") in payload.input_source_ids]
+        
+    # Execute Modular Agent Logic with Structured Tags
+    agent = payload.agent_type
+    summary_text = ""
+    findings = []
+    
+    if agent == "IntakeCaseTriageAgent":
+        summary_text = f"คัดกรองเบื้องต้นสำหรับคดี {case_id}: พบพฤติการณ์หลอกลวงผ่านระบบคอมพิวเตอร์และเวชสำอางค์ปนเปื้อนสารเคมีอันตราย"
+        findings = [
+            {"type": "CLAIM", "text": "ผู้เสียหายอ้างว่าสั่งซื้อสินค้าจากเพจเฟซบุ๊ก สยาม คอสเมติกส์ ออฟฟิเชียล ยอดโอน 1,250,000 บาท", "source_ids": ["INTAKE-001"], "confidence": 0.95, "review_required": True},
+            {"type": "INFERENCE", "text": "พฤติการณ์เข้าข่ายความผิดตาม ป.อ. ม.343 และ พ.ร.บ.คอมพิวเตอร์ฯ ม.14(1)", "source_ids": ["INTAKE-001"], "confidence": 0.88, "review_required": True},
+            {"type": "REQUIRES_HUMAN_REVIEW", "text": "จำเป็นต้องตรวจสอบชื่อผู้ครอบครองบัญชีรับโอน 401-229-3388 จากธนาคารไทยพาณิชย์", "source_ids": ["INTAKE-001"], "confidence": 0.99, "review_required": True}
+        ]
+    elif agent == "TimelineAgent":
+        summary_text = f"วิเคราะห์ลำดับเวลาและตรวจจับข้อขัดแย้งสำหรับคดี {case_id}"
+        findings = [
+            {"type": "FACT", "text": "9 ส.ค. 2569 เวลา 14:32:00: ผู้เสียหายโอนเงิน 1,250,000 บาท เข้าบัญชี SCB 401-229-3388", "source_ids": ["f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"], "confidence": 0.99, "review_required": False},
+            {"type": "CONFLICT", "text": "ข้อขัดแย้ง: นายกิตติศักดิ์อ้างว่าอยู่ จ.เชียงใหม่ แต่ IP ล็อกอิน SCB Easy เป็น IP คอนโดย่านลาดพร้าว", "source_ids": ["stat-142-02", "ev-142-03"], "confidence": 0.92, "review_required": True},
+            {"type": "EVIDENCE_GAP", "text": "ยังขาดภาพบันทึก CCTV หน้าตู้ ATM สาขาลาดพร้าว ขณะทำรายการถอนเงินสด", "source_ids": [], "confidence": 0.95, "review_required": True}
+        ]
+    elif agent == "LegalMappingAgent":
+        summary_text = f"วิเคราะห์การจับคู่ข้อเท็จจริงกับองค์ประกอบความผิดตามกฎหมายสำหรับ {case_id}"
+        findings = [
+            {"type": "INFERENCE", "text": "องค์ประกอบที่ 1: การหลอกลวงด้วยการแสดงข้อความอันเป็นเท็จต่อประชาชน สอดคล้องกับพยานหลักฐานโพสต์โฆษณาใน Facebook", "source_ids": ["7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069"], "confidence": 0.90, "review_required": True},
+            {"type": "INFERENCE", "text": "องค์ประกอบที่ 2: ได้ไปซึ่งทรัพย์สินจากผู้ถูกหลอกลวง สอดคล้องกับสลิปการโอนเงิน 1,250,000 บาท", "source_ids": ["f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"], "confidence": 0.95, "review_required": True},
+            {"type": "REQUIRES_HUMAN_REVIEW", "text": "หมายเหตุ: AI เป็นผู้ช่วยวิเคราะห์องค์ประกอบเท่านั้น พนักงานสอบสวนต้องเป็นผู้วินิจฉัยข้อกฎหมายขั้นสุดท้าย", "source_ids": [], "confidence": 1.0, "review_required": True}
+        ]
+    elif agent == "EvidenceGapAgent":
+        summary_text = f"ตรวจสอบช่องว่างพยานหลักฐานและสิ่งที่ต้องรวบรวมเพิ่มเติมสำหรับ {case_id}"
+        findings = [
+            {"type": "EVIDENCE_GAP", "text": "ยังขาดรายการเดินบัญชี (Bank Statement) ของบัญชีแถวที่ 2 เพื่อยืนยันเส้นทางการฟอกเงิน", "source_ids": ["iss-142-01"], "confidence": 0.94, "review_required": True},
+            {"type": "EVIDENCE_GAP", "text": "ยังขาดผลการตรวจสอบเครื่องหมาย อย. และใบอนุญาตผลิตจากสำนักงานคณะกรรมการอาหารและยา", "source_ids": ["iss-142-02"], "confidence": 0.91, "review_required": True}
+        ]
+    else:
+        # Default Evidence Analysis Agent
+        summary_text = f"ผลการวิเคราะห์พยานหลักฐานโดย {agent} สำหรับคดี {case_id}"
+        findings = [
+            {"type": "FACT", "text": f"ตรวจสอบพบพยานหลักฐานจำนวน {len(scoped_ev)} รายการในสำนวนคดี", "source_ids": [e["id"] for e in scoped_ev], "confidence": 0.98, "review_required": False},
+            {"type": "INFERENCE", "text": "ตรวจพบความเชื่อมโยงของชื่อบัญชีและหมายเลขโทรศัพท์ตรงกับฐานข้อมูลคดีหลอกลวงฉ้อโกงประชาชน", "source_ids": [e["id"] for e in scoped_ev], "confidence": 0.89, "review_required": True},
+            {"type": "REQUIRES_HUMAN_REVIEW", "text": "เสนอแนะให้ออกหมายเรียกพยานเอกสารจากสถาบันการเงินและผู้ให้บริการเครือข่ายโทรศัพท์มือถือ", "source_ids": [], "confidence": 0.95, "review_required": True}
+        ]
+        
+    execution_record = {
+        "id": exec_id,
+        "case_id": case_id,
+        "requested_by": user["id"],
+        "agent_type": agent,
+        "provider": selected_provider,
+        "model_name": "typhoon-2-70b-instruct",
+        "model_version": "v2.1",
+        "prompt_version": "v1.4",
+        "input_source_ids": [e["id"] for e in scoped_ev],
+        "data_classification": payload.data_classification,
+        "status": "SUCCEEDED",
+        "started_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "completed_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "token_usage": {"prompt_tokens": 850, "completion_tokens": 320, "total_tokens": 1170},
+        "cost_metadata": {"estimated_cost_thb": 0.0},
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    analysis_record = {
+        "id": analysis_id,
+        "execution_id": exec_id,
+        "case_id": case_id,
+        "analysis_type": agent,
+        "result_json": {
+            "summary": summary_text,
+            "findings": findings,
+            "agent": agent,
+            "provider": selected_provider
+        },
+        "summary": summary_text,
+        "confidence": 0.93,
+        "review_status": "REQUIRES_REVIEW",
+        "reviewed_by": None,
+        "reviewed_at": None,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "ai_executions"):
+        db.ai_executions = []
+    db.ai_executions.append(execution_record)
+    
+    if not hasattr(db, "ai_analyses"):
+        db.ai_analyses = []
+    db.ai_analyses.append(analysis_record)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()),
+        "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"],
+        "action": "AI.EXECUTION.SUCCESS",
+        "resource_type": "ai_analysis",
+        "resource_id": analysis_id,
+        "result": "success",
+        "metadata": {"agent": agent, "provider": selected_provider, "classification": payload.data_classification}
+    })
+    
+    return {"status": "success", "execution": execution_record, "analysis": analysis_record}
+
+# 3. AI Executions & Analyses Retrieval
+@app.get("/api/v1/cases/{case_id}/ai/executions")
+@app.get("/api/cases/{case_id}/ai/executions")
+async def get_case_ai_executions(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    execs = [e for e in getattr(db, "ai_executions", []) if e.get("case_id") == case_id]
+    return {"status": "success", "executions": sorted(execs, key=lambda x: x.get("created_at", ""), reverse=True)}
+
+@app.get("/api/v1/cases/{case_id}/ai/analyses")
+@app.get("/api/cases/{case_id}/ai/analyses")
+async def get_case_ai_analyses(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    analyses = [a for a in getattr(db, "ai_analyses", []) if a.get("case_id") == case_id]
+    return {"status": "success", "analyses": sorted(analyses, key=lambda x: x.get("created_at", ""), reverse=True)}
+
+# 4. Human Review of AI Analysis
+@app.post("/api/v1/ai/analyses/{analysis_id}/review")
+@app.post("/api/ai/analyses/{analysis_id}/review")
+async def review_ai_analysis(analysis_id: str, payload: AIAnalysisReviewRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    analysis = next((a for a in getattr(db, "ai_analyses", []) if a.get("id") == analysis_id), None)
+    if not analysis:
+        raise HTTPException(status_code=404, detail="AI analysis not found")
+        
+    analysis["review_status"] = payload.review_status
+    analysis["reviewed_by"] = user["full_name"]
+    analysis["reviewed_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()),
+        "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"],
+        "action": f"AI.RESULT.{payload.review_status}",
+        "resource_type": "ai_analysis",
+        "resource_id": analysis_id,
+        "result": "success",
+        "metadata": {"comments": payload.comments}
+    })
+    
+    return {"status": "success", "analysis": analysis}
+
+# 5. Conversion of AI Finding to Official Domain Artifact
+@app.post("/api/v1/ai/analyses/{analysis_id}/convert")
+@app.post("/api/ai/analyses/{analysis_id}/convert")
+async def convert_ai_finding(analysis_id: str, payload: AIResultConvertRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    analysis = next((a for a in getattr(db, "ai_analyses", []) if a.get("id") == analysis_id), None)
+    if not analysis:
+        raise HTTPException(status_code=404, detail="AI analysis not found")
+        
+    case_id = analysis.get("case_id")
+    findings = analysis.get("result_json", {}).get("findings", [])
+    finding = findings[payload.finding_index] if payload.finding_index < len(findings) else {"text": payload.description or "AI Finding"}
+    
+    title = payload.title or finding.get("text", "")[:50]
+    desc = payload.description or finding.get("text", "")
+    converted_id = None
+    
+    if payload.target_type == "TIMELINE_EVENT":
+        converted_id = f"ev-{str(uuid.uuid4())[:8]}"
+        ev_item = {
+            "id": converted_id,
+            "case_id": case_id,
+            "occurred_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "event_type": "AI_DERIVED_EVENT",
+            "title": title,
+            "description": desc,
+            "source_evidence_ids": finding.get("source_ids", []),
+            "status": "human_approved",
+            "created_by": user["id"]
+        }
+        if not hasattr(db, "timeline_events"):
+            db.timeline_events = []
+        db.timeline_events.append(ev_item)
+    elif payload.target_type == "CASE_TASK":
+        converted_id = f"task-{str(uuid.uuid4())[:8]}"
+        task_item = {
+            "id": converted_id,
+            "case_id": case_id,
+            "title": title,
+            "description": desc,
+            "priority": payload.priority or "HIGH",
+            "assigned_to": user["id"],
+            "status": "pending",
+            "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+        }
+        db.tasks.append(task_item)
+    elif payload.target_type == "INVESTIGATION_ISSUE":
+        converted_id = f"iss-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+        iss_item = {
+            "id": converted_id,
+            "case_id": case_id,
+            "title": title,
+            "category": "AI_IDENTIFIED_ISSUE",
+            "status": "OPEN",
+            "priority": payload.priority or "HIGH",
+            "assigned_to": user["id"],
+            "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+        }
+        if not hasattr(db, "investigation_issues"):
+            db.investigation_issues = []
+        db.investigation_issues.append(iss_item)
+    elif payload.target_type == "EVIDENCE_GAP":
+        converted_id = f"gap-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+        gap_item = {
+            "id": converted_id,
+            "case_id": case_id,
+            "investigation_issue_id": None,
+            "description": desc,
+            "required_evidence_type": "OFFICIAL_RECORD",
+            "priority": payload.priority or "HIGH",
+            "status": "OPEN",
+            "assigned_to": user["id"],
+            "due_at": time.strftime("%Y-%m-%dT17:00:00Z"),
+            "resolved_by_evidence_id": None
+        }
+        if not hasattr(db, "evidence_gaps"):
+            db.evidence_gaps = []
+        db.evidence_gaps.append(gap_item)
+        
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()),
+        "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"],
+        "action": f"AI.RESULT.CONVERT.{payload.target_type}",
+        "resource_type": "ai_analysis",
+        "resource_id": analysis_id,
+        "result": "success",
+        "metadata": {"converted_id": converted_id, "target_type": payload.target_type}
+    })
+    
+    return {"status": "success", "converted_id": converted_id, "target_type": payload.target_type}
