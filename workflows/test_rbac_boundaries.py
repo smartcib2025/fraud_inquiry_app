@@ -38,12 +38,28 @@ def fetch_case_detail(token, case_id):
     except urllib.error.HTTPError as e:
         return None, e.code
 
+def set_approval_status(admin_token, user_id, approved=True):
+    payload = {"approved": approved}
+    req_data = json.dumps(payload).encode('utf-8')
+    req = urllib.request.Request(
+        f"{API_BASE}/api/admin/users/{user_id}/approve",
+        data=req_data,
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer {admin_token}"},
+        method="POST"
+    )
+    res = urllib.request.urlopen(req)
+    return json.loads(res.read().decode('utf-8'))
+
 def test_rbac_boundaries():
     print("[Test] Initializing hierarchical access validation...")
 
     # 1. Admin checks
     print("\n[Test] Testing Admin Access (admin@cppd.go.th)...")
     admin_token = get_token_for_email("admin@cppd.go.th")
+    
+    # Approve clerk for subsequent clerk tests to succeed
+    set_approval_status(admin_token, "p-clerk", approved=True)
+    
     admin_cases = fetch_cases_list(admin_token)
     print(f"Admin sees {len(admin_cases)} cases: {[c['id'] for c in admin_cases]}")
     assert len(admin_cases) == 3

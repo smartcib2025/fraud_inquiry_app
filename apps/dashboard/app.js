@@ -827,6 +827,72 @@ document.addEventListener("DOMContentLoaded", () => {
             if (targetPanel) targetPanel.style.display = "block";
         }
     });
+
+    // Statement / Interview Question Generator
+    const btnInterview = document.getElementById("btn-run-interview-agent");
+    if (btnInterview) {
+        btnInterview.addEventListener("click", async () => {
+            const caseId = document.getElementById("details-case-id").textContent.trim();
+            const roleSelect = document.getElementById("interview-target-role");
+            const targetRole = roleSelect ? roleSelect.value : "suspect";
+            const targetName = targetRole === "suspect" ? "นายกิตติศักดิ์ วงศ์สวัสดิ์" : targetRole === "victim" ? "นายนัฐพงษ์ สุขประเสริฐ" : "พยานบุคคล";
+            
+            btnInterview.disabled = true;
+            btnInterview.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
+            
+            try {
+                const res = await fetch(`${API_BASE}/api/interviews/generate`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${state.token}`
+                    },
+                    body: JSON.stringify({
+                        case_id: caseId,
+                        target_role: targetRole,
+                        target_name: targetName
+                    })
+                });
+                const data = await res.json();
+                if (data.status === "success" && data.result) {
+                    const questions = data.result.questions || [];
+                    const listContainer = document.getElementById("details-interviews-list");
+                    listContainer.innerHTML = `
+                        <div style="background: rgba(59,130,246,0.08); border-left: 3px solid var(--accent-primary); padding: 0.6rem; border-radius: 4px; margin-bottom: 0.5rem;">
+                            <div class="justify-between" style="display: flex; align-items: center;">
+                                <strong class="text-xs font-mono">${data.result.agent_name}</strong>
+                                <span class="badge" style="background: rgba(245,158,11,0.15); color: var(--warning); font-size: 0.65rem;">${data.result.status}</span>
+                            </div>
+                            <p class="text-xs muted-text" style="margin: 0.25rem 0 0 0;">${data.result.summary}</p>
+                        </div>
+                        ${questions.map((q, idx) => `
+                            <div class="detail-item" style="display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.35rem;">
+                                <div class="justify-between" style="display: flex; align-items: flex-start;">
+                                    <strong class="text-xs font-mono" style="color: var(--accent-primary);">QUESTION #${idx+1}</strong>
+                                    <button class="btn btn-outline btn-xs btn-copy-q" data-q="${encodeURIComponent(q)}" style="padding: 0.1rem 0.4rem; font-size: 0.65rem;"><i class="fa-solid fa-copy"></i> Copy</button>
+                                </div>
+                                <p class="text-sm" style="margin: 0; line-height: 1.4;">${q}</p>
+                            </div>
+                        `).join("")}
+                    `;
+                    
+                    listContainer.querySelectorAll(".btn-copy-q").forEach(btn => {
+                        btn.addEventListener("click", () => {
+                            const text = decodeURIComponent(btn.getAttribute("data-q"));
+                            navigator.clipboard.writeText(text);
+                            btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
+                            setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy'; }, 2000);
+                        });
+                    });
+                }
+            } catch (err) {
+                alert("Failed to generate interview questions: " + err.message);
+            } finally {
+                btnInterview.disabled = false;
+                btnInterview.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Generate Questions';
+            }
+        });
+    }
     // OCR Upload Form Submission
     const ocrForm = document.getElementById("ocr-upload-form");
     if (ocrForm) {

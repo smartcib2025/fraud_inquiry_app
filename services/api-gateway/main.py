@@ -93,7 +93,8 @@ class MockDatabase:
             "p-admin": {"id": "p-admin", "email": "admin@cppd.go.th", "full_name": "Admin Chief", "org_unit": "Division HQ", "role": "admin", "approved": True},
             "p-deputy-commander": {"id": "p-deputy-commander", "email": "deputy.commander@cppd.go.th", "full_name": "deputy.commander (รอง ผบก.ปคบ.)", "org_unit": "Division HQ", "role": "deputy_commander", "approved": True},
             "p-deputy-superintendent": {"id": "p-deputy-superintendent", "email": "deputy.superintendent@cppd.go.th", "full_name": "Anong Head (รอง ผกก. กก.1 บก.ปคบ.)", "org_unit": "Financial Crimes Division 1", "role": "deputy_superintendent", "approved": True},
-            "p-clerk": {"id": "p-clerk", "email": "clerk.a@cppd.go.th", "full_name": "Clerk A (เสมียนคดี กก.1)", "org_unit": "Financial Crimes Division 1", "role": "clerk", "approved": True}
+            "p-clerk": {"id": "p-clerk", "email": "clerk.a@cppd.go.th", "full_name": "Clerk A (เสมียนคดี กก.1)", "org_unit": "Financial Crimes Division 1", "role": "clerk", "approved": False},
+            "p-anong": {"id": "p-anong", "email": "investigator.anong@gmail.com", "full_name": "Anong Investigator", "org_unit": "Financial Crimes Division 1", "role": "supervisor", "approved": True}
         }
         self.sessions = {}
         
@@ -197,7 +198,52 @@ class MockDatabase:
             {"id": "rep-001", "case_id": "CASE-142", "report_type": "Executive Brief", "title": "Siam Network Triage Briefing", "content": "DRAFT REPORT\nSummary of Siam Network cosmetics scam...", "created_at": "2026-08-17T12:00:00Z"}
         ]
         
-        # 11. AUDIT_LOG
+        # 11. COMMUNICATIONS
+        self.communications = [
+            {
+                "id": "comm-001",
+                "case_id": "CASE-142",
+                "channel": "LINE_CHAT",
+                "sender_identifier": "089-111-2345 (Seller)",
+                "recipient_identifier": "081-555-0192 (Victim Nattapong)",
+                "timestamp": "2026-08-09T14:15:00Z",
+                "content_text": "Please transfer 1,250,000 THB to SCB account 401-229-3388 to secure discount cosmetics stock.",
+                "evidence_id": "11b7df3c-6622-48df-9cb9-ef77ba4c28f1"
+            },
+            {
+                "id": "comm-002",
+                "case_id": "CASE-142",
+                "channel": "PHONE_CALL",
+                "sender_identifier": "089-111-2345 (Suspect)",
+                "recipient_identifier": "081-555-0192 (Victim Nattapong)",
+                "timestamp": "2026-08-09T14:20:00Z",
+                "content_text": "Voice call confirming order details and delivery timetable.",
+                "evidence_id": None
+            }
+        ]
+
+        # 12. AI_ANALYSES (Isolated from Original Evidence)
+        self.ai_analyses = [
+            {
+                "id": "ana-001",
+                "case_id": "CASE-142",
+                "agent_name": "TimelineAgent",
+                "analysis_type": "TIMELINE_CONTRADICTION",
+                "fact_tags": [
+                    {"tag": "FACT", "text": "Victim transfer 1.25M to SCB 401-229-3388 at 14:32:00", "source_evidence_id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"},
+                    {"tag": "CLAIM", "text": "Suspect claims he was in Chiang Mai and card was lost", "source_evidence_id": None},
+                    {"tag": "CONFLICT", "text": "SCB online IP registers login in Bangkok at 14:32", "source_evidence_id": "11b7df3c-6622-48df-9cb9-ef77ba4c28f1"}
+                ],
+                "findings_summary": "Alibi contradiction detected between suspect claim and IP location.",
+                "confidence_score": 0.92,
+                "review_status": "REQUIRES_HUMAN_REVIEW",
+                "reviewed_by": None,
+                "investigator_notes": None,
+                "created_at": "2026-08-17T12:30:00Z"
+            }
+        ]
+
+        # 13. AUDIT_LOG
         self.audit_log = []
         self.trigger_events = []
         
@@ -459,8 +505,21 @@ def promote_intake_to_case(intake_id: str, authorization: Optional[str] = Header
 @app.get("/api/cases/{case_id}/timeline")
 def get_case_timeline(case_id: str, authorization: Optional[str] = Header(None)):
     user = get_user_from_token(authorization)
-    timeline_events = [ev for ev in db.timeline if ev["case_id"] == case_id]
-    return timeline_events
+    case_statements = [s for s in db.statements if s["case_id"] == case_id]
+    auditor = StatementTimelineAuditor()
+    audit_report = auditor.audit_case_chronology(case_id, case_statements)
+    
+    db.audit_log.append({
+        "id": str(uuid.uuid4()),
+        "user_id": user["email"],
+        "action": "AUDIT_TIMELINE",
+        "table_name": "statements",
+        "record_id": case_id,
+        "query_details": f"Ran timeline chronology and contradiction audit for case {case_id}",
+        "logged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    })
+    
+    return audit_report.dict()
 
 @app.get("/api/cases/{case_id}/legal-issues")
 def get_case_legal_issues(case_id: str, authorization: Optional[str] = Header(None)):
@@ -473,6 +532,58 @@ def get_case_reports(case_id: str, authorization: Optional[str] = Header(None)):
     user = get_user_from_token(authorization)
     case_reports = [r for r in db.reports if r["case_id"] == case_id]
     return case_reports
+
+@app.get("/api/cases/{case_id}/communications")
+def get_case_communications(case_id: str, authorization: Optional[str] = Header(None)):
+    user = get_user_from_token(authorization)
+    comms = [c for c in getattr(db, "communications", []) if c["case_id"] == case_id]
+    return comms
+
+@app.get("/api/cases/{case_id}/ai-analyses")
+def get_case_ai_analyses(case_id: str, authorization: Optional[str] = Header(None)):
+    user = get_user_from_token(authorization)
+    analyses = [a for a in getattr(db, "ai_analyses", []) if a["case_id"] == case_id]
+    return analyses
+
+class InterviewGenerateRequest(BaseModel):
+    case_id: str
+    target_role: str = "suspect" # 'suspect', 'victim', 'witness'
+    target_name: str = "Kittisak Wongsawat"
+
+@app.post("/api/interviews/generate")
+def generate_interview_questions_endpoint(payload: InterviewGenerateRequest, authorization: Optional[str] = Header(None)):
+    user = get_user_from_token(authorization)
+    from statement_interview_agent import StatementInterviewAgent
+    agent = StatementInterviewAgent(api_url="http://localhost:8000")
+    result = agent.generate_interview_questions(payload.case_id, payload.target_role, payload.target_name)
+    
+    # Save to AI analyses table (isolated from original evidence)
+    if hasattr(db, "ai_analyses"):
+        db.ai_analyses.append({
+            "id": f"ana-{str(uuid.uuid4())[:8]}",
+            "case_id": payload.case_id,
+            "agent_name": "StatementInterviewAgent",
+            "analysis_type": "INTERVIEW_QUESTIONNAIRE",
+            "fact_tags": result.get("findings", []),
+            "findings_summary": result.get("summary", "Interview questions formulated."),
+            "confidence_score": 0.95,
+            "review_status": "REQUIRES_HUMAN_REVIEW",
+            "reviewed_by": None,
+            "investigator_notes": None,
+            "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+        })
+        
+    db.audit_log.append({
+        "id": str(uuid.uuid4()),
+        "user_id": user["email"],
+        "action": "GENERATE_INTERVIEW_QUESTIONS",
+        "table_name": "ai_analyses",
+        "record_id": payload.case_id,
+        "query_details": f"Generated {payload.target_role} questions for {payload.target_name}",
+        "logged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    })
+    
+    return {"status": "success", "result": result}
 
 class ReportGenerateRequest(BaseModel):
     case_id: str
@@ -489,35 +600,57 @@ def generate_report_draft(payload: ReportGenerateRequest, authorization: Optiona
     draft_title = f"{payload.report_type} - {case['title']}"
     draft_content = ""
     
-    if payload.report_type == "Executive Brief":
+    # Check if official Thai Law Enforcement Document Template
+    from document_drafting_agent import DocumentDraftingAgent
+    doc_agent = DocumentDraftingAgent(api_url="http://localhost:8000")
+    
+    if payload.report_type in ["SUMMONS_WARRANT", "หมายเรียกผู้ต้องหา"]:
+        res = doc_agent.draft_document(payload.case_id, "SUMMONS_WARRANT")
+        draft_title = res["title"]
+        draft_content = res["content_markdown"]
+    elif payload.report_type in ["SEARCH_WARRANT", "คำร้องขอหมายค้น"]:
+        res = doc_agent.draft_document(payload.case_id, "SEARCH_WARRANT")
+        draft_title = res["title"]
+        draft_content = res["content_markdown"]
+    elif payload.report_type in ["ACCUSATION_RECORD", "บันทึกแจ้งข้อกล่าวหา"]:
+        res = doc_agent.draft_document(payload.case_id, "ACCUSATION_RECORD")
+        draft_title = res["title"]
+        draft_content = res["content_markdown"]
+    elif payload.report_type in ["FINAL_REPORT", "รายงานการสอบสวนและความเห็น"]:
+        res = doc_agent.draft_document(payload.case_id, "FINAL_REPORT")
+        draft_title = res["title"]
+        draft_content = res["content_markdown"]
+    elif payload.report_type == "Executive Brief":
         draft_content = (
-            f"EXECUTIVE BRIEFING REPORT\n"
-            f"Case: {case['title']} ({case['id']})\n"
-            f"Owning Unit: {case['owning_unit']}\n\n"
-            f"1. Executive Summary:\n"
-            f"This case concerns allegation of consumer rights violation under CCPD Division 1 scope: {case['description']}.\n\n"
-            f"2. Facts Resolved:\n"
-            f"- Entities under investigation: Kittisak Wongsawat (SCB account 401-229-3388).\n"
-            f"- Evidence uploaded: Bank transfer slips, Line chat screenshots.\n\n"
-            f"3. Recommendation:\n"
-            f"Proceed with legal charges based on Section 343 Public Fraud."
+            f"# รายงานสรุปย่อผู้บังคับบัญชา (Executive Brief)\n"
+            f"**คดี**: {case['title']} ({case['id']})\n"
+            f"**หน่วยงานเจ้าของสำนวน**: {case['owning_unit']}\n\n"
+            f"### 1. สรุปข้อเท็จจริง:\n"
+            f"คดีนี้เป็นข้อร้องเรียนกรณีความผิดคุ้มครองผู้บริโภค กก.1 บก.ปคบ.: {case['description']}\n\n"
+            f"### 2. บุคคลและพยานหลักฐานที่พิสูจน์แล้ว:\n"
+            f"- ผู้ต้องสงสัย: นายกิตติศักดิ์ วงศ์สวัสดิ์ (บัญชี SCB 401-229-3388)\n"
+            f"- พยานหลักฐาน: สลิปโอนเงิน (SHA-256 Verified), ภาพบันทึกแชต Line\n\n"
+            f"### 3. ประเด็นข้อกฎหมายและความเห็น:\n"
+            f"พฤติการณ์สอดคล้องกับความผิดฐานร่วมกันฉ้อโกงประชาชน ตาม ป.อ. มาตรา 343 และ พ.ร.บ.คอมพิวเตอร์ฯ มาตรา 14(1)\n\n"
+            f"---\n*สถานะ: [AI_DRAFT v1.0] รอพนักงานสอบสวนตรวจรับรอง*"
         )
     elif payload.report_type == "Investigation Plan":
         draft_content = (
-            f"INVESTIGATION ACTION PLAN\n"
-            f"Case: {case['title']} ({case['id']})\n\n"
-            f"1. Investigation Strategy:\n"
-            f"- Identify suspect credentials and trace all proxy IP logs.\n"
-            f"- Inspect transaction layering to locate shell companies.\n\n"
-            f"2. Key Steps / Tasks:\n"
-            f"- Verify Kittisak Wongsawat credentials with DOPA registry.\n"
-            f"- File bank letters for SCB account activity records."
+            f"# แผนการสืบสวนสอบสวน (Investigation Plan)\n"
+            f"**คดี**: {case['title']} ({case['id']})\n\n"
+            f"### 1. ยุทธวิธีและแนวทางดำเนินการ:\n"
+            f"- ตรวจสอบความถูกต้องของอัตลักษณ์บุคคล ตรวจสอบประวัติอาชญากรรม\n"
+            f"- ตรวจสอบสเตตเมนต์ธนาคารและการถ่ายเทเงินไปยังบัญชีม้าแถวที่สอง\n\n"
+            f"### 2. แผนการปฏิบัติงาน (Task List):\n"
+            f"- [x] ตรวจสอบความถูกต้องสลิปโอนเงิน 1.25 ล้านบาท\n"
+            f"- [ ] ยื่นขอหมายค้นสถานที่ตั้งบริษัท สยาม เน็ตเวิร์ค จำกัด\n"
+            f"- [ ] ออกหมายเรียกผู้ต้องหาเข้าให้ปากคำครั้งที่ 1"
         )
     else:
         draft_content = (
-            f"{payload.report_type.upper()} REPORT DRAFT\n"
-            f"Case Reference: {case['id']} - {case['title']}\n"
-            f"Compiled by: {user['email']}\n\n"
+            f"# {payload.report_type.upper()} REPORT DRAFT\n"
+            f"**Case Reference**: {case['id']} - {case['title']}\n"
+            f"**Compiled by**: {user['email']}\n\n"
             f"Simulated AI Copilot generated content matching evidence-first parameters."
         )
         
@@ -527,6 +660,8 @@ def generate_report_draft(payload: ReportGenerateRequest, authorization: Optiona
         "report_type": payload.report_type,
         "title": draft_title,
         "content": draft_content,
+        "version": 1,
+        "status": "AI_DRAFT",
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
     }
     db.reports.append(report_record)
@@ -889,7 +1024,7 @@ def approve_user(user_id: str, payload: ApproveUserRequest, authorization: Optio
     profile["approved"] = payload.approved
     action = "USER_APPROVED" if payload.approved else "USER_REVOKED"
     
-    db.audit_events.append({
+    db.audit_log.append({
         "id": str(uuid.uuid4()),
         "user_id": user["email"],
         "action": action,
@@ -901,25 +1036,7 @@ def approve_user(user_id: str, payload: ApproveUserRequest, authorization: Optio
     
     return {"status": "success", "user": profile}
 
-@app.get("/api/cases/{case_id}/timeline")
-def get_case_timeline(case_id: str):
-    # Query statements associated with the case
-    case_statements = [s for s in db.statements if s["case_id"] == case_id]
-    auditor = StatementTimelineAuditor()
-    audit_report = auditor.audit_case_chronology(case_id, case_statements)
-    
-    # Audit log
-    db.audit_events.append({
-        "id": str(uuid.uuid4()),
-        "user_id": None,
-        "action": "AUDIT_TIMELINE",
-        "table_name": "statements",
-        "record_id": case_id,
-        "query_details": f"Ran timeline chronology and contradiction audit for case {case_id}",
-        "logged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
-    })
-    
-    return audit_report.dict()
+
 
 @app.get("/api/cases/{case_id}/readiness")
 def get_case_readiness(case_id: str):
@@ -1226,18 +1343,27 @@ def simulate_workflow_triggers(event_type: str, payload: Dict[str, Any]):
         type_ = payload.get("type", "PHONE")
         
         # Insert entity if not exists
-        entity_exists = any(e for e in db.entities if e["name"] == name)
+        entity_exists = any(p for p in db.persons if p.get("phone") == name or p.get("bank_account") == name)
         if not entity_exists:
-            entity_id = str(uuid.uuid4())
-            db.entities.append({
-                "id": entity_id,
-                "type": type_,
-                "name": name
-            })
-            db.case_entities.append({
-                "case_id": case_id,
-                "entity_id": entity_id
-            })
+            person_id = str(uuid.uuid4())
+            if type_ == "PHONE":
+                db.persons.append({
+                    "id": person_id,
+                    "case_id": case_id,
+                    "name": f"Suspect Phone ({name})",
+                    "role": "Suspect",
+                    "phone": name,
+                    "bank_account": ""
+                })
+            else:
+                db.persons.append({
+                    "id": person_id,
+                    "case_id": case_id,
+                    "name": f"Suspect Account ({name})",
+                    "role": "Suspect",
+                    "phone": "",
+                    "bank_account": name
+                })
         
         # If suspect identifier matched, trigger Cross-Case match warning
         if name in ["089-111-2345", "401-229-3388"]:

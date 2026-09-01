@@ -1,16 +1,30 @@
-# CPPD AI Model Router & Extraction Service
+# CPPD AI Model Router & Extraction Service (Master Prompt Compliant)
 import os
 import json
-from typing import Dict, Any, Type
+import time
+from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field
 
-# Using the modern 2026 Google GenAI SDK
 try:
     from google import genai
     from google.genai import types
     client_available = True
 except ImportError:
     client_available = False
+
+class TaggedFactItem(BaseModel):
+    tag: str = Field(description="FACT, CLAIM, INFERENCE, CONFLICT, EVIDENCE_GAP, NOT_VERIFIED, REQUIRES_HUMAN_REVIEW")
+    text: str = Field(description="Factual summary or assertion")
+    source_evidence_id: Optional[str] = Field(default=None, description="Linked Evidence ID or Statement ID")
+    confidence: float = Field(default=0.90)
+
+class StandardAnalysisResult(BaseModel):
+    analysis_type: str
+    case_id: str
+    status: str = Field(default="REQUIRES_HUMAN_REVIEW", description="VERIFIED, PARTIALLY_VERIFIED, MISMATCH, NOT_VERIFIED, REQUIRES_CHECK, REQUIRES_HUMAN_REVIEW")
+    facts: List[TaggedFactItem] = Field(default_factory=list)
+    summary: str
+    action_items: List[str] = Field(default_factory=list)
 
 class ExtractedEntities(BaseModel):
     persons: list[str] = Field(default_factory=list)
@@ -24,6 +38,22 @@ class ExtractedEntities(BaseModel):
     evidence_references: list[str] = Field(default_factory=list)
 
 class CPPDEnvironmentRouter:
+    SYSTEM_LEGAL_SAFETY_PROMPT = """
+You are the Agentic AI Investigation Copilot for Division 1, Consumer Protection Police Division (กก.1 บก.ปคบ.).
+Rules you must ALWAYS follow:
+1. You are an investigative assistant, NOT a judicial fact-finder.
+2. NEVER declare that a person is guilty or commit automated culpability verdicts.
+3. Use safe legal terminology: 'Facts may correspond to statutory elements under Section X'.
+4. Every fact statement must be categorized using tags:
+   - [FACT]: Verified by tangible evidence (slip, hash, corporate filing).
+   - [CLAIM]: Asserted by complainant, witness, or suspect.
+   - [INFERENCE]: Analytical deduction by AI.
+   - [CONFLICT]: Inconsistencies or contradictions.
+   - [EVIDENCE GAP]: Missing documents/signatures required for prosecution.
+   - [REQUIRES HUMAN REVIEW]: Critical decision for inquiry official.
+5. Never hallucinate fake laws, judgments, or nonexistent witness statements.
+"""
+
     def __init__(self):
         self.api_key = os.getenv("GEMINI_API_KEY", "mock-key")
         self.client = None
@@ -54,8 +84,8 @@ class CPPDEnvironmentRouter:
             url = f"{url}/chat/completions"
             
         messages = []
-        if system_prompt:
-            messages.append({"role": "system", "content": system_prompt})
+        sys_p = (system_prompt or "") + "\n" + self.SYSTEM_LEGAL_SAFETY_PROMPT
+        messages.append({"role": "system", "content": sys_p})
         messages.append({"role": "user", "content": prompt})
         
         payload = {
@@ -82,23 +112,12 @@ class CPPDEnvironmentRouter:
             raise e
 
     def route_model(self, task_type: str) -> str:
-        """
-        Determines the appropriate model tier based on task type.
-        - Flash: Fast, low cost, large context window (intake, classification)
-        - Pro: High reasoning (timeline matching, cross-case analysis, reviews)
-        """
-        flash_tasks = ["classification", "entity_extraction", "summarization", "victim_processing"]
-        pro_tasks = ["cross_case_synthesis", "timeline_reasoning", "contradiction_analysis", "supervisor_review"]
-        
+        pro_tasks = ["cross_case_synthesis", "timeline_reasoning", "contradiction_analysis", "supervisor_review", "legal_mapping"]
         if task_type in pro_tasks:
             return "gemini-2.5-pro"
         return "gemini-2.5-flash"
 
     def analyze_text(self, text: str, task_type: str) -> Dict[str, Any]:
-        """
-        Routes the task and returns analysis. Falls back to deterministic regex extraction
-        if no Gemini API key is configured.
-        """
         settings = self.load_settings()
         if settings.get("mode") == "cloud":
             model = self.route_model(task_type)
@@ -108,7 +127,7 @@ class CPPDEnvironmentRouter:
             try:
                 response = self.client.models.generate_content(
                     model=model,
-                    contents=text
+                    contents=f"{self.SYSTEM_LEGAL_SAFETY_PROMPT}\n\nTask: {task_type}\nText: {text}"
                 )
                 return {"status": "success", "model_used": model, "result": response.text}
             except Exception as e:
@@ -122,9 +141,6 @@ class CPPDEnvironmentRouter:
                 return {"status": "error", "error": str(e), "model_used": settings.get("local_model")}
 
     def extract_structured(self, text: str) -> ExtractedEntities:
-        """
-        Calls Gemini to perform structured extraction matching the CPPD JSON schema.
-        """
         settings = self.load_settings()
         if settings.get("mode") == "cloud":
             if not self.client:
@@ -132,7 +148,7 @@ class CPPDEnvironmentRouter:
             try:
                 response = self.client.models.generate_content(
                     model="gemini-2.5-flash",
-                    contents=f"Extract all CPPD entities from this statement: {text}",
+                    contents=f"{self.SYSTEM_LEGAL_SAFETY_PROMPT}\n\nExtract all CPPD entities from this statement: {text}",
                     config=types.GenerateContentConfig(
                         response_mime_type="application/json",
                         response_schema=ExtractedEntities,
@@ -155,24 +171,21 @@ class CPPDEnvironmentRouter:
                 return self._mock_structured(text)
 
     def summarize_statement(self, text: str) -> str:
-        """
-        Generates a high-fidelity summary of witness or victim statements.
-        """
         settings = self.load_settings()
         if settings.get("mode") == "cloud":
             if not self.client:
-                return "Victim defrauded of 1.25M THB by fake Facebook seller. Funds transferred to SCB 401-229-3388."
+                return "[FACT] Victim transfer 1.25M THB to SCB 401-229-3388. [CLAIM] Suspect contact: 089-111-2345."
             try:
                 response = self.client.models.generate_content(
                     model="gemini-2.5-flash",
-                    contents=f"Summarize this CPPD witness statement in 1-2 sentences, highlighting name, suspect contact, and bank account: {text}"
+                    contents=f"{self.SYSTEM_LEGAL_SAFETY_PROMPT}\n\nSummarize this CPPD witness statement in 1-2 sentences with [FACT]/[CLAIM] prefix tags: {text}"
                 )
                 return response.text.strip()
             except Exception as e:
                 print(f"[AI Router] Failed to summarize statement: {e}")
                 return "Summary extraction failed."
         else:
-            prompt = f"Summarize this CPPD witness statement in 1-2 sentences, highlighting name, suspect contact, and bank account: {text}"
+            prompt = f"Summarize this CPPD witness statement in 1-2 sentences with [FACT]/[CLAIM] prefix tags: {text}"
             try:
                 return self._call_local_ai(prompt).strip()
             except Exception as e:
@@ -180,32 +193,31 @@ class CPPDEnvironmentRouter:
                 return "Local AI summary extraction failed."
 
     def _mock_extraction(self, text: str, task_type: str) -> Dict[str, Any]:
-        """Mock analyzer to simulate Gemini Pro/Flash logic during development"""
-        time.sleep(0.5) # Simulate latency
+        time.sleep(0.1)
         if task_type == "classification":
             return {"category": "electronic_fraud", "confidence": 0.95}
         elif task_type == "summarization":
-            return {"summary": text[:100] + "...", "length": len(text)}
+            return {"summary": "[FACT] " + text[:100] + "...", "length": len(text)}
         elif task_type == "supervisor_review":
             return {
-                "case_readiness": "84%",
+                "case_readiness": "85%",
                 "checks": {
                     "case_completeness": "complete",
-                    "contradictions": "none detected",
-                    "evidence_mapping": "1 warning"
+                    "contradictions": "1 contradiction identified",
+                    "evidence_mapping": "verified"
                 }
             }
         return {"result": f"Mock analysis completed using routed schema for {task_type}"}
 
     def _mock_structured(self, text: str) -> ExtractedEntities:
-        """Mock JSON extraction fallback matching the 089-111-2345 scenario"""
         import re
-        
         persons = []
         if "Kittisak" in text or "Somchai" in text:
             persons.append("Kittisak Wongsawat")
         if "Nattapong" in text:
             persons.append("Nattapong Sukprasert")
+        if "Somsak" in text:
+            persons.append("Somsak Test")
             
         phones = re.findall(r"\b\d{3}-\d{3}-\d{4}\b", text) or ["089-111-2345"]
         accounts = re.findall(r"\b\d{3}-\d{3}-\d{4}\b", text) or ["401-229-3388"]

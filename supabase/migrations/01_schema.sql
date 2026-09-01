@@ -239,3 +239,49 @@ CREATE TABLE IF NOT EXISTS public.audit_events (
     query_details TEXT,
     logged_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 9. Communications & Digital Artifacts
+CREATE TABLE IF NOT EXISTS public.communications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    case_id TEXT REFERENCES public.cases(id) ON DELETE CASCADE,
+    channel TEXT NOT NULL, -- 'LINE_CHAT', 'PHONE_CALL', 'SMS', 'FACEBOOK', 'EMAIL', 'BANK_MEMO'
+    sender_identifier TEXT NOT NULL,
+    recipient_identifier TEXT NOT NULL,
+    timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
+    content_text TEXT,
+    raw_payload JSONB,
+    evidence_id UUID REFERENCES public.evidence(id) ON DELETE SET NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 10. AI Analyses & Evidence Gaps (Isolated from Original Evidence)
+CREATE TABLE IF NOT EXISTS public.ai_analyses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    case_id TEXT REFERENCES public.cases(id) ON DELETE CASCADE,
+    agent_name TEXT NOT NULL, -- e.g., 'FinancialTransactionAgent', 'LegalMappingAgent'
+    analysis_type TEXT NOT NULL, -- 'TIMELINE_CONTRADICTION', 'EVIDENCE_GAP', 'STRUCTURING_ANALYSIS', 'INTERVIEW_PLAN'
+    fact_tags JSONB NOT NULL DEFAULT '[]'::jsonb, -- Array of [{tag: 'FACT'|'CLAIM'|'INFERENCE'|'CONFLICT'|'EVIDENCE_GAP', text: '...', source_evidence_id: '...'}]
+    findings_summary TEXT NOT NULL,
+    confidence_score DECIMAL(3, 2) DEFAULT 0.90,
+    review_status TEXT NOT NULL DEFAULT 'REQUIRES_HUMAN_REVIEW', -- 'VERIFIED', 'PARTIALLY_VERIFIED', 'MISMATCH', 'NOT_VERIFIED', 'REQUIRES_CHECK', 'REQUIRES_HUMAN_REVIEW'
+    reviewed_by UUID REFERENCES public.profiles(id),
+    reviewed_at TIMESTAMP WITH TIME ZONE,
+    investigator_notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 11. Investigation Documents & Warrants (Version-Controlled)
+CREATE TABLE IF NOT EXISTS public.documents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    case_id TEXT REFERENCES public.cases(id) ON DELETE CASCADE,
+    document_type TEXT NOT NULL, -- 'SUMMONS_WARRANT', 'SEARCH_WARRANT', 'ACCUSATION_RECORD', 'FINAL_REPORT', 'BRIEFING'
+    title TEXT NOT NULL,
+    version INT NOT NULL DEFAULT 1,
+    status TEXT NOT NULL DEFAULT 'AI_DRAFT', -- 'AI_DRAFT', 'INVESTIGATOR_REVIEW', 'REVISED', 'APPROVED', 'FINAL'
+    content_markdown TEXT NOT NULL,
+    created_by TEXT NOT NULL,
+    approved_by UUID REFERENCES public.profiles(id),
+    approved_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
