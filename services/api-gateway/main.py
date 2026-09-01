@@ -367,10 +367,24 @@ class MockDatabase:
         # Legacy compatibility values
         self.statements = [
             {
+                "id": "stat-142-01",
+                "case_id": "CASE-142",
+                "subject_id": "cf2f8c5b-38ab-41c1-903c-83b66d4db02a",
+                "subject_type": "victim",
+                "role": "VICTIM",
+                "status": "APPROVED",
+                "recorded_at": "2026-08-10T10:00:00Z",
+                "transcript": "ข้าพเจ้านายนัฐพงษ์ สุขประเสริฐ ได้รับการติดต่อเสนอขายสินค้าเวชสำอางค์ราคาพิเศษผ่านเพจเฟซบุ๊ก จึงหลงเชื่อโอนเงินจำนวน 1,250,000 บาท เข้าบัญชีธนาคารไทยพาณิชย์ เลขที่ 401-229-3388 นายกิตติศักดิ์ วงศ์สวัสดิ์ หมายเลขติดต่อ 089-111-2345 ภายหลังได้รับสินค้าปลอมและผู้ขายปิดเพจหลบหนี",
+                "summary": "ผู้เสียหายถูกหลอกโอนเงิน 1.25 ล้านบาท ซื้อเวชสำอางค์ปลอมผ่านเพจเฟซบุ๊ก โอนเข้า SCB 401-229-3388 เบอร์ติดต่อ 089-111-2345",
+                "created_at": "2026-08-10T10:00:00Z"
+            },
+            {
                 "id": "a8efde12-b91b-4f9e-bc43-2287f3b890a2", 
                 "case_id": "CASE-142", 
                 "subject_id": "cf2f8c5b-38ab-41c1-903c-83b66d4db02a", 
                 "subject_type": "victim", 
+                "role": "VICTIM",
+                "status": "APPROVED",
                 "recorded_at": "2026-08-10T10:00:00Z", 
                 "transcript": "ข้าพเจ้านายนัฐพงษ์ สุขประเสริฐ ได้รับการติดต่อเสนอขายสินค้าเวชสำอางค์ราคาพิเศษผ่านเพจเฟซบุ๊ก จึงหลงเชื่อโอนเงินจำนวน 1,250,000 บาท เข้าบัญชีธนาคารไทยพาณิชย์ เลขที่ 401-229-3388 นายกิตติศักดิ์ วงศ์สวัสดิ์ หมายเลขติดต่อ 089-111-2345 ภายหลังได้รับสินค้าปลอมและผู้ขายปิดเพจหลบหนี", 
                 "summary": "ผู้เสียหายถูกหลอกโอนเงิน 1.25 ล้านบาท ซื้อเวชสำอางค์ปลอมผ่านเพจเฟซบุ๊ก โอนเข้า SCB 401-229-3388 เบอร์ติดต่อ 089-111-2345",
@@ -387,6 +401,95 @@ class MockDatabase:
                 "created_at": "2026-08-12T11:00:00Z"
             }
         ]
+        # PHASE 5 COLLECTIONS (Statement & Interview Copilot Layer)
+        self.interview_preparations = [
+            {
+                "id": "prep-142-01",
+                "case_id": "CASE-142",
+                "statement_id": "stat-142-01",
+                "person_id": "p-142-01",
+                "objective": "สอบสวนข้อเท็จจริงเกี่ยวกับการโอนเงิน 1,250,000 บาท และการส่งมอบเวชสำอางค์ปลอม",
+                "issues_to_cover": ["การติดต่อสั่งซื้อ", "การโอนเงินและบัญชีปลายทาง", "การรับมอบสินค้าและผลตรวจสารเคมี"],
+                "known_facts": ["ผู้เสียหายโอนเงินเข้าบัญชี SCB 401-229-3388 เมื่อ 9 ส.ค. 2569 เวลา 14:32:00"],
+                "relevant_evidence_ids": ["f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088", "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069"],
+                "known_conflicts": [],
+                "prepared_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "ai_assisted": True,
+                "reviewed_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "created_at": "2026-08-10T09:30:00Z",
+                "updated_at": "2026-08-10T09:45:00Z"
+            }
+        ]
+
+        self.interview_questions = [
+            {
+                "id": "q-142-01",
+                "statement_id": "stat-142-01",
+                "sequence": 1,
+                "question_type": "BACKGROUND",
+                "topic": "ข้อมูลส่วนตัวและความสัมพันธ์กับผู้ต้องหา",
+                "question_text": "ท่านรู้จักกับนายกิตติศักดิ์ วงศ์สวัสดิ์ หรือผู้ดูแลเพจ สยาม คอสเมติกส์ ออฟฟิเชียล มาก่อนหรือไม่ อย่างไร?",
+                "purpose": "ตรวจสอบมูลเหตุจูงใจและความสัมพันธ์เดิม",
+                "source_reference_ids": ["INTAKE-001"],
+                "generated_by": "AI",
+                "status": "ASKED",
+                "asked_at": "2026-08-10T10:00:00Z",
+                "created_at": "2026-08-10T09:50:00Z"
+            },
+            {
+                "id": "q-142-02",
+                "statement_id": "stat-142-01",
+                "sequence": 2,
+                "question_type": "FINANCIAL",
+                "topic": "การโอนเงินชำระค่าสินค้า",
+                "question_text": "ท่านโอนเงินจำนวน 1,250,000 บาท ผ่านช่องทางใด ไปยังบัญชีธนาคารใด ในวันเวลาใด?",
+                "purpose": "ยืนยันความถูกต้องของสลิปการโอนเงิน",
+                "source_reference_ids": ["f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"],
+                "generated_by": "AI",
+                "status": "ASKED",
+                "asked_at": "2026-08-10T10:15:00Z",
+                "created_at": "2026-08-10T09:50:00Z"
+            }
+        ]
+
+        self.statement_answers = [
+            {
+                "id": "ans-142-01",
+                "statement_id": "stat-142-01",
+                "question_id": "q-142-01",
+                "sequence": 1,
+                "answer_text": "ไม่เคยรู้จักหรือมีความสัมพันธ์ส่วนตัวกับนายกิตติศักดิ์ วงศ์สวัสดิ์ มาก่อน ติดต่อสั่งซื้อเวชสำอางค์ผ่านหน้าเพจเฟซบุ๊ก สยาม คอสเมติกส์ ออฟฟิเชียล เท่านั้น",
+                "answer_type": "VERBATIM",
+                "recorded_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "recorded_at": "2026-08-10T10:05:00Z",
+                "notes": "ผู้ให้การตอบด้วยความหนักแน่นและแสดงหลักฐานแชตประกอบ"
+            },
+            {
+                "id": "ans-142-02",
+                "statement_id": "stat-142-01",
+                "question_id": "q-142-02",
+                "sequence": 2,
+                "answer_text": "ข้าพเจ้าได้โอนเงินจากแอปพลิเคชัน Krungthai NEXT จำนวน 1,250,000 บาท เข้าบัญชีธนาคารไทยพาณิชย์ เลขที่ 401-229-3388 ชื่อบัญชี นายกิตติศักดิ์ วงศ์สวัสดิ์ เมื่อวันที่ 9 สิงหาคม 2569 เวลาประมาณ 14:32 น. ตามสลิปที่นำมามอบให้เจ้าพนักงาน",
+                "answer_type": "VERBATIM",
+                "recorded_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "recorded_at": "2026-08-10T10:18:00Z",
+                "notes": "ตรงกับสลิปและข้อมูลรายการเดินบัญชีของธนาคาร"
+            }
+        ]
+
+        self.statement_versions = [
+            {
+                "id": "sv-142-01",
+                "statement_id": "stat-142-01",
+                "version_number": 1,
+                "content_text": "บันทึกคำให้การผู้กล่าวหา นายนัฐพงษ์ สุขประเสริฐ ให้การยืนยันการถูกหลอกโอนเงิน 1,250,000 บาท และส่งมอบพยานหลักฐานสลิปและแชตการสั่งซื้อ",
+                "changed_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "change_reason": "บันทึกร่างคำให้การแรกรับ",
+                "review_status": "APPROVED",
+                "created_at": "2026-08-10T10:30:00Z"
+            }
+        ]
+
         # PHASE 4 COLLECTIONS (AI Orchestrator & Multi-Agent Engine)
         self.ai_executions = [
             {
@@ -3525,3 +3628,354 @@ async def convert_ai_finding(analysis_id: str, payload: AIResultConvertRequest, 
     })
     
     return {"status": "success", "converted_id": converted_id, "target_type": payload.target_type}
+
+
+# -------------------------------------------------------------
+# PHASE 5: STATEMENT & INTERVIEW COPILOT SCHEMAS
+# -------------------------------------------------------------
+
+class InterviewQuestionCreate(BaseModel):
+    sequence: int = 1
+    question_type: str = "OPEN"
+    topic: str
+    question_text: str
+    purpose: str
+    source_reference_ids: Optional[List[str]] = []
+    generated_by: Optional[str] = "HUMAN"
+    status: Optional[str] = "ASKED"
+
+class StatementAnswerCreate(BaseModel):
+    question_id: str
+    sequence: int = 1
+    answer_text: str
+    answer_type: str = "VERBATIM"  # VERBATIM, SUMMARY, STRUCTURED
+    notes: Optional[str] = None
+
+class InterviewPrepCreate(BaseModel):
+    person_id: str
+    objective: str
+    issues_to_cover: List[str] = []
+    known_facts: Optional[List[str]] = []
+    relevant_evidence_ids: Optional[List[str]] = []
+
+class StatementReviewAction(BaseModel):
+    action: str  # SUBMIT_REVIEW, APPROVE, RETURN
+    comments: Optional[str] = ""
+
+class StatementDraftRequest(BaseModel):
+    template_type: Optional[str] = "POLICE_STATEMENT_FORM_1"
+    language: Optional[str] = "th"
+
+# -------------------------------------------------------------
+# PHASE 5: STATEMENT & INTERVIEW COPILOT REST API ENDPOINTS
+# -------------------------------------------------------------
+
+# 1. Statement Details & Lifecycle
+@app.get("/api/v1/statements/{statement_id}")
+@app.get("/api/statements/{statement_id}")
+async def get_statement_details(statement_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    stat = next((s for s in db.statements if s.get("id") == statement_id), None)
+    if not stat:
+        raise HTTPException(status_code=404, detail="Statement not found")
+        
+    check_case_access(user, stat["case_id"])
+    
+    questions = [q for q in getattr(db, "interview_questions", []) if q.get("statement_id") == statement_id]
+    answers = [a for a in getattr(db, "statement_answers", []) if a.get("statement_id") == statement_id]
+    versions = [v for v in getattr(db, "statement_versions", []) if v.get("statement_id") == statement_id]
+    prep = next((p for p in getattr(db, "interview_preparations", []) if p.get("statement_id") == statement_id), None)
+    
+    return {
+        "status": "success",
+        "statement": stat,
+        "preparation": prep,
+        "questions": sorted(questions, key=lambda x: x.get("sequence", 0)),
+        "answers": sorted(answers, key=lambda x: x.get("sequence", 0)),
+        "versions": sorted(versions, key=lambda x: x.get("version_number", 0), reverse=True)
+    }
+
+@app.post("/api/v1/statements/{statement_id}/start")
+@app.post("/api/statements/{statement_id}/start")
+async def start_statement_interview(statement_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    stat = next((s for s in db.statements if s.get("id") == statement_id), None)
+    if not stat:
+        raise HTTPException(status_code=404, detail="Statement not found")
+    stat["status"] = "IN_PROGRESS"
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "STATEMENT.START",
+        "resource_type": "statement", "resource_id": statement_id, "result": "success"
+    })
+    return {"status": "success", "statement_status": "IN_PROGRESS"}
+
+@app.post("/api/v1/statements/{statement_id}/pause")
+@app.post("/api/statements/{statement_id}/pause")
+async def pause_statement_interview(statement_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    stat = next((s for s in db.statements if s.get("id") == statement_id), None)
+    if not stat:
+        raise HTTPException(status_code=404, detail="Statement not found")
+    stat["status"] = "PAUSED"
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "STATEMENT.PAUSE",
+        "resource_type": "statement", "resource_id": statement_id, "result": "success"
+    })
+    return {"status": "success", "statement_status": "PAUSED"}
+
+@app.post("/api/v1/statements/{statement_id}/complete")
+@app.post("/api/statements/{statement_id}/complete")
+async def complete_statement_interview(statement_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    stat = next((s for s in db.statements if s.get("id") == statement_id), None)
+    if not stat:
+        raise HTTPException(status_code=404, detail="Statement not found")
+    stat["status"] = "COMPLETED"
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "STATEMENT.COMPLETE",
+        "resource_type": "statement", "resource_id": statement_id, "result": "success"
+    })
+    return {"status": "success", "statement_status": "COMPLETED"}
+
+# 2. Questions and Answers
+@app.post("/api/v1/statements/{statement_id}/questions")
+@app.post("/api/statements/{statement_id}/questions")
+async def add_interview_question(statement_id: str, payload: InterviewQuestionCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    q_id = f"q-{str(uuid.uuid4())[:8]}"
+    q_item = {
+        "id": q_id,
+        "statement_id": statement_id,
+        "sequence": payload.sequence,
+        "question_type": payload.question_type,
+        "topic": payload.topic,
+        "question_text": payload.question_text,
+        "purpose": payload.purpose,
+        "source_reference_ids": payload.source_reference_ids or [],
+        "generated_by": payload.generated_by or "HUMAN",
+        "status": payload.status or "ASKED",
+        "asked_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    if not hasattr(db, "interview_questions"):
+        db.interview_questions = []
+    db.interview_questions.append(q_item)
+    return {"status": "success", "question": q_item}
+
+@app.post("/api/v1/statements/{statement_id}/answers")
+@app.post("/api/statements/{statement_id}/answers")
+async def add_statement_answer(statement_id: str, payload: StatementAnswerCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    ans_id = f"ans-{str(uuid.uuid4())[:8]}"
+    ans_item = {
+        "id": ans_id,
+        "statement_id": statement_id,
+        "question_id": payload.question_id,
+        "sequence": payload.sequence,
+        "answer_text": payload.answer_text,
+        "answer_type": payload.answer_type,
+        "recorded_by": user["id"],
+        "recorded_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "notes": payload.notes
+    }
+    if not hasattr(db, "statement_answers"):
+        db.statement_answers = []
+    db.statement_answers.append(ans_item)
+    return {"status": "success", "answer": ans_item}
+
+# 3. AI Question & Follow-up Agents
+@app.post("/api/v1/statements/{statement_id}/ai/questions")
+@app.post("/api/statements/{statement_id}/ai/questions")
+async def generate_statement_ai_questions(statement_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    stat = next((s for s in db.statements if s.get("id") == statement_id), None)
+    if not stat:
+        raise HTTPException(status_code=404, detail="Statement not found")
+        
+    role = stat.get("role", "WITNESS")
+    suggested_questions = [
+        {
+            "sequence": 1,
+            "question_type": "BACKGROUND",
+            "topic": "ความสัมพันธ์และภูมิหลัง",
+            "question_text": "ท่านมีความสัมพันธ์หรือเคยมีข้อพิพาทใดๆ กับบุคคลในคดีนี้มาก่อนหรือไม่?",
+            "purpose": "ตรวจสอบมูลเหตุจูงใจและความเป็นกลาง",
+            "status": "SUGGESTED",
+            "source_ids": [stat["id"]]
+        },
+        {
+            "sequence": 2,
+            "question_type": "EVIDENCE_BASED",
+            "topic": "การทำธุรกรรมและการส่งมอบพยานหลักฐาน",
+            "question_text": "ตามที่ปรากฏสลิปการโอนเงินจำนวน 1,250,000 บาท ท่านเป็นผู้ทำรายการด้วยตนเองใช่หรือไม่ และทำจากสถานที่ใด?",
+            "purpose": "ยืนยันความถูกต้องและถิ่นที่อยู่ขณะทำธุรกรรม",
+            "status": "SUGGESTED",
+            "source_ids": ["f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"]
+        },
+        {
+            "sequence": 3,
+            "question_type": "TIMELINE",
+            "topic": "ลำดับเวลาเกิดเหตุ",
+            "question_text": "หลังจากโอนเงินแล้ว ท่านได้รับการติดต่อหรือได้รับพัสดุสินค้าเมื่อวันเวลาใด?",
+            "purpose": "ประกอบไทม์ไลน์ช่วงเวลาเกิดความเสียหาย",
+            "status": "SUGGESTED",
+            "source_ids": []
+        }
+    ]
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "STATEMENT.AI.QUESTION",
+        "resource_type": "statement", "resource_id": statement_id, "result": "success"
+    })
+    
+    return {"status": "success", "suggested_questions": suggested_questions}
+
+@app.post("/api/v1/statements/{statement_id}/ai/follow-up")
+@app.post("/api/statements/{statement_id}/ai/follow-up")
+async def generate_statement_ai_followup(statement_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    follow_up_suggestions = [
+        {
+            "type": "FOLLOW_UP",
+            "question_text": "ท่านระบุว่าได้โทรศัพท์ติดต่อกับแอดมินเพจ ขอให้ระบุหมายเลขโทรศัพท์และแอปพลิเคชันที่ใช้สนทนาให้ชัดเจน",
+            "purpose": "ขอข้อมูลระบุตัวตน (Phone/Chat ID) เพื่อใช้ขอข้อมูลการจราจรทางคอมพิวเตอร์",
+            "reason": "ผู้ให้การกล่าวถึงการโทรศัพท์แต่ยังไม่ระบุหมายเลขโทรศัพท์",
+            "status": "SUGGESTED"
+        },
+        {
+            "type": "CONTRADICTION_CHECK",
+            "question_text": "ในคำให้การระบุว่าอยู่ใน จ.เชียงใหม่ แต่ IP การล็อกอินทำรายการบันทึกไว้ในกรุงเทพฯ ท่านสามารถอธิบายข้อเท็จจริงนี้ได้หรือไม่?",
+            "purpose": "เปิดโอกาสให้ผู้ให้การชี้แจงประเด็นข้อขัดแย้งเกี่ยวกับสถานที่ล็อกอิน",
+            "reason": "ตรวจพบข้อขัดแย้งระหว่างคำให้การและข้อมูลจราจรคอมพิวเตอร์",
+            "status": "SUGGESTED"
+        }
+    ]
+    
+    return {"status": "success", "follow_up_questions": follow_up_suggestions}
+
+# 4. Consistency & Completeness Audits
+@app.post("/api/v1/statements/{statement_id}/ai/consistency")
+@app.post("/api/statements/{statement_id}/ai/consistency")
+async def check_statement_consistency(statement_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    consistency_results = {
+        "status": "REQUIRES_REVIEW",
+        "contradictions_found": 1,
+        "items": [
+            {
+                "type": "CONFLICT",
+                "topic": "สถานที่ขณะเกิดเหตุ",
+                "statement_claim": "ผู้ต้องสงสัยอ้างว่าอยู่ที่ จ.เชียงใหม่ ในวันที่ 9 ส.ค. 2569",
+                "evidence_fact": "หลักฐานการล็อกอิน SCB Easy จาก IP คอนโดมิเนียมย่านลาดพร้าว กรุงเทพฯ ในเวลาเดียวกัน",
+                "severity": "HIGH",
+                "source_evidence_ids": ["f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088"]
+            }
+        ]
+    }
+    return {"status": "success", "consistency": consistency_results}
+
+@app.post("/api/v1/statements/{statement_id}/ai/completeness")
+@app.post("/api/statements/{statement_id}/ai/completeness")
+async def check_statement_completeness(statement_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    checklist = [
+        {"topic": "ข้อมูลประจำตัวและเลขบัตรประชาชน", "status": "COMPLETE"},
+        {"topic": "ความสัมพันธ์และบทบาทในคดี", "status": "COMPLETE"},
+        {"topic": "วันเวลาและสถานที่เกิดเหตุ", "status": "COMPLETE"},
+        {"topic": "เส้นทางการเงินและยอดความเสียหาย", "status": "COMPLETE"},
+        {"topic": "ภาพบันทึก CCTV หรือพยานบุคคลขณะถอนเงิน", "status": "MISSING_INFORMATION"}
+    ]
+    return {"status": "success", "completeness_status": "PARTIALLY_COMPLETE", "checklist": checklist}
+
+# 5. AI Statement Drafting & Version History
+@app.post("/api/v1/statements/{statement_id}/ai/draft")
+@app.post("/api/statements/{statement_id}/ai/draft")
+async def generate_statement_ai_draft(statement_id: str, payload: StatementDraftRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    stat = next((s for s in db.statements if s.get("id") == statement_id), None)
+    if not stat:
+        raise HTTPException(status_code=404, detail="Statement not found")
+        
+    answers = [a for a in getattr(db, "statement_answers", []) if a.get("statement_id") == statement_id]
+    
+    draft_body = f"""บันทึกคำให้การ (AI-ASSISTED DRAFT -- NOT FINAL)
+คดีอาญาที่ 142/2569 กองกำกับการ 1 กองบังคับการปราบปรามการกระทำความผิดเกี่ยวกับการคุ้มครองผู้บริโภค
+วันที่ 10 สิงหาคม 2569
+
+ผู้ให้การ: นายนัฐพงษ์ สุขประเสริฐ (ผู้เสียหาย/ผู้กล่าวหา)
+พนักงานสอบสวน: {user['full_name']}
+
+ข้อเท็จจริงตามที่ได้บันทึกคำให้การ:
+1. ผู้ให้การไม่เคยมีความสัมพันธ์ส่วนตัวกับนายกิตติศักดิ์ วงศ์สวัสดิ์ มาก่อน ได้ติดต่อสั่งซื้อเวชสำอางค์ผ่านหน้าเพจเฟซบุ๊ก สยาม คอสเมติกส์ ออฟฟิเชียล
+2. เมื่อวันที่ 9 สิงหาคม 2569 เวลา 14:32 น. ผู้ให้การได้โอนเงินค่าสินค้าจำนวน 1,250,000 บาท เข้าบัญชีธนาคารไทยพาณิชย์ เลขที่ 401-229-3388 ชื่อบัญชี นายกิตติศักดิ์ วงศ์สวัสดิ์
+3. [ข้อมูลยังไม่ครบ / ต้องตรวจสอบ: รายละเอียดใบเสร็จการจัดส่งพัสดุและผลการตรวจพิสูจน์สารเคมีจากกรมวิทยาศาสตร์การแพทย์]
+
+บันทึกไว้ ณ วันที่ 10 สิงหาคม 2569
+(ลงชื่อ).................................................ผู้ให้ถ้อยคำ
+(ลงชื่อ).................................................พนักงานสอบสวนผู้บันทึก
+"""
+    
+    # Create new Statement Version
+    ver_num = len([v for v in getattr(db, "statement_versions", []) if v.get("statement_id") == statement_id]) + 1
+    ver_id = f"sv-{str(uuid.uuid4())[:8]}"
+    ver_item = {
+        "id": ver_id,
+        "statement_id": statement_id,
+        "version_number": ver_num,
+        "content_text": draft_body,
+        "changed_by": user["id"],
+        "change_reason": "สร้างร่างคำให้การด้วย AI Statement Copilot",
+        "review_status": "DRAFT",
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "statement_versions"):
+        db.statement_versions = []
+    db.statement_versions.append(ver_item)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "STATEMENT.AI.DRAFT",
+        "resource_type": "statement", "resource_id": statement_id, "result": "success"
+    })
+    
+    return {"status": "success", "draft": draft_body, "version": ver_item}
+
+# 6. Statement Supervisor Review & Approval
+@app.post("/api/v1/statements/{statement_id}/submit-review")
+@app.post("/api/statements/{statement_id}/submit-review")
+async def submit_statement_for_review(statement_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    stat = next((s for s in db.statements if s.get("id") == statement_id), None)
+    if not stat:
+        raise HTTPException(status_code=404, detail="Statement not found")
+    stat["status"] = "IN_REVIEW"
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "STATEMENT.SUBMIT_REVIEW",
+        "resource_type": "statement", "resource_id": statement_id, "result": "success"
+    })
+    return {"status": "success", "statement_status": "IN_REVIEW"}
+
+@app.post("/api/v1/statements/{statement_id}/approve")
+@app.post("/api/statements/{statement_id}/approve")
+async def approve_statement_review(statement_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    stat = next((s for s in db.statements if s.get("id") == statement_id), None)
+    if not stat:
+        raise HTTPException(status_code=404, detail="Statement not found")
+    stat["status"] = "APPROVED"
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()), "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"], "action": "STATEMENT.APPROVE",
+        "resource_type": "statement", "resource_id": statement_id, "result": "success"
+    })
+    return {"status": "success", "statement_status": "APPROVED"}
