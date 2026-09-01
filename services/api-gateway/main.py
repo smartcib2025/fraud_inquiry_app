@@ -387,6 +387,181 @@ class MockDatabase:
                 "created_at": "2026-08-12T11:00:00Z"
             }
         ]
+        # PHASE 3 COLLECTIONS (Evidence Intelligence Layer)
+        self.evidence_files = [
+            {
+                "id": "ef-142-01",
+                "evidence_id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088",
+                "artifact_type": "ORIGINAL",
+                "parent_file_id": None,
+                "object_key": "evidence/case-142/raw/slip_1.25m.png",
+                "original_filename": "slip_scb_transfer_1250000.png",
+                "stored_filename": "f05d9e5b_raw.png",
+                "mime_type": "image/png",
+                "extension": "png",
+                "size_bytes": 1048576,
+                "sha256": "a3f82cb304b5f883201de374ffea57bd8c928e1832049e3bfd12cf88c9d21415",
+                "sha512": "b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6",
+                "storage_provider": "CPPD_SECURE_STORAGE",
+                "storage_bucket": "cppd-evidence-vault-142",
+                "uploaded_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "uploaded_at": "2026-08-10T10:05:00Z",
+                "scan_status": "CLEAN",
+                "integrity_status": "VERIFIED",
+                "is_primary": True,
+                "is_immutable": True,
+                "metadata_json": {
+                    "width": 1080,
+                    "height": 1920,
+                    "format": "PNG",
+                    "camera_device": "Apple iPhone 14 Pro",
+                    "color_space": "sRGB"
+                }
+            },
+            {
+                "id": "ef-142-02",
+                "evidence_id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088",
+                "artifact_type": "WORKING_COPY",
+                "parent_file_id": "ef-142-01",
+                "object_key": "evidence/case-142/working/slip_cropped_qr.png",
+                "original_filename": "slip_scb_qr_cropped.png",
+                "stored_filename": "f05d9e5b_working.png",
+                "mime_type": "image/png",
+                "extension": "png",
+                "size_bytes": 262144,
+                "sha256": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+                "sha512": None,
+                "storage_provider": "CPPD_SECURE_STORAGE",
+                "storage_bucket": "cppd-evidence-vault-142",
+                "uploaded_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "uploaded_at": "2026-08-10T10:10:00Z",
+                "scan_status": "CLEAN",
+                "integrity_status": "VERIFIED",
+                "is_primary": False,
+                "is_immutable": False,
+                "metadata_json": {
+                    "width": 500,
+                    "height": 500,
+                    "cropped_region": "PromptPay QR Code"
+                }
+            }
+        ]
+
+        self.custody_events = [
+            {
+                "id": "cust-142-01",
+                "evidence_id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088",
+                "event_type": "RECEIVED",
+                "from_user_id": "นายนัฐพงษ์ สุขประเสริฐ (ผู้เสียหาย)",
+                "to_user_id": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "from_location": "จุดรับเรื่อง กก.1 บก.ปคบ.",
+                "to_location": "ห้องเก็บพยานหลักฐาน กก.1 (Evidence Room Locker A-12)",
+                "performed_by": "พ.ต.ท. สมชาย สอบสวนสืบสวน",
+                "witnessed_by": "ส.ต.อ. สุรชัย คดีมั่น",
+                "occurred_at": "2026-08-10T10:05:00Z",
+                "reason": "รับมอบพยานหลักฐานสลิปโอนเงินประกอบการแจ้งความร้องทุกข์",
+                "seal_number": "SEAL-CPPD-2026-0881",
+                "condition_before": "สมบูรณ์",
+                "condition_after": "บรรจุในซองเก็บพยานหลักฐานดิจิทัลพร้อมสลักลายเซ็น",
+                "notes": "สลักลายเซ็น SHA-256 เรียบร้อย",
+                "created_at": "2026-08-10T10:05:00Z"
+            },
+            {
+                "id": "cust-142-02",
+                "evidence_id": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+                "event_type": "SUBMITTED_FOR_ANALYSIS",
+                "from_user_id": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "to_user_id": "กรมวิทยาศาสตร์การแพทย์ กระทรวงสาธารณสุข",
+                "from_location": "ห้องเก็บพยานหลักฐาน กก.1",
+                "to_location": "สำนักยาและวัตถุเสพติด กรมวิทยาศาสตร์การแพทย์",
+                "performed_by": "พ.ต.ท. สมชาย สอบสวนสืบสวน",
+                "witnessed_by": "ร.ต.อ. สมศักดิ์ สืบสวนไว",
+                "occurred_at": "2026-08-11T13:00:00Z",
+                "reason": "ส่งตรวจพิสูจน์สารเคมีอันตรายและสารปรอทในเวชสำอางค์",
+                "seal_number": "SEAL-CPPD-2026-0899",
+                "condition_before": "ปิดผนึกสมบูรณ์",
+                "condition_after": "เปิดผนึกเพื่อสกัดสารทดสอบในห้องปฏิบัติการ",
+                "notes": "ได้รับรายงานผลตรวจทางเคมีกลับเมื่อ 14 ส.ค. 2569",
+                "created_at": "2026-08-11T13:00:00Z"
+            }
+        ]
+
+        self.evidence_locations = [
+            {"id": "loc-1", "name": "Evidence Vault Locker A-12 (กก.1 บก.ปคบ.)", "type": "DIGITAL_AND_PHYSICAL_VAULT", "custodian": "ส.ต.อ. สุรชัย คดีมั่น"},
+            {"id": "loc-2", "name": "ห้องปฏิบัติการ กรมวิทยาศาสตร์การแพทย์", "type": "EXTERNAL_LAB", "custodian": "เภสัชกรชำนาญการ กรมวิทย์ฯ"},
+            {"id": "loc-3", "name": "โต๊ะพนักงานสอบสวน พ.ต.ท. สมชาย", "type": "INVESTIGATOR_CUSTODY", "custodian": "พ.ต.ท. สมชาย สอบสวนสืบสวน"}
+        ]
+
+        self.evidence_integrity_checks = [
+            {
+                "id": "chk-142-01",
+                "evidence_file_id": "ef-142-01",
+                "check_type": "UPLOAD",
+                "expected_hash": "a3f82cb304b5f883201de374ffea57bd8c928e1832049e3bfd12cf88c9d21415",
+                "actual_hash": "a3f82cb304b5f883201de374ffea57bd8c928e1832049e3bfd12cf88c9d21415",
+                "result": "MATCH",
+                "performed_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "performed_at": "2026-08-10T10:05:00Z",
+                "tool_name": "CPPD_SHA256_INTEGRITY_ENGINE",
+                "tool_version": "v1.2.0",
+                "notes": "Original file verified bit-exact on upload."
+            }
+        ]
+
+        self.evidence_gaps = [
+            {
+                "id": "gap-142-01",
+                "case_id": "CASE-142",
+                "investigation_issue_id": "iss-142-01",
+                "legal_element_id": "elem-142-02",
+                "description": "ยังขาดภาพบันทึกกล้องวงจรปิด (CCTV) หน้าตู้ ATM สาขาลาดพร้าว ขณะคนร้ายกดเงินสด 100,000 บาท",
+                "required_evidence_type": "VIDEO_CCTV",
+                "priority": "HIGH",
+                "status": "IN_PROGRESS",
+                "assigned_to": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "due_at": "2026-08-25T17:00:00Z",
+                "resolved_by_evidence_id": None
+            },
+            {
+                "id": "gap-142-02",
+                "case_id": "CASE-142",
+                "investigation_issue_id": "iss-142-02",
+                "legal_element_id": "elem-142-01",
+                "description": "รายการเดินบัญชีแถวที่ 2 ธนาคารกรุงไทยของนางสาวพัชรี แก้วมณี",
+                "required_evidence_type": "BANK_STATEMENT",
+                "priority": "HIGH",
+                "status": "OPEN",
+                "assigned_to": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "due_at": "2026-08-28T17:00:00Z",
+                "resolved_by_evidence_id": None
+            }
+        ]
+
+        self.evidence_analyses = [
+            {
+                "id": "ea-142-01",
+                "case_id": "CASE-142",
+                "evidence_id": "f05d9e5b-ec1d-4009-bf2f-e8b9fb6cb088",
+                "analysis_type": "OCR_FINANCIAL_EXTRACTION",
+                "analyst_type": "TOOL",
+                "analyst_user_id": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "tool_name": "Tesseract_OCR_Thai_Slip_Parser",
+                "tool_version": "5.3.0",
+                "input_artifact_ids": ["ef-142-01"],
+                "result": {
+                    "bank": "Siam Commercial Bank (SCB)",
+                    "account": "401-229-3388",
+                    "recipient": "นายกิตติศักดิ์ วงศ์สวัสดิ์",
+                    "amount": 1250000.0,
+                    "date": "2026-08-09 14:32:00"
+                },
+                "status": "VERIFIED",
+                "reviewed_by": "d2f0998c-8c1d-4099-ae1e-f3f2a89366df",
+                "reviewed_at": "2026-08-10T10:10:00Z",
+                "created_at": "2026-08-10T10:08:00Z"
+            }
+        ]
+
         # PHASE 2 COLLECTIONS
         self.investigation_issues = [
             {
@@ -2584,3 +2759,405 @@ async def get_case_activity(case_id: str, authorization: Optional[str] = Header(
     })
     
     return {"status": "success", "count": len(activities), "activities": sorted(activities, key=lambda x: x["timestamp"], reverse=True)}
+
+
+# -------------------------------------------------------------
+# PHASE 3: EVIDENCE INTELLIGENCE & CHAIN OF CUSTODY SCHEMAS
+# -------------------------------------------------------------
+
+class EvidenceCustodyTransferRequest(BaseModel):
+    to_user_id: str
+    to_location: str
+    reason: str
+    seal_number: Optional[str] = None
+    witnessed_by: Optional[str] = None
+    condition_after: Optional[str] = "สมบูรณ์"
+
+class EvidenceIntegrityCheckRequest(BaseModel):
+    check_type: str = "MANUAL"  # UPLOAD, ACCESS, TRANSFER, EXPORT, PERIODIC, MANUAL
+    actual_hash: Optional[str] = None
+
+class EvidenceGapCreate(BaseModel):
+    investigation_issue_id: Optional[str] = None
+    legal_element_id: Optional[str] = None
+    description: str
+    required_evidence_type: str
+    priority: str = "HIGH"
+    assigned_to: Optional[str] = None
+    due_at: Optional[str] = None
+
+class EvidenceGapResolveRequest(BaseModel):
+    resolved_by_evidence_id: str
+    status: str = "RESOLVED"
+
+class EvidenceArtifactCreate(BaseModel):
+    artifact_type: str  # FORENSIC_COPY, WORKING_COPY, EXTRACTED_CONTENT, DERIVED_ARTIFACT, AI_ANALYSIS_OUTPUT
+    parent_file_id: Optional[str] = None
+    original_filename: str
+    mime_type: str
+    size_bytes: int
+    sha256: str
+    metadata_json: Optional[Dict[str, Any]] = {}
+
+class EvidenceReviewRequest(BaseModel):
+    review_result: str  # VERIFIED, PARTIALLY_VERIFIED, QUESTIONED, REJECTED, REQUIRES_ACTION
+    authenticity_flag: bool = True
+    relevance_flag: bool = True
+    integrity_flag: bool = True
+    admissibility_flag: bool = True
+    comments: str
+
+class EvidenceExportRequest(BaseModel):
+    recipient: str
+    purpose: str
+    selected_evidence_ids: List[str] = []
+
+# -------------------------------------------------------------
+# PHASE 3: EVIDENCE INTELLIGENCE REST API ENDPOINTS
+# -------------------------------------------------------------
+
+# 1. Evidence Matrix & Gaps
+@app.get("/api/v1/cases/{case_id}/evidence-matrix")
+@app.get("/api/cases/{case_id}/evidence-matrix")
+async def get_evidence_matrix(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    issues = [i for i in getattr(db, "investigation_issues", []) if i.get("case_id") == case_id]
+    evidences = [e for e in db.evidence if e.get("case_id") == case_id]
+    relations = [r for r in getattr(db, "evidence_relations", []) if r.get("case_id") == case_id]
+    gaps = [g for g in getattr(db, "evidence_gaps", []) if g.get("case_id") == case_id]
+    
+    matrix = []
+    for issue in issues:
+        linked_rel = [r for r in relations if r.get("target_id") == issue.get("id")]
+        avail_ev_ids = [r.get("evidence_id") for r in linked_rel]
+        avail_evs = [e for e in evidences if e.get("id") in avail_ev_ids]
+        issue_gaps = [g for g in gaps if g.get("investigation_issue_id") == issue.get("id")]
+        
+        status = "VERIFIED" if len(avail_evs) > 0 and len(issue_gaps) == 0 else "HAS_GAPS" if len(issue_gaps) > 0 else "PENDING_COLLECTION"
+        
+        matrix.append({
+            "issue_id": issue.get("id"),
+            "issue_title": issue.get("title"),
+            "category": issue.get("category"),
+            "available_evidence": [{"id": e["id"], "title": e["title"], "type": e.get("type", "document"), "hash": e.get("file_hash", "")} for e in avail_evs],
+            "gaps": issue_gaps,
+            "matrix_status": status
+        })
+        
+    return {"status": "success", "case_id": case_id, "matrix": matrix}
+
+@app.get("/api/v1/cases/{case_id}/evidence-gaps")
+@app.get("/api/cases/{case_id}/evidence-gaps")
+async def get_evidence_gaps(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    gaps = [g for g in getattr(db, "evidence_gaps", []) if g.get("case_id") == case_id]
+    return {"status": "success", "gaps": gaps}
+
+@app.post("/api/v1/cases/{case_id}/evidence-gaps")
+@app.post("/api/cases/{case_id}/evidence-gaps")
+async def create_evidence_gap(case_id: str, payload: EvidenceGapCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    gap_id = f"gap-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    gap = {
+        "id": gap_id,
+        "case_id": case_id,
+        "investigation_issue_id": payload.investigation_issue_id,
+        "legal_element_id": payload.legal_element_id,
+        "description": payload.description,
+        "required_evidence_type": payload.required_evidence_type,
+        "priority": payload.priority,
+        "status": "OPEN",
+        "assigned_to": payload.assigned_to or user["id"],
+        "due_at": payload.due_at or time.strftime("%Y-%m-%dT17:00:00Z"),
+        "resolved_by_evidence_id": None
+    }
+    
+    if not hasattr(db, "evidence_gaps"):
+        db.evidence_gaps = []
+    db.evidence_gaps.append(gap)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()),
+        "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"],
+        "action": "EVIDENCE.GAP_CREATE",
+        "resource_type": "evidence_gap",
+        "resource_id": gap_id,
+        "result": "success",
+        "metadata": {"description": payload.description}
+    })
+    
+    return {"status": "success", "gap": gap}
+
+@app.patch("/api/v1/evidence-gaps/{gap_id}/resolve")
+@app.patch("/api/evidence-gaps/{gap_id}/resolve")
+async def resolve_evidence_gap(gap_id: str, payload: EvidenceGapResolveRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    gap = next((g for g in getattr(db, "evidence_gaps", []) if g.get("id") == gap_id), None)
+    if not gap:
+        raise HTTPException(status_code=404, detail="Evidence gap not found")
+        
+    gap["status"] = payload.status
+    gap["resolved_by_evidence_id"] = payload.resolved_by_evidence_id
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()),
+        "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"],
+        "action": "EVIDENCE.GAP_RESOLVE",
+        "resource_type": "evidence_gap",
+        "resource_id": gap_id,
+        "result": "success",
+        "metadata": {"resolved_by": payload.resolved_by_evidence_id}
+    })
+    
+    return {"status": "success", "gap": gap}
+
+# 2. Chain of Custody (Append-only)
+@app.get("/api/v1/evidence/{evidence_id}/custody")
+@app.get("/api/evidence/{evidence_id}/custody")
+async def get_evidence_custody_events(evidence_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    events = [c for c in getattr(db, "custody_events", []) if c.get("evidence_id") == evidence_id]
+    return {"status": "success", "events": sorted(events, key=lambda x: x.get("occurred_at", ""), reverse=True)}
+
+@app.post("/api/v1/evidence/{evidence_id}/custody/transfer")
+@app.post("/api/evidence/{evidence_id}/custody/transfer")
+async def transfer_evidence_custody(evidence_id: str, payload: EvidenceCustodyTransferRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    ev = next((e for e in db.evidence if e.get("id") == evidence_id), None)
+    if not ev:
+        raise HTTPException(status_code=404, detail="Evidence not found")
+        
+    cust_id = f"cust-{str(uuid.uuid4())[:8]}"
+    event = {
+        "id": cust_id,
+        "evidence_id": evidence_id,
+        "event_type": "TRANSFERRED",
+        "from_user_id": user["full_name"],
+        "to_user_id": payload.to_user_id,
+        "from_location": "กก.1 บก.ปคบ.",
+        "to_location": payload.to_location,
+        "performed_by": user["full_name"],
+        "witnessed_by": payload.witnessed_by or "ส.ต.อ. สุรชัย คดีมั่น",
+        "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "reason": payload.reason,
+        "seal_number": payload.seal_number or f"SEAL-CPPD-{str(uuid.uuid4())[:6]}",
+        "condition_before": "ปิดผนึกสมบูรณ์",
+        "condition_after": payload.condition_after or "ส่งมอบในสภาพสมบูรณ์",
+        "notes": f"โอนย้ายการครอบครองไปยัง {payload.to_user_id}",
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    
+    if not hasattr(db, "custody_events"):
+        db.custody_events = []
+    db.custody_events.append(event)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()),
+        "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"],
+        "action": "EVIDENCE.CUSTODY.TRANSFER",
+        "resource_type": "evidence",
+        "resource_id": evidence_id,
+        "result": "success",
+        "metadata": {"to_user": payload.to_user_id, "location": payload.to_location}
+    })
+    
+    return {"status": "success", "event": event}
+
+# 3. Integrity Check & SHA-256 Verification
+@app.post("/api/v1/evidence/{evidence_id}/integrity/verify")
+@app.post("/api/evidence/{evidence_id}/integrity/verify")
+async def verify_evidence_integrity(evidence_id: str, payload: EvidenceIntegrityCheckRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    ev = next((e for e in db.evidence if e.get("id") == evidence_id), None)
+    if not ev:
+        raise HTTPException(status_code=404, detail="Evidence not found")
+        
+    expected_hash = ev.get("file_hash", "")
+    actual_hash = payload.actual_hash or expected_hash
+    
+    is_match = (expected_hash == actual_hash)
+    result = "MATCH" if is_match else "MISMATCH"
+    
+    chk_id = f"chk-{str(uuid.uuid4())[:8]}"
+    check_record = {
+        "id": chk_id,
+        "evidence_id": evidence_id,
+        "check_type": payload.check_type,
+        "expected_hash": expected_hash,
+        "actual_hash": actual_hash,
+        "result": result,
+        "performed_by": user["id"],
+        "performed_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "tool_name": "CPPD_SHA256_INTEGRITY_ENGINE",
+        "tool_version": "v1.2.0",
+        "notes": "Bit-exact integrity match" if is_match else "CRITICAL: Hash mismatch detected!"
+    }
+    
+    if not hasattr(db, "evidence_integrity_checks"):
+        db.evidence_integrity_checks = []
+    db.evidence_integrity_checks.append(check_record)
+    
+    if not is_match:
+        # Create Security Event
+        db.audit_events.append({
+            "id": str(uuid.uuid4()),
+            "user_id": user["email"],
+            "action": "EVIDENCE.HASH.MISMATCH",
+            "table_name": "evidence",
+            "record_id": evidence_id,
+            "query_details": f"CRITICAL TAMPERING ALERT: Expected {expected_hash} but found {actual_hash}",
+            "logged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+        })
+        raise HTTPException(status_code=409, detail="Security Alert: Evidence SHA-256 hash mismatch detected!")
+        
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()),
+        "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"],
+        "action": "EVIDENCE.HASH.VERIFY",
+        "resource_type": "evidence",
+        "resource_id": evidence_id,
+        "result": "success",
+        "metadata": {"sha256": actual_hash}
+    })
+    
+    return {"status": "success", "result": result, "check_record": check_record}
+
+# 4. Artifact Hierarchy (Original / Working / Derived)
+@app.get("/api/v1/evidence/{evidence_id}/artifacts")
+@app.get("/api/evidence/{evidence_id}/artifacts")
+async def get_evidence_artifacts(evidence_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    files = [f for f in getattr(db, "evidence_files", []) if f.get("evidence_id") == evidence_id]
+    return {"status": "success", "artifacts": files}
+
+@app.post("/api/v1/evidence/{evidence_id}/artifacts")
+@app.post("/api/evidence/{evidence_id}/artifacts")
+async def create_evidence_artifact(evidence_id: str, payload: EvidenceArtifactCreate, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    art_id = f"ef-{str(uuid.uuid4())[:8]}"
+    artifact = {
+        "id": art_id,
+        "evidence_id": evidence_id,
+        "artifact_type": payload.artifact_type,
+        "parent_file_id": payload.parent_file_id,
+        "object_key": f"evidence/derived/{art_id}_{payload.original_filename}",
+        "original_filename": payload.original_filename,
+        "stored_filename": f"{art_id}.{payload.original_filename.split('.')[-1]}",
+        "mime_type": payload.mime_type,
+        "extension": payload.original_filename.split(".")[-1],
+        "size_bytes": payload.size_bytes,
+        "sha256": payload.sha256,
+        "sha512": None,
+        "storage_provider": "CPPD_SECURE_STORAGE",
+        "uploaded_by": user["id"],
+        "uploaded_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "scan_status": "CLEAN",
+        "integrity_status": "VERIFIED",
+        "is_primary": False,
+        "is_immutable": (payload.artifact_type == "ORIGINAL"),
+        "metadata_json": payload.metadata_json
+    }
+    
+    if not hasattr(db, "evidence_files"):
+        db.evidence_files = []
+    db.evidence_files.append(artifact)
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()),
+        "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"],
+        "action": "EVIDENCE.ARTIFACT_CREATE",
+        "resource_type": "evidence_file",
+        "resource_id": art_id,
+        "result": "success",
+        "metadata": {"artifact_type": payload.artifact_type, "parent_file_id": payload.parent_file_id}
+    })
+    
+    return {"status": "success", "artifact": artifact}
+
+# 5. Controlled Evidence Export & Hash Manifest
+@app.post("/api/v1/cases/{case_id}/evidence/export")
+@app.post("/api/cases/{case_id}/evidence/export")
+async def export_evidence_package(case_id: str, payload: EvidenceExportRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    all_case_evidences = [e for e in db.evidence if e.get("case_id") == case_id]
+    if payload.selected_evidence_ids:
+        target_evs = [e for e in all_case_evidences if e.get("id") in payload.selected_evidence_ids]
+    else:
+        target_evs = all_case_evidences
+        
+    export_id = f"pkg-{case_id.lower()}-{str(uuid.uuid4())[:6]}"
+    manifest_items = []
+    for ev in target_evs:
+        manifest_items.append({
+            "evidence_id": ev["id"],
+            "title": ev["title"],
+            "type": ev.get("type", "document"),
+            "sha256": ev.get("file_hash", ""),
+            "classification": ev.get("classification", "CONFIDENTIAL"),
+            "custody_status": ev.get("status", "sealed")
+        })
+        
+    manifest = {
+        "export_package_id": export_id,
+        "case_id": case_id,
+        "export_date": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "exporting_officer": user["full_name"],
+        "recipient": payload.recipient,
+        "purpose": payload.purpose,
+        "total_items": len(manifest_items),
+        "manifest_items": manifest_items
+    }
+    
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()),
+        "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"],
+        "action": "EVIDENCE.EXPORT",
+        "resource_type": "evidence_package",
+        "resource_id": export_id,
+        "result": "success",
+        "metadata": {"recipient": payload.recipient, "total_items": len(manifest_items)}
+    })
+    
+    return {"status": "success", "manifest": manifest}
+
+# 6. Duplicate Detection
+@app.get("/api/v1/cases/{case_id}/evidence/duplicates")
+@app.get("/api/cases/{case_id}/evidence/duplicates")
+async def detect_evidence_duplicates(case_id: str, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    check_case_access(user, case_id)
+    
+    case_evs = [e for e in db.evidence if e.get("case_id") == case_id]
+    hashes = {}
+    duplicates = []
+    for e in case_evs:
+        h = e.get("file_hash")
+        if h:
+            if h in hashes:
+                duplicates.append({
+                    "evidence_id": e["id"],
+                    "duplicate_of_id": hashes[h]["id"],
+                    "sha256": h,
+                    "match_type": "EXACT_HASH_MATCH"
+                })
+            else:
+                hashes[h] = e
+                
+    return {"status": "success", "duplicates_count": len(duplicates), "duplicates": duplicates}

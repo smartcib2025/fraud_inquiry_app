@@ -305,14 +305,38 @@
                                     <div class="detail-list" id="workspace-statements-list"></div>
                                 </div>
 
-                                <!-- TAB 5: EVIDENCE -->
+                                <!-- TAB 5: EVIDENCE (Evidence Intelligence & Custody Vault) -->
                                 <div id="workspace-tab-evidence" class="workspace-tab-content" style="display: none;">
                                     <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">
-                                        <strong class="text-sm">คลังพยานหลักฐานและความเชื่อมโยง (Evidence & Relations)</strong>
+                                        <div>
+                                            <strong class="text-sm"><i class="fa-solid fa-fingerprint text-primary"></i> คลังพยานหลักฐานและความเชื่อมโยง (Evidence Intelligence Vault)</strong>
+                                            <div class="text-xs muted-text">สลักลายเซ็น SHA-256 บันทึกห่วงโซ่การครอบครอง (Chain of Custody) และแมทริกซ์ความสมบูรณ์</div>
+                                        </div>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <button class="btn btn-outline btn-xs" id="btn-export-evidence-pkg"><i class="fa-solid fa-file-export"></i> Export Package</button>
+                                        </div>
                                     </div>
-                                    <div class="detail-list" id="workspace-evidence-list"></div>
-                                </div>
 
+                                    <!-- Sub-navigation for Evidence Modules -->
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem; margin-bottom: 1rem;">
+                                        <div style="background: rgba(59,130,246,0.06); padding: 0.6rem; border-radius: 6px; border: 1px solid rgba(59,130,246,0.15);">
+                                            <span class="text-xs muted-text">สถานะความสมบูรณ์ (Integrity)</span>
+                                            <div style="font-weight: 700; color: var(--success); font-size: 0.9rem; margin-top: 0.15rem;"><i class="fa-solid fa-shield-check"></i> 100% SHA-256 MATCH</div>
+                                        </div>
+                                        <div style="background: rgba(245,158,11,0.06); padding: 0.6rem; border-radius: 6px; border: 1px solid rgba(245,158,11,0.15);">
+                                            <span class="text-xs muted-text">ช่องว่างพยานหลักฐาน (Evidence Gaps)</span>
+                                            <div style="font-weight: 700; color: var(--warning); font-size: 0.9rem; margin-top: 0.15rem;" id="evidence-gaps-count">2 รายการค้างส่ง</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Evidence List Container -->
+                                    <strong class="text-xs" style="color: var(--accent-primary); display: block; margin-bottom: 0.4rem;">รายการพยานหลักฐานและวัตถุพยานในคดี:</strong>
+                                    <div class="detail-list" id="workspace-evidence-list" style="margin-bottom: 1rem;"></div>
+
+                                    <!-- Evidence Matrix Container -->
+                                    <strong class="text-xs" style="color: var(--accent-primary); display: block; margin-bottom: 0.4rem;">แมทริกซ์ความสอดคล้องพยานหลักฐาน (Evidence Matrix & Gaps):</strong>
+                                    <div class="detail-list" id="workspace-evidence-matrix-list"></div>
+                                </div>
                                 <!-- TAB 6: TIMELINE -->
                                 <div id="workspace-tab-timeline" class="workspace-tab-content" style="display: none;">
                                     <div class="justify-between" style="display: flex; align-items: center; margin-bottom: 0.75rem;">

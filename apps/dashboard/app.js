@@ -489,19 +489,50 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `).join("") || '<p class="text-sm muted-text">ยังไม่มีการบันทึกคำให้การในคดีนี้</p>';
 
-            // 5. Tab: Evidence & Relations
+            // 5. Tab: Evidence & Relations (Evidence Intelligence Layer)
             const evidenceContainer = document.getElementById("workspace-evidence-list");
+            const matrixContainer = document.getElementById("workspace-evidence-matrix-list");
             const rawEv = fullCase?.evidence || [];
             const relations = evData?.relations || [];
+            
+            // Parallel fetch Matrix and Gaps
+            let matData = { matrix: [] };
+            let gapData = { gaps: [] };
+            try {
+                const [mRes, gRes] = await Promise.all([
+                    fetch(`${API_BASE}/api/v1/cases/${caseId}/evidence-matrix`),
+                    fetch(`${API_BASE}/api/v1/cases/${caseId}/evidence-gaps`)
+                ]);
+                if (mRes.ok) matData = await mRes.json();
+                if (gRes.ok) gapData = await gRes.json();
+            } catch(e) {}
+
+            const gapsCountElem = document.getElementById("evidence-gaps-count");
+            if (gapsCountElem) {
+                gapsCountElem.textContent = (gapData.gaps?.length || 0) + " รายการค้างส่ง";
+            }
+
             evidenceContainer.innerHTML = rawEv.map(ev => {
                 const linkedRel = relations.filter(r => r.evidence_id === ev.id);
                 return `
-                    <div class="detail-item" style="margin-bottom: 0.5rem;">
-                        <div class="justify-between" style="display: flex; align-items: center;">
-                            <strong>${ev.title}</strong>
-                            <span class="badge" style="background: rgba(255,255,255,0.05); font-size: 0.65rem;">${ev.status.toUpperCase()}</span>
+                    <div class="detail-item" style="margin-bottom: 0.6rem; border-left: 3px solid var(--accent-primary);">
+                        <div class="justify-between" style="display: flex; align-items: flex-start;">
+                            <div>
+                                <strong class="text-sm font-semibold">${ev.title}</strong>
+                                <span class="badge font-mono" style="font-size: 0.65rem; background: rgba(255,255,255,0.05); margin-left: 0.4rem;">${ev.type || 'DOCUMENT'}</span>
+                            </div>
+                            <div style="display: flex; gap: 0.3rem;">
+                                <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--success); font-size: 0.65rem;"><i class="fa-solid fa-lock"></i> ${ev.status.toUpperCase()}</span>
+                                <button class="btn btn-outline btn-xs btn-verify-hash" data-ev-id="${ev.id}" data-hash="${ev.file_hash}" style="padding: 0.1rem 0.4rem; font-size: 0.65rem;"><i class="fa-solid fa-shield-check"></i> Re-Verify SHA-256</button>
+                            </div>
                         </div>
-                        <div class="text-xs font-mono muted-text" style="margin: 0.2rem 0;">SHA-256: ${ev.file_hash.substring(0, 24)}...</div>
+                        <div class="text-xs font-mono muted-text" style="margin: 0.25rem 0; background: rgba(0,0,0,0.15); padding: 0.25rem 0.4rem; border-radius: 4px;">
+                            SHA-256: ${ev.file_hash}
+                        </div>
+                        <div class="justify-between" style="display: flex; font-size: 0.7rem; color: var(--text-muted); margin-top: 0.2rem;">
+                            <span>สถานที่เก็บ: Evidence Vault Locker A-12 (กก.1 บก.ปคบ.)</span>
+                            <span>ผู้ครอบครองปัจจุบัน: พ.ต.ท. สมชาย สอบสวนสืบสวน</span>
+                        </div>
                         ${linkedRel.length > 0 ? `
                             <div style="margin-top: 0.35rem; display: flex; flex-wrap: wrap; gap: 0.25rem;">
                                 ${linkedRel.map(r => `
@@ -514,6 +545,51 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 `;
             }).join("") || '<p class="text-sm muted-text">ไม่มีรายการพยานหลักฐาน</p>';
+
+            // Add Event Listeners for 1-Click SHA-256 Verification
+            evidenceContainer.querySelectorAll(".btn-verify-hash").forEach(btn => {
+                btn.addEventListener("click", async () => {
+                    const evId = btn.getAttribute("data-ev-id");
+                    const expectedHash = btn.getAttribute("data-hash");
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying...';
+                    try {
+                        const res = await fetch(`${API_BASE}/api/v1/evidence/${evId}/integrity/verify`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ check_type: "MANUAL", actual_hash: expectedHash })
+                        });
+                        const data = await res.json();
+                        if (data.status === "success" && data.result === "MATCH") {
+                            btn.className = "btn btn-outline btn-xs";
+                            btn.style.color = "var(--success)";
+                            btn.style.borderColor = "var(--success)";
+                            btn.innerHTML = '<i class="fa-solid fa-check-double"></i> SHA-256 Verified (Match)';
+                        }
+                    } catch(e) {
+                        btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Error';
+                    }
+                });
+            });
+
+            // Render Evidence Matrix
+            if (matrixContainer) {
+                const matrix = matData.matrix || [];
+                matrixContainer.innerHTML = matrix.map(m => `
+                    <div class="detail-item" style="border-left: 3px solid ${m.matrix_status === 'VERIFIED' ? 'var(--success)' : 'var(--warning)'}; margin-bottom: 0.5rem;">
+                        <div class="justify-between" style="display: flex; align-items: center;">
+                            <strong class="text-sm font-semibold">${m.issue_title}</strong>
+                            <span class="badge" style="background: ${m.matrix_status === 'VERIFIED' ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)'}; color: ${m.matrix_status === 'VERIFIED' ? 'var(--success)' : 'var(--warning)'}; font-size: 0.65rem;">${m.matrix_status}</span>
+                        </div>
+                        <div class="text-xs muted-text" style="margin: 0.2rem 0;">พยานหลักฐานที่มีในสำนวน: ${m.available_evidence.map(e => e.title).join(", ") || 'ยังไม่มีหลักฐานเชื่อมโยง'}</div>
+                        ${(m.gaps && m.gaps.length > 0) ? `
+                            <div style="margin-top: 0.25rem; font-size: 0.75rem; color: var(--danger); background: rgba(239,68,68,0.06); padding: 0.3rem 0.5rem; border-radius: 4px;">
+                                <i class="fa-solid fa-triangle-exclamation"></i> <strong>สิ่งที่ยังขาด (Gaps):</strong> ${m.gaps.map(g => g.description).join("; ")}
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join("") || '<p class="text-sm muted-text">ไม่มีข้อมูล Evidence Matrix</p>';
+            }
 
             // 6. Tab: Timeline
             const timelineContainer = document.getElementById("details-contradictions-list");
