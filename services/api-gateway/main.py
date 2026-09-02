@@ -519,6 +519,7 @@ class MockDatabase:
         self.case_closure_requests = []
 
         # PHASE 10 COLLECTIONS (Hybrid AI Gateway & Production Security Hardening Layer)
+        self.restricted_blocking_enabled = True
         self.ai_providers = [
             {
                 "provider_id": "prov-local-ollama",
@@ -5937,6 +5938,10 @@ class AIModelCreate(BaseModel):
     capabilities: List[str] = ["chat"]
     classification_limit: str = "INTERNAL"
 
+class AIGatewayToggleRequest(BaseModel):
+    target: str  # local_ai, cloud_ai, restricted_blocking
+    enabled: bool
+
 # -------------------------------------------------------------
 # PHASE 10: HYBRID AI GATEWAY & PRODUCTION HARDENING ENDPOINTS
 # -------------------------------------------------------------
@@ -5997,6 +6002,71 @@ async def get_ai_models(authorization: Optional[str] = Header(None)):
     user = authenticate_request(authorization)
     models = getattr(db, "ai_models", [])
     return {"status": "success", "models": models}
+
+@app.get("/api/v1/admin/ai-gateway/routing")
+@app.get("/api/admin/ai-gateway/routing")
+async def get_ai_gateway_routing(authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    
+    local_prov = next((p for p in getattr(db, "ai_providers", []) if p.get("type") == "LOCAL"), None)
+    cloud_prov = next((p for p in getattr(db, "ai_providers", []) if p.get("type") == "APPROVED_CLOUD"), None)
+    restricted_blocking = getattr(db, "restricted_blocking_enabled", True)
+    
+    local_enabled = (local_prov.get("status") == "ACTIVE") if local_prov else True
+    cloud_enabled = (cloud_prov.get("status") == "ACTIVE") if cloud_prov else True
+    
+    return {
+        "status": "success",
+        "routing": {
+            "local_ai": {
+                "name": "Local CPPD AI Node (Llama 3.3 70B)",
+                "enabled": local_enabled,
+                "status": "ACTIVE / RESTRICTED_ENABLED" if local_enabled else "DISABLED / OFFLINE"
+            },
+            "cloud_ai": {
+                "name": "Approved Cloud AI (Gemini 1.5 Govt)",
+                "enabled": cloud_enabled,
+                "status": "ACTIVE / INTERNAL_ONLY" if cloud_enabled else "DISABLED / CLOUD_OFF"
+            },
+            "restricted_blocking": {
+                "name": "Restricted Cloud AI Blocking",
+                "enabled": restricted_blocking,
+                "status": "ENFORCED (HTTP 403)" if restricted_blocking else "PERMISSIVE (WARNING)"
+            }
+        }
+    }
+
+@app.post("/api/v1/admin/ai-gateway/toggle")
+@app.post("/api/admin/ai-gateway/toggle")
+async def toggle_ai_gateway_routing(payload: AIGatewayToggleRequest, authorization: Optional[str] = Header(None)):
+    user = authenticate_request(authorization)
+    target = payload.target
+    enabled = payload.enabled
+    
+    if target == "local_ai":
+        for p in getattr(db, "ai_providers", []):
+            if p.get("type") == "LOCAL":
+                p["status"] = "ACTIVE" if enabled else "DISABLED"
+    elif target == "cloud_ai":
+        for p in getattr(db, "ai_providers", []):
+            if p.get("type") == "APPROVED_CLOUD":
+                p["status"] = "ACTIVE" if enabled else "DISABLED"
+    elif target == "restricted_blocking":
+        db.restricted_blocking_enabled = enabled
+    else:
+        raise HTTPException(status_code=400, detail=f"Unknown target: {target}")
+        
+    db.audit_log.append({
+        "event_id": str(uuid.uuid4()),
+        "occurred_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "actor_user_id": user["id"],
+        "action": f"AI_GATEWAY.TOGGLE_{target.upper()}",
+        "resource_type": "ai_gateway_routing",
+        "resource_id": target,
+        "result": f"enabled={enabled}"
+    })
+    
+    return await get_ai_gateway_routing(authorization)
 
 # 3. Security Events & Audit Hash Chain Verification
 @app.get("/api/v1/admin/security-events")

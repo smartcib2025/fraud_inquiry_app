@@ -159,6 +159,12 @@ document.addEventListener("DOMContentLoaded", () => {
             "gateway-local-node": "Local CPPD AI Node (Llama 3.3 70B):",
             "gateway-cloud-node": "Approved Cloud AI (Gemini 1.5 Govt):",
             "gateway-restricted-block": "Restricted Cloud AI Blocking:",
+            "gateway-local-desc": "Processes restricted data & evidence on-premises to guarantee data sovereignty",
+            "gateway-cloud-desc": "Authorized government cloud LLM for general summarization & triage",
+            "gateway-restricted-desc": "Strictly blocks transmitting restricted case files to cloud models",
+            "gateway-local-desc": "ประมวลผลข้อมูลลับและพยานหลักฐานภายในเครือข่าย ป้องกันข้อมูลรั่วไหล",
+            "gateway-cloud-desc": "โมเดลคลาวด์ภาครัฐที่ได้รับอนุญาต สำหรับงานสรุปเอกสารทั่วไป",
+            "gateway-restricted-desc": "สกัดกั้นไม่ให้ส่งข้อมูลลับคดี (RESTRICTED) ออกนอกระบบเด็ดขาด",
             
             "briefing-modal-title": "รายงานสรุปสำนวนคดีเสนอผู้บังคับบัญชา (Command Briefing)",
             "btn-done": "เสร็จสิ้น",
@@ -316,6 +322,9 @@ document.addEventListener("DOMContentLoaded", () => {
             "gateway-local-node": "本地离线大模型 (Llama 3.3 70B):",
             "gateway-cloud-node": "政务合规云端大模型 (Gemini 1.5):",
             "gateway-restricted-block": "绝密涉密案件云端拦截状态:",
+            "gateway-local-desc": "在警务内网直接运行，本地处理最高密级证据，杜绝数据出境",
+            "gateway-cloud-desc": "经过安全准入的政务云大模型，仅限处理公开与内部数据",
+            "gateway-restricted-desc": "强制阻断向商业云外发涉密及敏感案件数据，返回 HTTP 403",
             
             "briefing-modal-title": "呈报主管首长案情汇报包 (Command Briefing)",
             "btn-done": "阅毕关闭",
@@ -629,6 +638,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (viewName === "cases") fetchCases();
         if (viewName === "supervisor-governance") fetchSupervisorReviews();
+        if (viewName === "admin-audit") {
+            fetchAIGatewayRouting();
+        }
     }
 
     // -------------------------------------------------------------
@@ -1054,4 +1066,156 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+})
+    // -------------------------------------------------------------
+    // AI Gateway & Hybrid Routing Interactive Switch Controller
+    // -------------------------------------------------------------
+    const toggleLocalAI = document.getElementById("toggle-local-ai");
+    const toggleCloudAI = document.getElementById("toggle-cloud-ai");
+    const toggleRestrictedBlock = document.getElementById("toggle-restricted-block");
+
+    const badgeLocalAI = document.getElementById("badge-local-ai");
+    const badgeCloudAI = document.getElementById("badge-cloud-ai");
+    const badgeRestrictedBlock = document.getElementById("badge-restricted-block");
+    const badgeGatewayOverall = document.getElementById("badge-gateway-overall");
+
+    async function fetchAIGatewayRouting() {
+        try {
+            const res = await fetch(`${API_BASE}/api/v1/admin/ai-gateway/routing`);
+            if (res.ok) {
+                const data = await res.json();
+                updateAIGatewayUI(data.routing);
+            }
+        } catch (e) {
+            console.warn("Using local AI gateway state", e);
+        }
+    }
+
+    function updateAIGatewayUI(routing) {
+        if (!routing) return;
+
+        if (routing.local_ai && toggleLocalAI && badgeLocalAI) {
+            toggleLocalAI.checked = routing.local_ai.enabled;
+            if (routing.local_ai.enabled) {
+                badgeLocalAI.textContent = "ACTIVE / RESTRICTED_ENABLED";
+                badgeLocalAI.style.background = "rgba(16,185,129,0.15)";
+                badgeLocalAI.style.color = "var(--success)";
+            } else {
+                badgeLocalAI.textContent = "DISABLED / OFFLINE";
+                badgeLocalAI.style.background = "rgba(239,68,68,0.15)";
+                badgeLocalAI.style.color = "var(--danger)";
+            }
+        }
+
+        if (routing.cloud_ai && toggleCloudAI && badgeCloudAI) {
+            toggleCloudAI.checked = routing.cloud_ai.enabled;
+            if (routing.cloud_ai.enabled) {
+                badgeCloudAI.textContent = "ACTIVE / INTERNAL_ONLY";
+                badgeCloudAI.style.background = "rgba(59,130,246,0.15)";
+                badgeCloudAI.style.color = "#60a5fa";
+            } else {
+                badgeCloudAI.textContent = "DISABLED / CLOUD_OFF";
+                badgeCloudAI.style.background = "rgba(239,68,68,0.15)";
+                badgeCloudAI.style.color = "var(--danger)";
+            }
+        }
+
+        if (routing.restricted_blocking && toggleRestrictedBlock && badgeRestrictedBlock) {
+            toggleRestrictedBlock.checked = routing.restricted_blocking.enabled;
+            if (routing.restricted_blocking.enabled) {
+                badgeRestrictedBlock.innerHTML = '<i class="fa-solid fa-lock"></i> ENFORCED (HTTP 403)';
+                badgeRestrictedBlock.style.background = "rgba(16,185,129,0.15)";
+                badgeRestrictedBlock.style.color = "var(--success)";
+            } else {
+                badgeRestrictedBlock.innerHTML = '<i class="fa-solid fa-unlock"></i> PERMISSIVE (WARNING)';
+                badgeRestrictedBlock.style.background = "rgba(245,158,11,0.15)";
+                badgeRestrictedBlock.style.color = "var(--warning)";
+            }
+        }
+
+        // Overall status
+        if (badgeGatewayOverall) {
+            const localOn = toggleLocalAI ? toggleLocalAI.checked : true;
+            const cloudOn = toggleCloudAI ? toggleCloudAI.checked : true;
+
+            if (localOn && cloudOn) {
+                badgeGatewayOverall.innerHTML = '<i class="fa-solid fa-shield-halved"></i> HYBRID ACTIVE';
+                badgeGatewayOverall.style.background = "rgba(16,185,129,0.15)";
+                badgeGatewayOverall.style.color = "var(--success)";
+            } else if (localOn && !cloudOn) {
+                badgeGatewayOverall.innerHTML = '<i class="fa-solid fa-server"></i> LOCAL NODE ONLY';
+                badgeGatewayOverall.style.background = "rgba(59,130,246,0.15)";
+                badgeGatewayOverall.style.color = "#60a5fa";
+            } else if (!localOn && cloudOn) {
+                badgeGatewayOverall.innerHTML = '<i class="fa-solid fa-cloud"></i> CLOUD ONLY (UNRESTRICTED)';
+                badgeGatewayOverall.style.background = "rgba(245,158,11,0.15)";
+                badgeGatewayOverall.style.color = "var(--warning)";
+            } else {
+                badgeGatewayOverall.innerHTML = '<i class="fa-solid fa-power-off"></i> AI GATEWAY OFFLINE';
+                badgeGatewayOverall.style.background = "rgba(239,68,68,0.15)";
+                badgeGatewayOverall.style.color = "var(--danger)";
+            }
+        }
+    }
+
+    async function sendAIGatewayToggle(target, enabled) {
+        try {
+            const res = await fetch(`${API_BASE}/api/v1/admin/ai-gateway/toggle`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ target: target, enabled: enabled })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                updateAIGatewayUI(data.routing);
+                return true;
+            }
+        } catch (e) {
+            console.warn("Offline fallback for AI Gateway toggle", e);
+        }
+
+        // Fallback local update
+        const mockRouting = {
+            local_ai: { enabled: toggleLocalAI ? toggleLocalAI.checked : true },
+            cloud_ai: { enabled: toggleCloudAI ? toggleCloudAI.checked : true },
+            restricted_blocking: { enabled: toggleRestrictedBlock ? toggleRestrictedBlock.checked : true }
+        };
+        updateAIGatewayUI(mockRouting);
+        return true;
+    }
+
+    if (toggleLocalAI) {
+        toggleLocalAI.addEventListener("change", async (e) => {
+            const isEnabled = e.target.checked;
+            const targetName = "Local CPPD AI Node (Llama 3.3 70B)";
+            const statusText = isEnabled ? "เปิดใช้งานแล้ว (ENABLED)" : "ปิดการใช้งานแล้ว (DISABLED)";
+            showToast(`${targetName}: ${statusText}`, isEnabled ? "success" : "warning");
+            await sendAIGatewayToggle("local_ai", isEnabled);
+        });
+    }
+
+    if (toggleCloudAI) {
+        toggleCloudAI.addEventListener("change", async (e) => {
+            const isEnabled = e.target.checked;
+            const targetName = "Approved Cloud AI (Gemini 1.5 Govt)";
+            const statusText = isEnabled ? "เปิดใช้งานแล้ว (ENABLED)" : "ปิดการใช้งานแล้ว (DISABLED)";
+            showToast(`${targetName}: ${statusText}`, isEnabled ? "info" : "warning");
+            await sendAIGatewayToggle("cloud_ai", isEnabled);
+        });
+    }
+
+    if (toggleRestrictedBlock) {
+        toggleRestrictedBlock.addEventListener("change", async (e) => {
+            const isEnabled = e.target.checked;
+            const targetName = "Restricted Cloud AI Blocking";
+            const statusText = isEnabled ? "บังคับบล็อกเข้มงวด (ENFORCED 403)" : "ปิดการบล็อก (PERMISSIVE WARNING)";
+            showToast(`${targetName}: ${statusText}`, isEnabled ? "success" : "danger");
+            await sendAIGatewayToggle("restricted_blocking", isEnabled);
+        });
+    }
+
+    // Initial fetch on load
+    fetchAIGatewayRouting();
+
 });

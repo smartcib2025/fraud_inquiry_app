@@ -606,22 +606,61 @@
                         </div>
 
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header justify-between">
                                 <h2><i class="fa-solid fa-server text-primary"></i> <span data-i18n="ai-gateway-title">สถานะ AI Gateway และ Hybrid Routing</span></h2>
+                                <span class="badge" id="badge-gateway-overall" style="background: rgba(16,185,129,0.15); color: var(--success);"><i class="fa-solid fa-shield-halved"></i> HYBRID ACTIVE</span>
                             </div>
                             <div class="card-body">
-                                <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;">
-                                    <div class="justify-between" style="display: flex; padding: 0.5rem; border-bottom: 1px solid var(--border-color);">
-                                        <span data-i18n="gateway-local-node">Local CPPD AI Node (Llama 3.3 70B):</span>
-                                        <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--success);">ACTIVE / RESTRICTED_ENABLED</span>
+                                <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                                    <!-- Row 1: Local CPPD AI Node -->
+                                    <div class="routing-row" id="row-local-ai">
+                                        <div class="routing-info">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <strong style="font-size: 0.9rem;" data-i18n="gateway-local-node">Local CPPD AI Node (Llama 3.3 70B):</strong>
+                                            </div>
+                                            <span class="text-xs muted-text" data-i18n="gateway-local-desc">ประมวลผลข้อมูลลับและพยานหลักฐานภายในเครือข่าย ป้องกันข้อมูลรั่วไหล</span>
+                                        </div>
+                                        <div class="routing-actions">
+                                            <span class="badge" id="badge-local-ai" style="background: rgba(16,185,129,0.15); color: var(--success);">ACTIVE / RESTRICTED_ENABLED</span>
+                                            <label class="switch-control" title="เปิด/ปิด Local AI Node">
+                                                <input type="checkbox" id="toggle-local-ai" checked>
+                                                <span class="switch-slider"></span>
+                                            </label>
+                                        </div>
                                     </div>
-                                    <div class="justify-between" style="display: flex; padding: 0.5rem; border-bottom: 1px solid var(--border-color);">
-                                        <span data-i18n="gateway-cloud-node">Approved Cloud AI (Gemini 1.5 Govt):</span>
-                                        <span class="badge" style="background: rgba(59,130,246,0.15); color: #60a5fa;">ACTIVE / INTERNAL_ONLY</span>
+
+                                    <!-- Row 2: Approved Cloud AI -->
+                                    <div class="routing-row" id="row-cloud-ai">
+                                        <div class="routing-info">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <strong style="font-size: 0.9rem;" data-i18n="gateway-cloud-node">Approved Cloud AI (Gemini 1.5 Govt):</strong>
+                                            </div>
+                                            <span class="text-xs muted-text" data-i18n="gateway-cloud-desc">โมเดลคลาวด์ภาครัฐที่ได้รับอนุญาต สำหรับงานสรุปเอกสารทั่วไป</span>
+                                        </div>
+                                        <div class="routing-actions">
+                                            <span class="badge" id="badge-cloud-ai" style="background: rgba(59,130,246,0.15); color: #60a5fa;">ACTIVE / INTERNAL_ONLY</span>
+                                            <label class="switch-control" title="เปิด/ปิด Approved Cloud AI">
+                                                <input type="checkbox" id="toggle-cloud-ai" checked>
+                                                <span class="switch-slider"></span>
+                                            </label>
+                                        </div>
                                     </div>
-                                    <div class="justify-between" style="display: flex; padding: 0.5rem;">
-                                        <span data-i18n="gateway-restricted-block">Restricted Cloud AI Blocking:</span>
-                                        <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--success);"><i class="fa-solid fa-lock"></i> ENFORCED (HTTP 403)</span>
+
+                                    <!-- Row 3: Restricted Cloud AI Blocking -->
+                                    <div class="routing-row" id="row-restricted-block">
+                                        <div class="routing-info">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <strong style="font-size: 0.9rem;" data-i18n="gateway-restricted-block">Restricted Cloud AI Blocking:</strong>
+                                            </div>
+                                            <span class="text-xs muted-text" data-i18n="gateway-restricted-desc">สกัดกั้นไม่ให้ส่งข้อมูลลับคดี (RESTRICTED) ออกนอกระบบเด็ดขาด</span>
+                                        </div>
+                                        <div class="routing-actions">
+                                            <span class="badge" id="badge-restricted-block" style="background: rgba(16,185,129,0.15); color: var(--success);"><i class="fa-solid fa-lock"></i> ENFORCED (HTTP 403)</span>
+                                            <label class="switch-control" title="เปิด/ปิด การบล็อกข้อมูลลับออกคลาวด์">
+                                                <input type="checkbox" id="toggle-restricted-block" checked>
+                                                <span class="switch-slider"></span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
